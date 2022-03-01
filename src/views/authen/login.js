@@ -19,8 +19,6 @@ const Login = (props) => {
 
   const onLogin = async () => {
 
-    
-
     let form = refForm.current;
     let username = form['inputUsername'].value.trim();
     let password = form['inputPassword'].value.trim();
