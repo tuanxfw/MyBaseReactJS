@@ -30,11 +30,10 @@
     "@craco/craco": "^6.4.3"
   },
   "scripts": {
-    "start": "SET HTTPS=false&&SET PORT=3131&&craco start",
-    "build:product": "npm run build",
-    "build:test": "env-cmd -f .env.development npm run build",
-    "build": "set \"GENERATE_SOURCEMAP=false\" && craco build",
-    "buildOrigin": "craco build"
+    "start": "craco start",
+    "build:product": "craco build",
+    "build:uat": "env-cmd -f .env.uat craco build",
+    "build:test": "env-cmd -f .env.development craco build"
   },
   "eslintConfig": {
     "extends": [

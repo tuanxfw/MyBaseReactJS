@@ -14,10 +14,6 @@ import {
   showConfirm,
   showError,
 } from "components/MessageBox";
-import { showDialog, closeDialog } from "components/Dialog";
-import { showCircleLoading, closeCircleLoading } from "components/CircleLoading";
-import SampleForm from "./sampleForm";
-import { TestService } from "services/sampleService/TestService";
 import DisplayBox from "components/DisplayBox";
 import CommonLabel from 'components/CommonLabel';
 import CommonValidTooltip from 'components/CommonValidTooltip';
@@ -25,6 +21,11 @@ import CommonButton from "components/CommonButton";
 import CommonDatePicker from "components/CommonDatePicker";
 import CommmonSelect from "components/CommonSelect";
 import CommonInputNumber from "components/CommonInputNumber";
+import CommonTable from "components/CommonTable";
+import SampleForm from "./sampleForm";
+import { showDialog, closeDialog } from "components/Dialog";
+import { showCircleLoading, closeCircleLoading } from "components/CircleLoading";
+import { TestService } from "services/sampleService/TestService";
 import { renderSingleColumnOptions, renderMultipleColumnOptions, renderListString } from "components/selectAntd/CustomOptions"
 
 const Login = (props) => {
@@ -260,6 +261,17 @@ const Login = (props) => {
                 <CommonLabel>{"Input number default"}</CommonLabel>
                 <CommonValidTooltip>{""}</CommonValidTooltip>
                 <CommonInputNumber />
+              </Col>
+            </Row>
+          </DisplayBox>
+        </Col>
+
+        <Col>
+          <DisplayBox title={"Table"} isOpen={false}>
+            <Row xs={2}>
+              <Col>
+                <CommonLabel>{"Input number default"}</CommonLabel>
+                <CommonTable />
               </Col>
             </Row>
           </DisplayBox>
