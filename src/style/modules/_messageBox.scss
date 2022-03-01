@@ -1,0 +1,127 @@
+.message-box-style {
+    .modal-header {
+        padding: 10px;
+    }
+
+    .modal-content {
+        border: none;
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    
+        #btnCloseMessageBox {
+            border: none;
+        }
+
+        #btnConfirmMessageBox {
+            border: none;
+        }
+
+        #btnCancelMessageBox {
+            border: none;
+        }
+    }
+
+    .modal-footer {
+        padding: 5px;
+    }
+}
+
+.message-box-style.info-message{
+    .modal-header {
+        background: #2196F3;
+        
+        .modal-title {
+            color: rgb(255, 255, 255);
+        }
+    }
+
+    .modal-content {
+        #btnCloseMessageBox {
+            display: inline;
+            background-color: #2196F3;
+        }
+
+        #btnConfirmMessageBox {
+            display: none;
+        }
+
+        #btnCancelMessageBox {
+            display: none;
+        }
+    }
+}
+
+.message-box-style.warning-message{
+    .modal-header {
+        background: #ff9800;
+        
+        .modal-title {
+            color: rgb(255, 255, 255);
+        }
+    }
+
+    .modal-content {
+        #btnCloseMessageBox {
+            display: inline;
+            background-color: #ff9800;
+        }
+
+        #btnConfirmMessageBox {
+            display: none;
+        }
+
+        #btnCancelMessageBox {
+            display: none;
+        }
+    }
+}
+
+.message-box-style.confirm-message{
+    .modal-header {
+        background: #2196F3;
+        
+        .modal-title {
+            color: rgb(255, 255, 255);
+        }
+    }
+
+    .modal-content {
+        #btnCloseMessageBox {
+            display: none;
+        }
+
+        #btnConfirmMessageBox {
+            display: inline;
+            background-color: #2196F3;
+        }
+
+        #btnCancelMessageBox {
+            display: inline;
+            background-color: #6c757d;
+        }
+    }
+}
+
+.message-box-style.error-message{
+    .modal-header {
+        background: #f44336;
+        
+        .modal-title {
+            color: rgb(255, 255, 255);
+        }
+    }
+
+    .modal-content {
+        #btnCloseMessageBox {
+            display: inline;
+            background-color: #f44336;
+        }
+
+        #btnConfirmMessageBox {
+            display: none;
+        }
+
+        #btnCancelMessageBox {
+            display: none;
+        }
+    }
+}

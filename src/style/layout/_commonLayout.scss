@@ -1,0 +1,16 @@
+.common-layout {
+    height: 100vh;
+    overflow: hidden;
+    background: $background;
+
+    .body {
+        //overflow-y: auto;
+        overflow-x: hidden;
+        height: calc(100vh - #{$height-header} - #{$height-breadcrumb} - #{$height-footer});
+
+        .row {
+            margin: 2px 2px 2px 2px;
+        }
+    }
+}
+

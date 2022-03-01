@@ -1,0 +1,25 @@
+.footer-style {
+  background-color: rgba(red($footer-background-color), green($footer-background-color), blue($footer-background-color), 0.5);
+  height: $height-footer;
+  padding: 2px 20px 0px 20px;
+  display: flex;
+  justify-content: space-between;
+
+  .info-field {
+
+  }
+  
+  .lang-field {
+    cursor: pointer;
+
+    .ant-dropdown-link {
+      color: rgb(17, 59, 245);
+    }
+
+    .icon-lang {
+      vertical-align: text-bottom;
+      font-size: 17px;
+      margin-right: 4px;
+    }
+  }
+}

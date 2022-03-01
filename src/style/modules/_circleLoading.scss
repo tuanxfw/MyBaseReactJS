@@ -1,0 +1,45 @@
+$thickness: 10px;
+$diameter: 100px;
+
+.circle-loading {
+  .modal-content {
+    background-color: transparent;
+    border: none;
+  }
+
+  .dashed-loading:after,
+  .dashed-loading:before {
+    content: "";
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    top: 40vh;
+    border-radius: 50%;
+    width: $diameter;
+    height: $diameter;
+  }
+
+  .dashed-loading:before {
+    border: $thickness dashed $circle-loading-color;
+    border-left: $thickness solid transparent;
+    border-bottom: $thickness solid transparent;
+    -webkit-animation: dashed 1s linear infinite;
+    animation: dashed 1s linear infinite;
+  }
+  
+  .dashed-loading:after {
+    border: $thickness solid $circle-loading-color;
+    border-left: $thickness solid transparent;
+    border-bottom: $thickness solid transparent;
+    -webkit-animation: dashed 1s ease infinite;
+    animation: dashed 1s ease infinite;
+  }
+
+  @keyframes dashed {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}

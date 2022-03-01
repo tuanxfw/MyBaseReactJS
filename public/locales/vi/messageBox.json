@@ -1,0 +1,13 @@
+{
+    "title": {
+        "info": "Thông báo",
+        "warning": "Cảnh báo",
+        "confirm": "Xác nhận",
+        "error": "Lỗi"
+    },
+    "button": {
+        "confirm": "Đồng ý",
+        "close": "Đóng",
+        "cancel": "Hủy"
+    }
+}

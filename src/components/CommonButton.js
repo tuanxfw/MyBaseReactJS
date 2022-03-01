@@ -1,0 +1,68 @@
+import React, { useEffect, useState } from "react";
+import ButtonText from "components/button/ButtonText";
+import ButtonIconText from "components/button/ButtonIconText";
+import ButtonIcon from "components/button/ButtonIcon";
+import ActionTable from "components/button/ActionTable";
+
+const CommonButton = ({code: p_code, type: p_type, ...rest}) => {
+
+  //#region Method
+  const genButton = () => {
+
+    if (checkPerMission(p_code) === false) {
+      return;
+    }
+
+    let options = { ...rest };
+
+    options.onClick = commonOnClick;
+
+    let button = null;
+
+    switch (p_type) {
+      case "iconText":
+        button = <ButtonIconText {...options} />;
+        break;
+
+      case "icon":
+        button = <ButtonIcon {...options} />;
+        break;
+
+      case "actionTable":
+        button = <ActionTable {...options} />;
+        break;
+
+      default: //text
+        button = <ButtonText {...options} />;
+        break;
+    }
+
+    return button;
+  };
+  //#endregion
+
+  //#region Event
+  const commonOnClick = (e) => {
+    
+    writeLog(p_code);
+
+    if (rest.onClick) {
+      rest.onClick(e);
+    }
+  };
+  //#endregion
+
+  //#region Method
+  const checkPerMission = (code) => {
+    return true;
+  };
+
+  const writeLog = (code) => {
+    
+  };
+  //#endregion
+
+  return <>{genButton()}</>;
+};
+
+export default CommonButton;

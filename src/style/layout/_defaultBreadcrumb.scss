@@ -1,0 +1,20 @@
+.breadcrumb-style {
+  height: $height-breadcrumb;
+
+  padding-left: 15px; 
+}
+
+.init-content-dropdown-breadcrum-item {
+  padding: 8px 15px 5px 15px;
+  border-radius: 4px;
+  background: $breadcrumb-init-content-dropdown-background-color;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+
+  .spinner-border {
+    color: $breadcrumb-spinner-color
+  }
+}
+
+.breadcrumbItem {
+  cursor: pointer;
+}

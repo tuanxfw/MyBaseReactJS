@@ -1,0 +1,29 @@
+.tooltip-validate {
+  position: relative;
+
+  .tooltip-validate-content {
+    position: absolute;
+    right: 0%;
+    bottom: 0%;
+    //top: 0%;
+    z-index: 5;
+    background-color: rgb(255, 0, 0);
+    color: white;
+    border-radius: 3px;
+    box-shadow: #999 2px 2px 3px;
+    padding: 0px 5px;
+    font-family: "Tahoma" !important;
+    font-size: 13px;
+  }
+
+  .tooltip-validate-content:after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 5%;
+    margin-left: 0px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: red transparent transparent transparent;
+  }
+}

@@ -1,0 +1,88 @@
+$background: #fffffe00 !default;
+$paragraph: #fffffe00 !default;
+$highlight: #fffffe00 !default;
+$secondary: #fffffe00 !default;
+$scrollbar: #fffffe00 !default;
+
+//@include switch-theme-dark();
+@include switch-theme-light();
+
+/*#region Default Layout*/
+
+/*#region Header*/
+$header-background-color: $secondary;
+$header-background-dropdown-color: $background;
+$header-text-color: $paragraph;
+/*#endregion*/
+
+/*#region Breadcrumb*/
+$breadcrumb-init-content-dropdown-background-color: $background;
+$breadcrumb-spinner-color: $highlight;
+/*#endregion*/
+
+/*#region Sidebar*/
+$sidebar-background-color: $background;
+$sidebar-text-color: $paragraph;
+$sidebar-highlight-color: $paragraph;
+/*#endregion*/
+
+/*#region Body*/
+$body-background-color: $background;
+/*#endregion*/
+
+/*#region Footer*/
+$footer-background-color: $secondary;
+/*#endregion*/
+
+
+/*#endregion*/
+
+/*#region Component*/
+
+/*#region DisplayBox*/
+$display-box-header-background: $highlight;
+$display-box-header-text-color: $background;
+$button-border-color: $highlight;
+/*#endregion*/
+
+/*#region Dialog*/
+$dialog-border-color: $highlight;
+/*#endregion*/
+
+/*#region Circle Loading*/
+$circle-loading-color: $secondary;
+/*#endregion*/
+
+/*#region Button*/
+$button-background-color: $highlight;
+$button-text-color: $background;
+$button-border-color: $highlight;
+/*#endregion*/
+
+/*#region Input*/
+$input-background-color: $background;
+$input-text-color: $paragraph;
+$input-border-color: $highlight;
+/*#endregion*/
+
+/*#region DatePicker*/
+$datepicker-background-color: $background;
+$datepicker-text-color: $paragraph;
+$datepicker-border-color: $highlight;
+/*#endregion*/
+
+
+/*#region Modal*/
+$modal-header-color: $secondary;
+$modal-background-color: $background;
+$modal-text-color: $paragraph;
+$modal-border-color: $highlight;
+/*#endregion*/
+
+/*#region Table*/
+$table-background-color: $background;
+$table-text-color: $paragraph;
+$table-border-color: $paragraph;
+/*#endregion*/
+
+/*#endregion*/

@@ -1,0 +1,29 @@
+.common-select.ant-select {
+  width: 100%;
+
+  .content:first-child {
+    padding-left: 0px;
+  }
+
+  .content:last-child {
+    border-right: none;
+  }
+}
+
+.custom-options {
+  width: 100%;
+  height: 24px;
+
+  .content {
+    border-right: 1px solid #a6a6a6;
+    border-bottom: 1px solid #a6a6a6;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+}
+
+.custom-options.header {
+  font-weight: bold;
+  text-align: center;
+}

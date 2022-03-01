@@ -1,0 +1,67 @@
+import React from "react";
+import store from "redux/store";
+import { withTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
+import { Modal } from "reactstrap";
+import {
+  getStatusDialog,
+  getContentDialog,
+  getOptionsDialog,
+} from "redux/selectors/dialogSelectors";
+import {
+  toggleDialog,
+  setContentDialog,
+  setOptionsDialog,
+} from "redux/actions/dialogActions";
+import ErrorBoundary from "components/default/ErrorBoundary";
+
+const Dialog = (props) => {
+
+  const r_statusDialog = useSelector(getStatusDialog);
+  const r_contentDialog = useSelector(getContentDialog);
+  const r_optionsDialog = useSelector(getOptionsDialog);
+
+  //#region Event
+
+  //#endregion
+
+  //#region Method
+
+  //#endregion
+
+  return (
+    <>
+      <Modal
+        className="dialog-style"
+        backdrop={"static"}
+        scrollable={false}
+        zIndex={1050}
+        isOpen={r_statusDialog}
+        {...r_optionsDialog}
+      >
+        <ErrorBoundary>
+          {r_contentDialog}
+        </ErrorBoundary>
+      </Modal>
+    </>
+  );
+};
+
+export default withTranslation(["common"])(Dialog);
+
+export const showDialog = (content, options = null) => {
+  ;
+  store.dispatch(toggleDialog(true));
+  store.dispatch(setContentDialog(content));
+  store.dispatch(setOptionsDialog(options));
+};
+
+export const closeDialog = (callback) => {
+  store.dispatch(toggleDialog(false));
+  store.dispatch(setContentDialog(null));
+  store.dispatch(setOptionsDialog(null));
+
+  if (callback) {
+    callback();
+  }
+};

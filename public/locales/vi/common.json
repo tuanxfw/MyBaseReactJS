@@ -1,0 +1,11 @@
+{
+  "app": {
+    "appName": "My base"
+  },
+
+  "errors": {
+    "cantAccessThisPage": "Bạn không có quyền truy cập màn hình này!",
+    "sessionLoginIsExpired": "Phiên đăng nhập của bạn đã hết hạn!",
+    "exception": "Đã có lỗi xảy ra"
+  }
+}

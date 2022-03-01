@@ -1,0 +1,44 @@
+.button-style {
+    color: $button-text-color;
+    background-color: $button-background-color !important;
+    border: $button-border-color !important;
+    outline: none;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    
+}
+.button-style:hover{
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.button-style.text {
+    
+}
+
+.button-style.icon-text {
+    i {
+        margin-right: 5px;
+    }
+}
+
+.button-style.icon {
+
+}
+
+.action-table-style {
+    background-color: $button-text-color !important;
+    color: $button-background-color !important;
+    padding: 2px 3px 2px 3px;
+    margin-right: 3px;
+    margin-left: 3px;
+    border: transparent;
+    box-shadow: transparent;
+    outline-color: $button-text-color !important;
+}
+
+.action-table-style:hover{
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.action-table-style:disabled{
+    opacity: 0.5 !important;
+}

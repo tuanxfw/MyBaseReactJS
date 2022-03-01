@@ -1,0 +1,33 @@
+.display-box-sytyle {
+  margin: 5px 0px 5px 0px;
+  padding: 0px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  border: none;
+  
+  .header-display-box {
+    //background-image: linear-gradient(to right, $display-box-header-background, #ffffff);
+    background: $display-box-header-background;
+    border: none;
+    padding: 0px;
+    //height: 32px;
+    cursor: pointer;
+
+    .btn {
+      color: $display-box-header-text-color;
+      background: none;
+      border: none;
+      box-shadow: none;
+      //padding: 5px 0px 0px 6px;
+      //font-size: 15px;
+
+      i {
+        margin-left: 5px;
+        vertical-align: text-bottom;
+      }
+    }
+  }
+
+  .body-display-box {
+    padding: 8px;
+  }
+}

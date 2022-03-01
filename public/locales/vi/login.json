@@ -1,0 +1,11 @@
+{
+    "username": "Tài khoản",
+    "password": "Mật khẩu",
+    "login": "Đăng nhập",
+    "forgotPassword": "Quên mật khẩu?",
+    "register": "Đăng ký",
+
+    "errors": {
+        "usernameOrPasswordIsNull": "Tài khoản hoặc mật khẩu đâng bị trống"
+    }
+}

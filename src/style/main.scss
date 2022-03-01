@@ -1,0 +1,46 @@
+/*#region Themes*/
+@import 'themes/light.scss';
+@import 'themes/dark.scss';
+/*#endregion*/
+
+/*#region Abstracts*/
+@import 'abstracts/variablesColor.scss';
+@import 'abstracts/variablesLayout.scss';
+/*#endregion*/
+
+/*#region Base*/
+@import 'base/scrollbar';
+@import 'base/hr';
+/*#endregion*/
+
+/*#region Layout*/
+@import 'layout/commonLayout';
+@import 'layout/defaultSideBar';
+@import 'layout/defaultHeader';
+@import 'layout/defaultBreadcrumb';
+@import 'layout/defaultFooter';
+/*#endregion*/
+
+/*#region Module*/
+@import 'modules/circleLoading';
+@import 'modules/messageBox';
+@import 'modules/dialog';
+@import 'modules/displayBox';
+@import 'modules/commonButton';
+@import 'modules/commonLabel';
+@import 'modules/commonDatePicker';
+@import 'modules/commonValidTooltip';
+@import 'modules/commonSelect';
+/*#endregion*/
+
+
+/*#region Pages*/
+@import 'pages/errorBoundary';
+@import 'pages/login';
+/*#endregion*/
+
+
+/*#region Vendors*/
+@import 'vendors/bootstrap';
+@import 'vendors/antd';
+/*#endregion*/
