@@ -7,7 +7,7 @@ import ActionTable from "components/button/ActionTable";
 const CommonButton = ({code: p_code, type: p_type, ...rest}) => {
 
   //#region Method
-  const genButton = () => {
+  const selectButton = () => {
 
     if (checkPerMission(p_code) === false) {
       return;
@@ -62,7 +62,7 @@ const CommonButton = ({code: p_code, type: p_type, ...rest}) => {
   };
   //#endregion
 
-  return <>{genButton()}</>;
+  return selectButton();
 };
 
 export default CommonButton;

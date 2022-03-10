@@ -1,26 +1,47 @@
-
+const _ = require('lodash');
 
 export const ObjectUtils = {
     objectIsNull,
-    compareObject
+    compareProps
 };
 
 
-function objectIsNull (obj) {
+function objectIsNull(obj) {
     if (
-        obj === undefined 
-        || obj === null 
-    ){
+        obj === undefined
+        || obj === null
+    ) {
         return true;
     }
 
     return false;
 }
 
-function compareObject (obj1, obj2) {
-    if(JSON.stringify(obj1) === JSON.stringify(obj2)){
-        return true;
+function compareProps(obj1, obj2) {
+    if (String(typeof obj1) !== "object" && String(typeof obj2) !== "object") {
+        return;
+    }
+    
+    let fieldObj1 = _.keys(obj1);
+    let fieldObj2 = _.keys(obj2);
+
+    if (!_.isEqual(fieldObj1, fieldObj2)) {
+        return false;
     }
 
-    return false;
+    let result = true;
+    for (let index = 0; index < fieldObj1.length; index++) {
+        const field = fieldObj1[index];
+        
+        if (
+            String(typeof obj1[field]) !== "function"  
+            && !_.isEqual(obj1[field], obj2[field])
+            )
+        {
+            result = false;
+            break;
+        }
+    }
+
+    return result;
 }

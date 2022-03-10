@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import PropTypes from 'prop-types';
 import { App as AppConstants } from 'constants/Constants';
 import { v4 as uuidv4 } from 'uuid';
@@ -12,6 +12,8 @@ import CustomQuarterPicker from 'components/datePicker/CustomQuarterPicker';
 import CustomYearPicker from 'components/datePicker/CustomYearPicker';
 
 const CommonDatePicker = (props) => {
+    const id = uuidv4();
+    
     const format = {
         date: {
             inputFormat: AppConstants.DATE_TIME_FORMAT.DATE,
@@ -78,15 +80,21 @@ const CommonDatePicker = (props) => {
         }
     };
 
-    const genComponent = () => {
+    const selectComponent = () => {
         let element = null;
 
         let options = { ...props };
+
         delete options.typePicker;
         delete options.typePicker;
 
+        options.id  = props.id || id;
         options.style = { width: '100%', marginTop: '0px' };
         options.onChange = onChangeValue;
+
+        if (options.defaultValue) {
+            options.value = options.defaultValue;
+        }
 
         switch (props.typePicker) {
             case "time":
@@ -119,13 +127,14 @@ const CommonDatePicker = (props) => {
                 break;
 
             default:
-                element = null;
+                element = <CustomDatePicker {...options} format={options.format || format.date} />
+                break;
         }
 
         return element;
 
     };
-    
+
 
     const onChangeValue = (value) => {
         //console.log(value);
@@ -136,9 +145,11 @@ const CommonDatePicker = (props) => {
     };
 
     return (
-        <div className="common-date-picker" id={"parent-" + props.id}>
-            {/* {s_element} */}
-            {genComponent()}
+        <div 
+        className="common-date-picker" 
+        id={"parent-" + (props.id || id)}
+        style={props.style}>
+            {selectComponent()}
         </div>
     );
 }
@@ -150,5 +161,5 @@ CommonDatePicker.propTypes = {
 };
 
 CommonDatePicker.defaultProps = {
-    id: uuidv4(),
+    //id: uuidv4(),
 };

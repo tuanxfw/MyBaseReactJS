@@ -1,14 +1,15 @@
-import React, {useCallback} from "react";
-import { Select, Tooltip } from "antd";
+import React, { useCallback } from "react";
+import { Select } from "antd";
 import {
     Row,
     Col,
 } from "reactstrap";
+import Tooltip from 'components/CommonTooltip';
 import { v4 as uuidv4 } from 'uuid';
 
 const { Option } = Select;
 
-export const renderListString = (data, header) => {
+export const renderListString = (header) => (data) => {
     let children = [];
 
     if (header) {
@@ -37,7 +38,7 @@ export const renderListString = (data, header) => {
                     label={name}
                     value={value}>
                     <div key={uuidv4()} className="custom-options">
-                        <Tooltip title={name}>
+                        <Tooltip key={uuidv4()}>
                             <div>{name}</div>
                         </Tooltip>
                     </div>
@@ -49,7 +50,7 @@ export const renderListString = (data, header) => {
     return children;
 };
 
-export const renderSingleColumnOptions = (data, valueField = "value", keyField = "key", nameField = "name", header) => {
+export const renderSingleColumnOptions = (valueField = "value", keyField = "key", nameField = "name", header) => (data) => {
     let children = [];
 
     if (header) {
@@ -72,7 +73,7 @@ export const renderSingleColumnOptions = (data, valueField = "value", keyField =
 
             let keyItem = item[keyField];
             let nameItem = item[nameField];
-            let valueItem = item[valueField];
+            let valueItem = String(item[valueField]);
 
             children.push(
                 <Option
@@ -80,7 +81,7 @@ export const renderSingleColumnOptions = (data, valueField = "value", keyField =
                     label={nameItem}
                     value={valueItem}>
                     <div key={uuidv4()} className="custom-options">
-                        <Tooltip key={uuidv4()} title={nameItem}>
+                        <Tooltip key={uuidv4()}>
                             <div key={uuidv4()}>{nameItem}</div>
                         </Tooltip>
                     </div>
@@ -94,61 +95,67 @@ export const renderSingleColumnOptions = (data, valueField = "value", keyField =
 };
 
 export const renderMultipleColumnOptions = (
-    data,
     valueField = "value",
     keyField = "key",
     nameField = ["key", "name"],
     header = [],
     widthCol = [],
-) => {
-    let children = [];
+) =>
+    (data) => {
+        let children = [];
 
-    if (header?.length > 0) {
-        children.push(
-            <Option
-                disabled
-                key={uuidv4()}
-                label={"header"}
-                value={"header"}>
-                <div key={uuidv4()} className="custom-options header">
-                    <Row key={uuidv4()}>
-                        {header.map((item, index) => {
-                            return <Col key={uuidv4()} className="content" xs={widthCol[index]}>
-                                {item}
-                            </Col>
-                        })}
-                    </Row>
-                </div>
-            </Option>
-        );
-    }
-
-    if (data?.length > 0) {
-        data.forEach(item => {
-
-            let keyItem = item[keyField];
-            let valueItem = item[valueField];
-
+        if (header?.length > 0) {
             children.push(
                 <Option
-                    key={keyItem}
-                    value={valueItem}>
-                    <div key={uuidv4()} className="custom-options">
+                    disabled
+                    key={uuidv4()}
+                    label={"header"}
+                    value={"header"}>
+                    <div key={uuidv4()} className="custom-options header">
                         <Row key={uuidv4()}>
-                            {nameField.map((field, index) => {
-                                return <Tooltip key={uuidv4()} title={item[field]}>
-                                    <Col key={uuidv4()} className="content" xs={widthCol[index]}>
-                                        {item[field]}
-                                    </Col>
-                                </Tooltip>
+                            {header.map((item, index) => {
+                                return <Col key={uuidv4()} className="content" xs={widthCol[index]}>
+                                    {item}
+                                </Col>
                             })}
                         </Row>
                     </div>
                 </Option>
             );
-        });
-    }
+        }
 
-    return children;
+        if (data?.length > 0) {
+            data.forEach(item => {
 
-};
+                let keyItem = item[keyField];
+                let nameItem = "";
+                let valueItem = String(item[valueField]);
+
+                let contentRow = nameField.map((field, index) => {
+                    nameItem = nameItem + item[field] + " ";
+                    
+                    return <Col key={uuidv4()} className="content" xs={widthCol[index]}>
+                        <Tooltip key={uuidv4()}>
+                            {item[field]}
+                        </Tooltip>
+                    </Col>
+                });
+
+                children.push(
+                    <Option
+                        key={keyItem}
+                        value={valueItem}
+                        label={nameItem}>
+                        <div key={uuidv4()} className="custom-options">
+                            <Row key={uuidv4()}>
+                                {contentRow}
+                            </Row>
+                        </div>
+                    </Option>
+                );
+            });
+        }
+
+        return children;
+
+    };

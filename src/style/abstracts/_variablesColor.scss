@@ -2,12 +2,16 @@ $background: #fffffe00 !default;
 $paragraph: #fffffe00 !default;
 $highlight: #fffffe00 !default;
 $secondary: #fffffe00 !default;
-$scrollbar: #fffffe00 !default;
 
 //@include switch-theme-dark();
 @include switch-theme-light();
 
 /*#region Default Layout*/
+
+/*#region Scrollbar Layout*/
+$scrollbar: #fffffe00 !default;
+$scrollbar-background: #fffffe00 !default;
+/*#endregion*/
 
 /*#region Header*/
 $header-background-color: $secondary;
@@ -71,7 +75,6 @@ $datepicker-text-color: $paragraph;
 $datepicker-border-color: $highlight;
 /*#endregion*/
 
-
 /*#region Modal*/
 $modal-header-color: $secondary;
 $modal-background-color: $background;
@@ -79,10 +82,18 @@ $modal-text-color: $paragraph;
 $modal-border-color: $highlight;
 /*#endregion*/
 
+/*#region Select*/
+$select-border-content-color: $paragraph;
+/*#endregion*/
+
 /*#region Table*/
 $table-background-color: $background;
+$table-header-background-color: #f3f3f3;
+$table-footer-background-color: #a5a5a510;
 $table-text-color: $paragraph;
-$table-border-color: $paragraph;
+$table-border-color: $highlight;
+$table-button-sort-font-color: $paragraph;
+$paging-font-color: $paragraph;
 /*#endregion*/
 
 /*#endregion*/

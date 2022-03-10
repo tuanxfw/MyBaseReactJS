@@ -4,7 +4,7 @@ module.exports = {
             return {
                 ...webpackConfig,
                
-                devtool: 'eval',
+                //devtool: 'eval',
             }
         }
     }

@@ -29,6 +29,8 @@ const CustomWeekPicker = (props) => {
 
       props.onChange(result);
 
+      s_setValue(e);
+
     } catch (exception) {
       console.log(exception);
     }
@@ -38,7 +40,7 @@ const CustomWeekPicker = (props) => {
     <>
       <DatePicker
         {...props}
-        getPopupContainer={() => document.getElementById("parent-" + props.id)}
+        getPopupContainer={props.id ? () => document.getElementById("parent-" + props.id) : undefined}
         placeholder={props.format.viewFormat}
         format={[props.format.viewFormat]}
         value={s_value}

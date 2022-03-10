@@ -15,7 +15,7 @@ const DefaultFooter = (props) => {
 
     //#region Event
     const onChangeLang = ({ key }) => {
-        const langItem = _.find(langItems, {ns: key});
+        const langItem = _.find(langItems, { ns: key });
 
         i18n.changeLanguage(key);
         s_setLangItem(langItem);
@@ -48,7 +48,9 @@ const DefaultFooter = (props) => {
                     <span>Base 2022</span>
                 </div>
                 <div className="lang-field">
-                    <Dropdown overlay={genLangItem()}>
+                    <Dropdown
+                        overlay={genLangItem()}
+                        trigger={["click"]}>
                         <span className="ant-dropdown-link">
                             <i className="fa-solid fa-language icon-lang" />
                             {s_langItem.name}

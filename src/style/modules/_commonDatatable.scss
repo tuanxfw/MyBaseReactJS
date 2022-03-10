@@ -1,0 +1,139 @@
+.common-datatble {
+  width: 100%;
+  border: 1px solid $table-border-color;
+  border-radius: 2px;
+
+  ::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 8px;
+    height: 12px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 0px;
+    background-color: $scrollbar;
+  }
+
+  .react-bootstrap-table {
+    min-height: 500px;
+    margin: 0px;
+    overflow: auto;
+
+    table {
+      thead {
+        position: sticky;
+        top: 0;
+        background: $table-header-background-color;
+        z-index: 1;
+
+        .header-column {
+          position: relative;
+          margin: auto;
+          padding: 10px;
+
+          .btn-sort {
+            border: none;
+            padding: 0px;
+            position: absolute;
+            right: 3px;
+            top: 0px;
+            width: 22px;
+            background-color: transparent;
+            color: $table-button-sort-font-color;
+
+            * {
+              pointer-events: none;
+            }
+          }
+
+          .header-field {
+            text-align: center;
+          }
+
+          .filter-field {
+          }
+        }
+
+        .ant-select-single.ant-select-show-arrow .ant-select-selection-item {
+          padding: 0px;
+          margin-right: 10px;
+        }
+      }
+
+      tbody {
+        border-top: none;
+
+        .cell {
+          width: 100%;
+          display: table;
+          table-layout: fixed;
+
+          * {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        }
+      }
+
+      tfoot {
+        position: sticky;
+        bottom: 0;
+        border-top: none;
+        background: #f2f2f2;
+      }
+    }
+  }
+
+  .react-bootstrap-table thead tr th {
+    padding: 0px;
+    vertical-align: middle;
+  }
+}
+
+.common-datatble-paging {
+  display: flex;
+  justify-content: space-between;
+  padding: 7px 0px 5px 0px;
+  margin: 0px 0px 0px 0px;
+  //border-top: 1px solid $table-border-color;
+  background-color: $table-footer-background-color;
+
+  .total-field {
+    margin: 4px 0px 0px 5px;
+    color: $paging-font-color;
+  }
+
+  .page-filed {
+
+  }
+
+  .action-field {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    color: $paging-font-color;
+
+    button {
+      margin-right: 7px;
+      background-color: transparent;
+      border: none;
+      padding: 0px;
+      text-align: center;
+
+      i {
+        font-size: 15px;
+      }
+    }
+  }
+}
+
+.common-datatble-paging.client,
+.common-datatble-paging.api {
+  @media only screen and (max-width: 620px) {
+    .total-field *,
+    .action-field * {
+      display: none;
+    }
+  }
+}

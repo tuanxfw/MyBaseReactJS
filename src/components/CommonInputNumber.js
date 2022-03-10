@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
-import { Input } from "reactstrap";
+import { Input } from 'antd';
 import NumberFormat from "react-number-format";
 import { App as AppConstants } from "constants/Constants";
 
-const CommonInputNumber = (props) => {
-    //const [s_options, s_setOptions] = useState(null);
+const CommonInputNumber = ({ onChange, ...props }) => {
 
     const isAllowed = (values) => {
         let valueNumber = values.floatValue;
@@ -30,14 +29,11 @@ const CommonInputNumber = (props) => {
         return true;
     }
 
-    return <>
-        <NumberFormat
-            {...props}
-            onValueChange={ props.onChange ? (values) => { props.onChange(values); } : undefined }
-            onChange={undefined}
-            isAllowed={isAllowed}
-        />
-    </>;
+    return <NumberFormat
+        {...props}
+        onValueChange={onChange ? (values) => { onChange(values); } : undefined}
+        isAllowed={isAllowed}
+    />;
 }
 
 CommonInputNumber.propTypes = {

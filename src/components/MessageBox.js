@@ -2,7 +2,8 @@ import React from "react";
 import store from "redux/store";
 import { withTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
+import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import CommonButton from "components/CommonButton";
 import { Trans } from "translation/i18n";
 import {
   getStatusMessageBox,
@@ -57,15 +58,15 @@ const MessageBox = (props) => {
         </ModalHeader>
         <ModalBody>{r_messageData.content || ""}</ModalBody>
         <ModalFooter>
-          <Button id="btnCloseMessageBox" onClick={onCLose}>
+          <CommonButton id="btnCloseMessageBox" onClick={onCLose}>
             {t("messageBox:button.close")}
-          </Button>
-          <Button id="btnConfirmMessageBox" onClick={onConfirm}>
+          </CommonButton>
+          <CommonButton id="btnConfirmMessageBox" onClick={onConfirm}>
             {t("messageBox:button.confirm")}
-          </Button>
-          <Button id="btnCancelMessageBox" onClick={onCancel}>
+          </CommonButton>
+          <CommonButton id="btnCancelMessageBox" onClick={onCancel}>
             {t("messageBox:button.cancel")}
-          </Button>
+          </CommonButton>
         </ModalFooter>
       </Modal>
     </>

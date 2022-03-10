@@ -37,7 +37,7 @@
     .modal-content {
         #btnCloseMessageBox {
             display: inline;
-            background-color: #2196F3;
+            background-color: #2196F3 !important;
         }
 
         #btnConfirmMessageBox {
@@ -62,7 +62,7 @@
     .modal-content {
         #btnCloseMessageBox {
             display: inline;
-            background-color: #ff9800;
+            background-color: #ff9800 !important;
         }
 
         #btnConfirmMessageBox {
@@ -91,12 +91,12 @@
 
         #btnConfirmMessageBox {
             display: inline;
-            background-color: #2196F3;
+            background-color: #2196F3 !important;
         }
 
         #btnCancelMessageBox {
             display: inline;
-            background-color: #6c757d;
+            background-color: #6c757d !important;
         }
     }
 }
@@ -113,7 +113,7 @@
     .modal-content {
         #btnCloseMessageBox {
             display: inline;
-            background-color: #f44336;
+            background-color: #f44336 !important;
         }
 
         #btnConfirmMessageBox {
