@@ -8,22 +8,29 @@
   }
 
   .navbar-brand {
-    color: $header-text-color;
-    // padding: 0px;
-    // margin: 0px;
+    .title {
+      color: $header-text-color;
+      display: flex;
+      align-content: center;
 
-    img{
+      img {
         height: 40px;
+      }
+
+      div {
+        margin: auto;
+      }
     }
+
   }
 
-  .btn-outline-secondary:hover{
+  .btn-outline-secondary:hover {
     background-color: $header-background-color;
     color: $header-text-color;
     border: 1px solid $header-text-color;
-}
+  }
 
-  .navbar-toggler{
+  .navbar-toggler {
     background-color: $header-background-color;
     color: $header-text-color !important;
     border: 1px solid $header-text-color;

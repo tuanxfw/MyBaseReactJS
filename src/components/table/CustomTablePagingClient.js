@@ -6,8 +6,6 @@ import { Pagination } from 'antd';
 import SelectColumnsTable from "./SelectColumnsTable"
 import ExportTable from "./ExportTable"
 
-
-
 const _ = require('lodash');
 
 const CustomTablePagingClient = ({
@@ -101,9 +99,10 @@ const CustomTablePagingClient = ({
                         {t("commonDatatable:record")}
                     </span>
                 </div>
-                <Pagination {...p_pagingConfig}
+                <Pagination 
                     className="page-filed"
                     total={s_dataAfterFilter.length}
+                    {...p_pagingConfig}
                 />
                 <div className="action-field">
                     <button onClick={onResetFilterAndSort} title={t("commonDatatable:resetFilterAndSort")}>

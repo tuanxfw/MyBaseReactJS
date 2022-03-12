@@ -21,6 +21,7 @@ const _ = require('lodash');
 
 const CommonTable = ({
     pagingType: p_pagingType,
+    pagingConfig: p_pagingConfig,
     watch: p_watch,
     ...props
 }) => {
@@ -50,7 +51,7 @@ const CommonTable = ({
         }
     ];
 
-    const [s_pagingInfo, s_setPagingInfo] = useState({ currentPage: 1, pageSize: AppConstants.DATATABLE.PAGE_SIZE_DEFAULT });
+    const [s_pagingInfo, s_setPagingInfo] = useState({ current: 1, pageSize: AppConstants.DATATABLE.PAGE_SIZE_DEFAULT });
 
     const optionsMatchMode = [
         {//like
@@ -74,6 +75,17 @@ const CommonTable = ({
     var g_filterConidtion = {};
     var g_mathMode = {};
     var g_sortCondition = {};
+    var g_dataSelected = [];
+
+    useEffect(() => { //trigger when p_pagingConfig change
+        if (p_pagingConfig) {
+            s_setPagingInfo(p_pagingConfig);
+        }
+    }, [p_pagingConfig])
+
+    useEffect(() => {
+        console.log({g_filterConidtion});
+    });;
 
     //#region Gen component
     const genColumnObject = (data) => {
@@ -92,7 +104,7 @@ const CommonTable = ({
             const { header, sort, filter, cellRender, ...col } = item;
 
             if (col.dataField === "#") {
-                cellRender.function = genRowIndex(s_pagingInfo.currentPage, s_pagingInfo.pageSize);
+                cellRender.function = genRowIndex(s_pagingInfo.current, s_pagingInfo.pageSize);
             }
 
             if (typeof header === "string") {
@@ -282,8 +294,44 @@ const CommonTable = ({
     //#endregion
 
     //#region Event
-    const onChangePaging = (currentPage, pageSize) => {
-        s_setPagingInfo({ currentPage, pageSize });
+    const onSelectRow = (keyField, mode, callBackFunc) => (row, isSelect, rowIndex, e) => {
+        let dataSelected = [...g_dataSelected];
+
+        let result = [];
+
+        if (mode === "radio") {
+            dataSelected = [row[keyField]]
+            result = [row];
+        }
+        else {
+            let key = row[keyField];
+
+            if (isSelect) {
+                dataSelected.push(key);
+            }
+            else {
+                dataSelected = _.remove(dataSelected, (item) => item !== key);
+                //dataSelected = dataSelected.splice(rowIndex, 1);
+            };
+
+            result = _.filter(props.data, (obj) => dataSelected.indexOf(obj[keyField]) !== -1);
+        }
+
+        g_dataSelected = dataSelected;
+
+        if (callBackFunc) {
+            callBackFunc(result, rowIndex, row, isSelect, e);
+        }
+    };
+
+    const onSelectAllRow = (mode, callBackFunc) => (isSelect, rows, e) => {
+        if (!isSelect) {
+            g_dataSelected = [];
+        }
+    };
+
+    const onChangePaging = (current, pageSize) => {
+        s_setPagingInfo({ current, pageSize });
     };
     //#endregion
 
@@ -438,24 +486,37 @@ const CommonTable = ({
             responsive: true,
             itemRender: genItemPaging,
             pageSizeOptions: AppConstants.DATATABLE.PAGE_SIZE_OPTIONS,
-            current: s_pagingInfo.currentPage,
+            current: s_pagingInfo.current,
             pageSize: s_pagingInfo.pageSize,
             onChange: onChangePaging,
         };
-        const pagingConfig = {
+        const pagingConfigCustom = p_pagingConfig;
 
-        };
+        let configSelect = undefined;
+        if (options?.selectRow) {
+
+            let configSelectCustom = { ...options.selectRow };
+            let configSelectDefault = {
+                clickToSelect: options.selectRow?.clickToSelect || true,
+                selected: options.selectRow?.clickToSelect?.selected || [],
+                onSelect: onSelectRow(props.keyField, options.selectRow.mode, options.selectRow?.onSelect),
+                onSelectAll: onSelectAllRow(props.keyField, options.selectRow?.onSelect),
+            }
+
+            configSelect = { ...configSelectCustom, ...configSelectDefault };
+        }
+        options.selectRow = configSelect;
 
         switch (p_pagingType) {
             case "none":
                 return <CustomTableNoPaging {...options} />
 
             case "api":
-                options.pagingConfig = { ...pagingConfigDefault, ...pagingConfig };
+                options.pagingConfig = { ...pagingConfigDefault, ...pagingConfigCustom };
                 return <CustomTablePagingApi {...options} />
 
             default: //client
-                options.pagingConfig = { ...pagingConfigDefault, ...pagingConfig };
+                options.pagingConfig = { ...pagingConfigDefault, ...pagingConfigCustom };
                 return <CustomTablePagingClient {...options} />
         }
     };
@@ -486,5 +547,6 @@ CommonTable.propTypes = {
 CommonTable.defaultProps = {
     data: [],
     columns: [],
-    scrollHeight: "500px"
+    scrollHeight: "500px",
+    //pagingConfig: {},
 };

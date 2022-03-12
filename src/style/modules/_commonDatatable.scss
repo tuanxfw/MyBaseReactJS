@@ -26,6 +26,10 @@
         background: $table-header-background-color;
         z-index: 1;
 
+        .selection-cell-header {
+          text-align: center;
+        }
+
         .header-column {
           position: relative;
           margin: auto;

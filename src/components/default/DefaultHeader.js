@@ -9,7 +9,7 @@ import {
   Nav,
   DropdownToggle,
   DropdownMenu,
-  Dropdown,
+  UncontrolledDropdown,
   Button,
 } from "reactstrap";
 import { Menu } from "antd";
@@ -20,7 +20,6 @@ import { AuthenticationService } from "services/authen/AuthenticationService";
 
 const DefaultHeader = (props) => {
 
-  const [s_openDropdown, s_setOpenDropdown] = useState(false);
   const [s_openCollapse, s_setOpenCollapse] = useState(false);
 
   const { t } = props;
@@ -37,7 +36,7 @@ const DefaultHeader = (props) => {
     }
 
     menuItem.command();
-    
+
   };
   //#endregion
 
@@ -50,7 +49,7 @@ const DefaultHeader = (props) => {
         type: "action",
         title: t("defaultHeader:optionsDropdown.changePassword"),
         icon: <i key="icoChangePassword" className="fas fa-key" />,
-        command: ()=>{},
+        command: () => { },
       },
       {
         name: "logout",
@@ -96,18 +95,17 @@ const DefaultHeader = (props) => {
           </Button>
         </NavbarBrand>
         <NavbarBrand>
-          {/* <img alt="" src={`${process.env.PUBLIC_URL}/images/logo.png`} /> */}
-          <span>Base</span>
+          <div className="title">
+            <img alt="" src={`${process.env.PUBLIC_URL}/images/logo.png`} />
+            <div>Base</div>
+          </div>
         </NavbarBrand>
         <NavbarToggler onClick={() => s_setOpenCollapse(!s_openCollapse)}>
           <i className="fas fa-ellipsis-v" />
         </NavbarToggler>
         <Collapse navbar isOpen={s_openCollapse}>
           <Nav className="me-auto" navbar></Nav>
-          <Dropdown
-            isOpen={s_openDropdown}
-            toggle={() => s_setOpenDropdown(!s_openDropdown)}
-          >
+          <UncontrolledDropdown>
             <DropdownToggle caret nav>
               <i className="fas fa-user" />
               <span>Username</span>
@@ -119,7 +117,7 @@ const DefaultHeader = (props) => {
                 </Menu>
               </div>
             </DropdownMenu>
-          </Dropdown>
+          </UncontrolledDropdown>
         </Collapse>
       </Navbar>
     </div>
