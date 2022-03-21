@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Row, Col, Form, InputGroup, InputGroupText } from "reactstrap";
 import { Input, Button } from 'antd';
 import { withTranslation } from "react-i18next";
@@ -7,7 +7,7 @@ import { showError } from "components/MessageBox";
 import { UserUtils } from 'utils/UserUtils';
 import { AuthenUtils } from 'utils/AuthenUtils';
 import { AuthenticationService } from "services/authen/AuthenticationService";
-import { App as AppConstant, Services as ServicesConstant } from "constants/Constants"
+import { Config as ConfigConstant, Services as ServicesConstant } from "constants/Constants"
 
 //import CommonValidTooltip from 'components/CommonValidTooltip';
 
@@ -15,11 +15,12 @@ const Login = (props) => {
   const { t } = props;
   let history = useHistory();
 
-  let refForm = React.createRef();
+  let refForm = useRef();
 
   //#region Event
 
-  const onLogin = async () => {
+  const onLogin = async (e) => {
+    e.preventDefault()
 
     let form = refForm.current;
     let username = form['inputUsername'].value.trim();
@@ -46,7 +47,7 @@ const Login = (props) => {
     try {
       const result = await AuthenticationService.login(
         {
-          appCode: AppConstant.CODE,
+          appCode: ConfigConstant.CODE,
           username: username,
           password: password,
         }
@@ -134,9 +135,10 @@ const Login = (props) => {
     <Form
       innerRef={refForm}
       noValidate='novalidate'
-      onSubmit={(e) => e.preventDefault()}>
+      //onSubmit={(e) => e.preventDefault()}
+      onSubmit={onLogin}>
       <Row className="login-layout"
-        style={{ backgroundImage: `url('${process.env.PUBLIC_URL}/images/background.jpg')` }}>
+        style={{ backgroundImage: `url('${ConfigConstant.PUBLIC_URL}/images/background.jpg')` }}>
         <Col {...{ xxl: 9, xl: 9, lg: 9, md: 8, sm: 6, xs: 0 }}
           className="login-left-layout" />
 
@@ -145,7 +147,7 @@ const Login = (props) => {
           <Row>
             {/* <Col md={12} style={{height: "20vh"}}/> */}
             <Col md={12} className="login-title">
-              <div style={{ backgroundImage: `url('${process.env.PUBLIC_URL}/images/logo.png')` }} />
+              <div style={{ backgroundImage: `url('${ConfigConstant.PUBLIC_URL}/images/logo.png')` }} />
               <h4>{t('common:app:appName')}</h4>
             </Col>
             <Col md={12} style={{ padding: "20px 30px 0px 30px" }}>
@@ -161,7 +163,7 @@ const Login = (props) => {
               prefix={<i className="fas fa-key" />}/>
             </Col>
             <Col md={12} className="login-group-button">
-              <Button type="primary" onClick={onLogin}>{t('login:login')}</Button>
+              <button type="submit" className="ant-btn ant-btn-submit">{t('login:login')}</button>
             </Col>
             <Col md={12} className="login-group-advanced">
               <a href="/" target="_self">{t('login:forgotPassword')}</a>

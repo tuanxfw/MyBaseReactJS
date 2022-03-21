@@ -11,13 +11,18 @@ import { renderSingleColumnOptions, renderMultipleColumnOptions, renderListStrin
 
 const SampleSelect = (props) => {
 
-    const testList = [
-        { key: "1", name: "Name1", value: "Value1 123123 123 123 123 13 123123 1231232 12312312 312312 3" },
-        { key: "2", name: "Name2", value: "Value2"  },
-        { key: "3", name: "Name3", value: "Value3"  },
-    ];
+    const genTestList = (size = 100) => {
+        console.log(size);
+        let result = [];
 
-    const [s_testList, s_setTestList] = useState(testList);
+        for (let i = 0; i < size; i++) {
+            result.push({ key: "key" + i, name: "Name" + i, value: "Value" + i  });
+        }
+
+        return result;
+    };
+
+    const [s_testList, s_setTestList] = useState(genTestList());
 
     return (
         <Row xs={3}>
@@ -35,8 +40,9 @@ const SampleSelect = (props) => {
                 <CommonValidTooltip></CommonValidTooltip>
                 <CommonSelect
                     onChange={(e) => console.log(e)}
-                    dataRender={testList}
-                    funcRender={renderSingleColumnOptions("value", "key", "name")} />
+                    dataRender={s_testList} 
+                    mode="multiple"
+                    funcRender={renderSingleColumnOptions("value", "name")} />
             </Col>
 
             <Col>
@@ -45,7 +51,18 @@ const SampleSelect = (props) => {
                 <CommonSelect
                     onChange={(e) => console.log(e)}
                     dataRender={s_testList}
-                    funcRender={renderMultipleColumnOptions("value", "key", ["key", "name", "value"], ["Mã", "Tên", "Giá trị"])} />
+                    funcRender={renderMultipleColumnOptions("value", ["key", "name", "value"], ["Mã", "Tên", "Giá trị"])} />
+            </Col>
+
+            <Col>
+                <CommonLabel>{"Lazy select rest api"}</CommonLabel>
+                <CommonValidTooltip></CommonValidTooltip>
+                <CommonSelect
+                    lazyLoad
+                    onChange={(e) => console.log(e)}
+                    dataRender={genTestList} //function rest api, param = value search
+                    funcRender={renderSingleColumnOptions("value", "name")} 
+                    />
             </Col>
         </Row>
     );

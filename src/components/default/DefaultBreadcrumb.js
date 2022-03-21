@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { withTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import { UserUtils } from 'utils/UserUtils';
@@ -6,6 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Spinner } from 'reactstrap'
 import { Breadcrumb, Dropdown, Menu } from 'antd';
 import { AuthenticationService } from "services/authen/AuthenticationService";
+import { Config } from 'constants/Constants';
 
 const DefaultBreadcrumb = (props) => {
     const { t } = props;
@@ -19,7 +21,7 @@ const DefaultBreadcrumb = (props) => {
         let pathName = url.pathname.replace(/\/$/, "");
 
         //Truy cập màn home
-        if (pathName === process.env.PUBLIC_URL) {
+        if (pathName === Config.PUBLIC_URL) {
             s_setBreadcrumb(null);
             return;
         }
@@ -31,11 +33,12 @@ const DefaultBreadcrumb = (props) => {
             alert(t('common:errors.cantAccessThisPage'));
             AuthenticationService.logout();
         }
+        else {
+            document.title = menuItem["title"];
 
-        document.title = menuItem.title;
-
-        let breadcrumb = genBreadcrumb(menuItem);
-        s_setBreadcrumb(breadcrumb);
+            let breadcrumb = genBreadcrumb(menuItem);
+            s_setBreadcrumb(breadcrumb);
+        }
     }, [props]);
 
     //#region Method
@@ -78,7 +81,7 @@ const DefaultBreadcrumb = (props) => {
                     <span
                         className="breadcrumbItem"
                         onClick={() => history.push("/")}>
-                        Home
+                        <i className="fa-solid fa-house" />
                     </span>
                 </Breadcrumb.Item>
                 {s_breadcrumb}
@@ -114,17 +117,13 @@ const BreadcrumbSub = (props) => {
             let menu = genMenuBreadcrumb(meunSub.children);
             s_setContent(
                 <Menu
-                    key={uuidv4()}
-                    onClick={onBreadcrumbMenuClick}>
+                    key={uuidv4()}>
                     {menu}
                 </Menu>
             );
         }
     };
 
-    const onBreadcrumbMenuClick = ({ key }) => {
-        history.push(key);
-    };
     //#endregion
 
     //#region Method
@@ -173,7 +172,7 @@ const BreadcrumbSub = (props) => {
                         key={item.path}
                         icon={<i key={uuidv4()} className={item.icon} />}
                     >
-                        {item.title}
+                        <Link to={item["url"] || "/"}>{item.title}</Link>
                     </Menu.Item>
                 );
             }
@@ -190,7 +189,7 @@ const BreadcrumbSub = (props) => {
             key={uuidv4()}
         >
             <span
-                className="ant-dropdown-link breadcrumbItem"
+                className="ant-dropdown-link breadcrumbItem over-flow-text"
                 onMouseMove={onHoverBreadcrumb}
                 key={uuidv4()}>
                 {props.menu.title}

@@ -8,6 +8,7 @@ import { UserUtils } from 'utils/UserUtils';
 import store from "redux/store";
 import { getStatusSidebar } from "redux/selectors/defaultSidebarSelectors";
 import { toggleSideBar } from "redux/actions/defaultSidebarActions";
+import { Config } from 'constants/Constants';
 
 const DefaultSideBar = (props) => {
   const dispatch = useDispatch();
@@ -90,7 +91,7 @@ const DefaultSideBar = (props) => {
       <Offcanvas
         className="sidebar-style"
         style={{
-          backgroundImage: `url('${process.env.PUBLIC_URL}/images/background.jpg')`,
+          backgroundImage: `url('${Config.PUBLIC_URL}/images/background.jpg')`,
         }}
         isOpen={r_statusSidebar}
         fade={true}
@@ -101,7 +102,7 @@ const DefaultSideBar = (props) => {
       >
         <OffcanvasHeader className="sidebar-header-style">
           <div className="img-field">
-            <img alt="" src={`${process.env.PUBLIC_URL}/images/logo.png`} />
+            <img alt="" src={`${Config.PUBLIC_URL}/images/logo.png`} />
           </div>
           <Button
             close

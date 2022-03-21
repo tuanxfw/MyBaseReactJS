@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import PropTypes from 'prop-types';
 import { v4 as uuidv4 } from 'uuid';
 import { Col, Row } from "reactstrap";
@@ -10,12 +10,13 @@ import CommonInputNumber from 'components/CommonInputNumber';
 import CommonSelect from 'components/CommonSelect';
 import CommonDatePicker from 'components/CommonDatePicker';
 import CommonTooltip from 'components/CommonTooltip';
-import { renderSingleColumnOptions, renderMultipleColumnOptions, renderListString } from "components/selectAntd/CustomOptions";
+import { renderSingleColumnOptions } from "components/selectAntd/CustomOptions";
 import CustomTableNoPaging from "components/table/CustomTableNoPaging";
 import CustomTablePagingApi from "components/table/CustomTablePagingApi";
 import CustomTablePagingClient from "components/table/CustomTablePagingClient";
 import { ObjectUtils } from "utils/ObjectUtils";
 import { DateUtils } from 'utils/DateUtils';
+
 
 const _ = require('lodash');
 
@@ -51,8 +52,6 @@ const CommonTable = ({
         }
     ];
 
-    const [s_pagingInfo, s_setPagingInfo] = useState({ current: 1, pageSize: AppConstants.DATATABLE.PAGE_SIZE_DEFAULT });
-
     const optionsMatchMode = [
         {//like
             value: "{str}",
@@ -72,20 +71,27 @@ const CommonTable = ({
         },
     ];
 
-    var g_filterConidtion = {};
-    var g_mathMode = {};
-    var g_sortCondition = {};
-    var g_dataSelected = [];
+    const [s_pagingInfo, s_setPagingInfo] = useState({ current: 1, pageSize: AppConstants.DATATABLE.PAGE_SIZE_DEFAULT });
 
+    let ref_filterConidtion = useRef({});
+    let ref_mathMode = useRef({});
+    let ref_sortCondition = useRef({});
+    let ref_dataSelected = useRef([]);
+
+    //#region useEffect
     useEffect(() => { //trigger when p_pagingConfig change
         if (p_pagingConfig) {
             s_setPagingInfo(p_pagingConfig);
         }
-    }, [p_pagingConfig])
+    }, [p_pagingConfig]);
 
-    useEffect(() => {
-        console.log({g_filterConidtion});
-    });;
+    useEffect(() => { //trigger when props.data or props.columns change
+        return () => { //before changeS
+            resetTable();
+            s_setPagingInfo({ current: 1, pageSize: AppConstants.DATATABLE.PAGE_SIZE_DEFAULT });
+        };
+    }, [props.data, props.columns]);
+    //#endregion
 
     //#region Gen component
     const genColumnObject = (data) => {
@@ -104,7 +110,7 @@ const CommonTable = ({
             const { header, sort, filter, cellRender, ...col } = item;
 
             if (col.dataField === "#") {
-                cellRender.function = genRowIndex(s_pagingInfo.current, s_pagingInfo.pageSize);
+                cellRender.function = genRowIndex;
             }
 
             if (typeof header === "string") {
@@ -142,7 +148,7 @@ const CommonTable = ({
 
         let icon = "fa-solid fa-sort";
 
-        switch (g_sortCondition[column.dataField]) {
+        switch (ref_sortCondition.current[column.dataField]) {
             case "desc":
                 icon = "fa-solid fa-arrow-down-wide-short";
                 break;
@@ -156,7 +162,7 @@ const CommonTable = ({
         }
 
         if (sort) {
-            return <button
+            return <Button
                 key={uuidv4()}
                 className="btn-sort"
                 name="btnSortTable"
@@ -165,7 +171,7 @@ const CommonTable = ({
                 })}
             >
                 <i disabled className={icon} />
-            </button>;
+            </Button>;
         }
 
         return null;
@@ -175,21 +181,47 @@ const CommonTable = ({
         return <h6 className="header-text">{header}</h6>
     };
 
+    const genHeaderGroup = (idTable, newHeaderGroup) => {
+        if (newHeaderGroup) {
+            let oldHeaderGroup = document.evaluate(`//*[@id="${idTable}"]/thead/tr[@name="headerGroup"]`, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+            
+            if (oldHeaderGroup) {
+                for (let i = 0; i < oldHeaderGroup.snapshotLength; i++) {
+                    oldHeaderGroup.snapshotItem(i).remove(); 
+                }
+            }
+
+            let header = document.evaluate(`//*[@id="${idTable}"]/thead/tr`, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+            header.insertAdjacentHTML('beforebegin', newHeaderGroup);
+        }
+    };
+
     const genFilter = (column, filter) => {
 
         if (!filter) {
             return null;
         }
 
-        let defaultMatchMode = g_mathMode[column.dataField] || optionsMatchMode[0].value;
-        let defaultConditionFilter = g_filterConidtion[column.dataField] || filter?.advanced?.defaultValue || "";
+        let defaultMatchMode = ref_mathMode.current[column.dataField] || optionsMatchMode[0].value;
+        let defaultConditionFilter = ref_filterConidtion.current[column.dataField] || filter?.advanced?.defaultValue || "";
 
         let filterComponent = null;
+        let styleMatchMode = {};
+        let styleCondition = {};
+
         switch (filter.type) {
             case "number":
+                styleMatchMode = { width: "60px" };
+                styleCondition = { width: "calc(100% - 42px - 60px)" };
+
+                if (filter.function) {
+                    styleMatchMode = { display: "none" };
+                    styleCondition = { width: "calc(100% - 42px)" };
+                };
+
                 filterComponent = <>
                     <CommonSelect
-                        style={{ width: "60px" }}
+                        style={styleMatchMode}
                         defaultValue={defaultMatchMode}
                         allowClear={false} showSearch={false}
                         onChange={(value) => buildMathMode(column.dataField, value)}
@@ -197,7 +229,7 @@ const CommonTable = ({
                         funcRender={renderSingleColumnOptions("value", "value", "name")} />
                     <CommonInputNumber
                         key={uuidv4()}
-                        style={{ width: "calc(100% - 42px - 60px)" }}
+                        style={styleCondition}
                         allowClear
                         onChange={(values) => buildFilterCondition(column.dataField, String(values.floatValue || ""))}
                         defaultValue={defaultConditionFilter}
@@ -214,7 +246,7 @@ const CommonTable = ({
                     {...filter.advanced} />
                 break;
 
-            case "datetime":
+            case "date":
                 filterComponent = <CommonDatePicker
                     key={uuidv4()}
                     style={{ width: "calc(100% - 42px)" }}
@@ -224,16 +256,24 @@ const CommonTable = ({
                 break;
 
             default: //text
+                styleMatchMode = { width: "60px" };
+                styleCondition = { width: "calc(100% - 42px - 60px)" };
+
+                if (filter.function) {
+                    styleMatchMode = { display: "none" };
+                    styleCondition = { width: "calc(100% - 42px)" };
+                };
+
                 filterComponent = <>
                     <CommonSelect
-                        style={{ width: "60px" }}
+                        style={styleMatchMode} id="testSelect"
                         defaultValue={defaultMatchMode}
                         allowClear={false} showSearch={false}
                         onChange={(value) => buildMathMode(column.dataField, value)}
                         dataRender={optionsMatchMode}
                         funcRender={renderSingleColumnOptions("value", "value", "name")} />
                     <Input
-                        style={{ width: "calc(100% - 42px - 60px)" }}
+                        style={styleCondition}
                         key={uuidv4()}
                         onChange={(e) => buildFilterCondition(column.dataField, e.target.value)}
                         allowClear
@@ -264,7 +304,7 @@ const CommonTable = ({
         return <div style={cellRender?.style}>{cell}</div>;
     };
 
-    const genRowIndex = (currentPage, pageSize) => (cell, row, rowIndex) => <>{(currentPage - 1) * pageSize + rowIndex + 1}</>
+    const genRowIndex = (cell, row, rowIndex) => <>{(s_pagingInfo.current - 1) * s_pagingInfo.pageSize + rowIndex + 1}</>;
 
     const genItemPaging = (page, type, element) => {
         let resultElement = null;
@@ -294,14 +334,16 @@ const CommonTable = ({
     //#endregion
 
     //#region Event
-    const onSelectRow = (keyField, mode, callBackFunc) => (row, isSelect, rowIndex, e) => {
-        let dataSelected = [...g_dataSelected];
+    const onSelectRow = (mode, callBackFunc) => (row, isSelect, rowIndex, e) => {
+        const keyField = props.keyField;
 
-        let result = [];
+        let dataSelected = [...ref_dataSelected.current];
+
+        let rowsSelected = [];
 
         if (mode === "radio") {
             dataSelected = [row[keyField]]
-            result = [row];
+            rowsSelected = [row];
         }
         else {
             let key = row[keyField];
@@ -314,19 +356,35 @@ const CommonTable = ({
                 //dataSelected = dataSelected.splice(rowIndex, 1);
             };
 
-            result = _.filter(props.data, (obj) => dataSelected.indexOf(obj[keyField]) !== -1);
+            rowsSelected = _.filter(props.data, (obj) => dataSelected.indexOf(obj[keyField]) !== -1);
         }
 
-        g_dataSelected = dataSelected;
+        ref_dataSelected.current = dataSelected;
 
         if (callBackFunc) {
-            callBackFunc(result, rowIndex, row, isSelect, e);
+            callBackFunc({ rowsSelected, rowIndex, e });
         }
     };
 
     const onSelectAllRow = (mode, callBackFunc) => (isSelect, rows, e) => {
+        const keyField = props.keyField;
+
+        let keySelected = [];
+        let rowsSelected = [];
+
         if (!isSelect) {
-            g_dataSelected = [];
+            keySelected = [];
+            rowsSelected = [];
+        }
+        else {
+            keySelected = _.map(props.data, keyField);
+            rowsSelected = [...props.data];
+        }
+
+        ref_dataSelected.current = keySelected;
+
+        if (callBackFunc) {
+            callBackFunc({ rowsSelected, e });
         }
     };
 
@@ -337,7 +395,7 @@ const CommonTable = ({
 
     //#region Method 
     const buildFilterCondition = (field, value) => {
-        let filterCondition = { ...g_filterConidtion };
+        let filterCondition = { ...ref_filterConidtion.current };
 
         if (!value || value.trim() === "") {
             delete filterCondition[field];
@@ -346,23 +404,23 @@ const CommonTable = ({
             filterCondition[field] = value;
         }
 
-        g_filterConidtion = filterCondition;
+        ref_filterConidtion.current = filterCondition;
 
-        if (p_watch) console.log(g_filterConidtion);
+        if (p_watch) console.log(ref_filterConidtion.current);
     };
 
     const buildMathMode = (field, value) => {
-        let mathMode = { ...g_mathMode };
+        let mathMode = { ...ref_mathMode.current };
 
         mathMode[field] = value;
 
-        g_mathMode = mathMode;
+        ref_mathMode.current = mathMode;
 
-        if (p_watch) console.log(g_mathMode);
+        if (p_watch) console.log(ref_mathMode.current);
     };
 
     const buildSortCondition = (field) => {
-        let sortCondition = { ...g_sortCondition };
+        let sortCondition = { ...ref_sortCondition.current };
 
         if (sortCondition[field]) {
             sortCondition[field] = sortCondition[field] === "asc" ? "desc" : "asc";
@@ -371,16 +429,16 @@ const CommonTable = ({
             sortCondition[field] = "asc";
         }
 
-        g_sortCondition = sortCondition;
-        //g_sortCondition = { [field]: sortCondition[field] };
+        ref_sortCondition.current = sortCondition;
+        //ref_sortCondition.current = { [field]: sortCondition[field] };
 
-        if (p_watch) console.log(g_sortCondition);
+        if (p_watch) console.log(ref_sortCondition.current);
     };
 
     const filter = (data) => {
         let dataAfterFilter = [...data];
 
-        const lstField = _.keys(g_filterConidtion);
+        const lstField = _.keys(ref_filterConidtion.current);
         lstField.map((field) => {
 
             let col = _.find(props.columns, { dataField: field }) || {};
@@ -390,14 +448,14 @@ const CommonTable = ({
                 mathMode = "^{str}$"; //==
             }
             else {
-                mathMode = g_mathMode[field] || optionsMatchMode[0].value;
+                mathMode = ref_mathMode.current[field] || optionsMatchMode[0].value;
             }
 
-            const findString = mathMode.replaceAll("{str}", g_filterConidtion[field]);
+            const findString = mathMode.replaceAll("{str}", ref_filterConidtion.current[field]);
             const regex = new RegExp(findString, 'i'); //i: không biệt hoa thường
 
             if (col?.filter?.function) {
-                dataAfterFilter = col?.filter?.function(dataAfterFilter, g_filterConidtion[field]);
+                dataAfterFilter = col?.filter?.function(dataAfterFilter, ref_filterConidtion.current[field], field);
             }
             else {
                 dataAfterFilter = _.filter(dataAfterFilter, (obj) => {
@@ -415,8 +473,8 @@ const CommonTable = ({
 
         let dataAfterSort = [];
 
-        const iteratees = _.keys(g_sortCondition);
-        const orders = _.values(g_sortCondition);
+        const iteratees = _.keys(ref_sortCondition.current);
+        const orders = _.values(ref_sortCondition.current);
 
         props.columns.map((col) => {
             if (col.sort?.function) {
@@ -441,10 +499,11 @@ const CommonTable = ({
         return dataAfterSort;
     };
 
-    const resetFilterAndSort = () => {
-        g_filterConidtion = {};
-        g_mathMode = {};
-        g_sortCondition = {};
+    const resetTable = () => {
+        ref_filterConidtion.current = {};
+        ref_mathMode.current = {};
+        ref_sortCondition.current = {};
+        ref_dataSelected.current = [];
     };
 
     const changeVisibleCol = (lstCol, colName, visible) => {
@@ -463,6 +522,11 @@ const CommonTable = ({
 
         return lstColNew;
     };
+
+    const getListSelectdKey = (data) => {
+        return _.map(data, props.keyField);
+    };
+
     //#endregion
 
     const selectTable = () => {
@@ -472,12 +536,14 @@ const CommonTable = ({
         options.columns = genColumnObject(options.columns);
 
         if (!options.id) options.id = uuidv4();
+        //options.cellEdit = cellEditFactory({ mode: 'click' });
 
         options.funcFeature = {
+            genHeaderGroup: genHeaderGroup,
             filter: filter,
             sort: sort,
             changeVisibleCol: changeVisibleCol,
-            resetFilterAndSort: resetFilterAndSort,
+            resetFilterAndSort: resetTable,
         };
 
         const pagingConfigDefault = {
@@ -498,9 +564,10 @@ const CommonTable = ({
             let configSelectCustom = { ...options.selectRow };
             let configSelectDefault = {
                 clickToSelect: options.selectRow?.clickToSelect || true,
-                selected: options.selectRow?.clickToSelect?.selected || [],
-                onSelect: onSelectRow(props.keyField, options.selectRow.mode, options.selectRow?.onSelect),
-                onSelectAll: onSelectAllRow(props.keyField, options.selectRow?.onSelect),
+                clickToEdit: true,
+                selected: options.selectRow?.selected ? getListSelectdKey(options.selectRow?.selected) : ref_dataSelected.current,
+                onSelect: onSelectRow(options.selectRow.mode, options.selectRow?.onChangeSelected),
+                onSelectAll: onSelectAllRow(options.selectRow.mode, options.selectRow?.onChangeSelected),
             }
 
             configSelect = { ...configSelectCustom, ...configSelectDefault };
@@ -537,6 +604,30 @@ const CommonTable = ({
 
 export default React.memo(CommonTable, ObjectUtils.compareProps);
 //export default CommonTable;
+
+//#region Gen Body function
+export const genColDateChangeFormatDateString = (fromFormat, toFormat = AppConstants.DATE_TIME_FORMAT.DATE_FORMAT) => (cell, row, rowIndex) => {
+    return <>{DateUtils.changeFormatDateString(cell, fromFormat, toFormat)}</>;
+};
+//#endregion
+
+//#region Filter function
+export const filterDateStringByString = (fromFormat, toFormat) => (data, condition, field) => {
+    let result = [];
+
+    try {
+        result = _.filter(
+            data,
+            (obj) => DateUtils.changeFormatDateString(obj[field], fromFormat, toFormat).includes(condition)
+        );
+    } catch (error) {
+        console.log(error);
+        result = [];
+    }
+
+    return result;
+};
+//#endregion
 
 CommonTable.propTypes = {
     keyField: PropTypes.string,

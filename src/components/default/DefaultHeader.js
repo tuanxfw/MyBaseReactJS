@@ -17,6 +17,7 @@ import { openSidebar } from "components/default/DefaultSideBar"
 import { showError } from "components/MessageBox"
 import { AuthenticationService } from "services/authen/AuthenticationService";
 //import { Language } from "translation/language"
+import { Config } from 'constants/Constants';
 
 const DefaultHeader = (props) => {
 
@@ -96,7 +97,7 @@ const DefaultHeader = (props) => {
         </NavbarBrand>
         <NavbarBrand>
           <div className="title">
-            <img alt="" src={`${process.env.PUBLIC_URL}/images/logo.png`} />
+            <img alt="" src={`${Config.PUBLIC_URL}/images/logo.png`} />
             <div>Base</div>
           </div>
         </NavbarBrand>

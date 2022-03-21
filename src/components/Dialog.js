@@ -55,7 +55,7 @@ const DialogItem = (props) => {
         isOpen={s_isOpen}
         {...props.options}
       >
-        <button hidden id={props.id} onClick={() => s_setIsOpen(false)} />
+        <button hidden name="closeDialog" id={props.id} onClick={() => s_setIsOpen(false)} />
         <ErrorBoundary>
           {props.children}
         </ErrorBoundary>
@@ -67,10 +67,14 @@ const DialogItem = (props) => {
 export const showDialog = (dialogContent, dialogId = uuidv4(), dialogOptions = null) => {
   let dialogItems = [...store.getState().dialog.dialogItems];
 
+  const optionsDefault = {
+    size: "xl",
+  }
+
   dialogItems.push({
     id: dialogId,
     content: dialogContent,
-    options: dialogOptions,
+    options: { ...optionsDefault, ...dialogOptions },
   });
 
   store.dispatch(setDialogItems(dialogItems));
@@ -79,7 +83,12 @@ export const showDialog = (dialogContent, dialogId = uuidv4(), dialogOptions = n
 };
 
 export const closeDialog = (dialogId, callback) => {
-  document.getElementById(dialogId).click();
+  if (dialogId) {
+    document.getElementById(dialogId).click();
+  }
+  else {
+    document.evaluate('//button[@name="closeDialog"]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.click();
+  }
 
   setTimeout(
     () => {

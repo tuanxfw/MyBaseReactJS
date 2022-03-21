@@ -1,6 +1,7 @@
 {
   "name": "my-app",
   "version": "0.1.0",
+  "author": "TuanNB7",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.0.0",
@@ -15,6 +16,7 @@
     "node-sass": "4.14",
     "react": "^17.0.2",
     "react-bootstrap-table-next": "^4.0.3",
+    "react-bootstrap-table2-editor": "^1.4.0",
     "react-bootstrap-table2-filter": "^1.3.3",
     "react-dom": "^17.0.2",
     "react-i18next": "^11.15.1",

@@ -33,13 +33,18 @@ function compareProps(obj1, obj2) {
     for (let index = 0; index < fieldObj1.length; index++) {
         const field = fieldObj1[index];
         
-        if (
-            String(typeof obj1[field]) !== "function"  
-            && !_.isEqual(obj1[field], obj2[field])
-            )
+        if (String(typeof obj1[field]) !== "function")
         {
-            result = false;
-            break;
+            try {
+                result = JSON.stringify(obj1[field]) === JSON.stringify(obj2[field]);
+            } 
+            catch (error) {
+                result = _.isEqual(obj1[field], obj2[field]);
+            }
+
+            if (!result) {
+                break;
+            }
         }
     }
 

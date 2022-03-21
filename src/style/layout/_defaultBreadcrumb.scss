@@ -1,7 +1,27 @@
 .breadcrumb-style {
   height: $height-breadcrumb;
+  background-color: $breadcrumb-background-color;
+  padding-left: 15px;
+  padding-top: 3px;
+  width: 100%;
+  display: table;
+  table-layout: fixed;
 
-  padding-left: 15px; 
+  .i {
+    vertical-align: revert;
+  }
+
+  * {
+    //display: inline-block;
+    //vertical-align: bottom;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .over-flow-text {
+    max-width: 30ch;
+  }
 }
 
 .init-content-dropdown-breadcrum-item {
@@ -11,7 +31,7 @@
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 
   .spinner-border {
-    color: $breadcrumb-spinner-color
+    color: $breadcrumb-spinner-color;
   }
 }
 

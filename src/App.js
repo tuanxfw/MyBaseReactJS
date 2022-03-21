@@ -5,7 +5,7 @@ import { ConfigProvider } from 'antd';
 
 import ErrorBoundary from "components/default/ErrorBoundary";
 import { Language } from "translation/language"
-
+import { Config } from "constants/Constants";
 
 const Login = lazy(() => import("views/authen/login"));
 const CommonLayout = lazy(() => import("views/CommonLayout"));
@@ -30,7 +30,7 @@ const App = (props) => {
     // <ConfigProvider locale={Language.changeLanguage(i18n).antd}>
     <ConfigProvider locale={s_langAntd}>
       <ErrorBoundary>
-        <BrowserRouter basename={process.env.PUBLIC_URL}>
+        <BrowserRouter basename={Config.PUBLIC_URL}>
           <Suspense fallback="...loading">
             <MessageBox />
             <Dialog />
@@ -46,4 +46,4 @@ const App = (props) => {
   );
 };
 
-export default withTranslation(["common"])(App);
+export default withTranslation(["common, messageBox"])(App);

@@ -1,5 +1,5 @@
 import Cookies from 'universal-cookie';
-import { App } from "constants/Constants";
+import { Config } from "constants/Constants";
 
 const cookies = new Cookies();
 
@@ -12,21 +12,21 @@ export const AuthenUtils = {
 };
 
 function setUserTokenLocal (token, timeout = 10000) {
-    let cookieData = JSON.parse(cookies.get(App.CODE) || "{}");
+    let cookieData = JSON.parse(cookies.get(Config.CODE) || "{}");
     cookieData.userToken = token;
 
-    cookies.set(App.CODE, JSON.stringify(cookieData), {maxAge: timeout});
+    cookies.set(Config.CODE, JSON.stringify(cookieData), {maxAge: timeout});
 };
 
 function getUserTokenLocal () {
-    let cookieData = cookies.get(App.CODE);
+    let cookieData = cookies.get(Config.CODE);
 
     return cookieData?.userToken || {};
 };
 
 function checkLoginLocal () {
-    const localStorageData = localStorage.getItem(App.CODE);
-    const cookieData = cookies.get(App.CODE);
+    const localStorageData = localStorage.getItem(Config.CODE);
+    const cookieData = cookies.get(Config.CODE);
 
     if (localStorageData && cookieData) {
         return true;
@@ -36,8 +36,8 @@ function checkLoginLocal () {
 };
 
 function logoutLocal() {
-    localStorage.removeItem(App.CODE);
-    cookies.remove(App.CODE);
+    localStorage.removeItem(Config.CODE);
+    cookies.remove(Config.CODE);
 
     document.location.reload(true);
 };

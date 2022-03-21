@@ -11,7 +11,7 @@ import CustomMonthPicker from 'components/datePicker/CustomMonthPicker';
 import CustomQuarterPicker from 'components/datePicker/CustomQuarterPicker';
 import CustomYearPicker from 'components/datePicker/CustomYearPicker';
 
-const CommonDatePicker = (props) => {
+const CommonDatePicker = ({typePicker: p_typePicker, ...props}) => {
     const id = uuidv4();
     
     const format = {
@@ -85,9 +85,6 @@ const CommonDatePicker = (props) => {
 
         let options = { ...props };
 
-        delete options.typePicker;
-        delete options.typePicker;
-
         options.id  = props.id || id;
         options.style = { width: '100%', marginTop: '0px' };
         options.onChange = onChangeValue;
@@ -96,7 +93,7 @@ const CommonDatePicker = (props) => {
             options.value = options.defaultValue;
         }
 
-        switch (props.typePicker) {
+        switch (p_typePicker) {
             case "time":
 
                 element = <CustomTimePicker {...options} format={options.format || format.time} />

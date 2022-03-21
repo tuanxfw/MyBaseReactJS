@@ -50,7 +50,7 @@ export const renderListString = (header) => (data) => {
     return children;
 };
 
-export const renderSingleColumnOptions = (valueField = "value", keyField = "key", nameField = "name", header) => (data) => {
+export const renderSingleColumnOptions = (valueField = "value", nameField = "name", header) => (data) => {
     let children = [];
 
     if (header) {
@@ -71,7 +71,7 @@ export const renderSingleColumnOptions = (valueField = "value", keyField = "key"
     if (data?.length > 0) {
         data.forEach(item => {
 
-            let keyItem = item[keyField];
+            let keyItem = uuidv4();
             let nameItem = item[nameField];
             let valueItem = String(item[valueField]);
 
@@ -96,7 +96,6 @@ export const renderSingleColumnOptions = (valueField = "value", keyField = "key"
 
 export const renderMultipleColumnOptions = (
     valueField = "value",
-    keyField = "key",
     nameField = ["key", "name"],
     header = [],
     widthCol = [],
@@ -127,13 +126,13 @@ export const renderMultipleColumnOptions = (
         if (data?.length > 0) {
             data.forEach(item => {
 
-                let keyItem = item[keyField];
+                let keyItem = uuidv4();
                 let nameItem = "";
                 let valueItem = String(item[valueField]);
 
                 let contentRow = nameField.map((field, index) => {
                     nameItem = nameItem + item[field] + " ";
-                    
+
                     return <Col key={uuidv4()} className="content" xs={widthCol[index]}>
                         <Tooltip key={uuidv4()}>
                             {item[field]}

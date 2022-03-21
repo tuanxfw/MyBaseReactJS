@@ -15,6 +15,7 @@ const CustomTablePagingApi = ({
     columns: p_columns,
     funcFeature: p_funcFeature,
     pagingConfig: p_pagingConfig,
+    headerGroup: p_headerGroup,
     ...props
 }) => {
     const { t } = props;
@@ -23,6 +24,10 @@ const CustomTablePagingApi = ({
     const [s_dataAfterFilter, s_setDataAfterFilter] = useState([]);
    
     //#region Effect
+    useEffect(() => { //did mount
+        p_funcFeature.genHeaderGroup(props.id, p_headerGroup);
+    }, [p_headerGroup]);
+    
     useEffect(() => { //trigger when props.columns change
         s_setColumns(p_columns);
     }, [p_columns]);

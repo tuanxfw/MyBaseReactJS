@@ -1,6 +1,10 @@
-export const App = {
-    CODE: 'BUSINESS',
+export const Config = {
+    CODE: 9,
+    PUBLIC_URL: process.env.PUBLIC_URL,
+    URL_API: process.env.REACT_APP_URL_API,
+};
 
+export const App = {
     DATATABLE: {
         PAGE_SIZE_OPTIONS: [10, 20, 50, 100, 200],
         PAGE_SIZE_DEFAULT: 50,
@@ -19,6 +23,8 @@ export const App = {
     REGEX: {
         EMAIL: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
         DATE: /^[0-9]{2}[\/]{1}[0-9]{2}[\/]{1}[0-9]{4}$/g,
+        URL: /^http[s]?:\/\/(www\.)?(.*)?\/?(.)*/i,
+        FILE_NAME: /^[a-z0-9+áàạảãâấầậẩẫăắằặẳẵéèẹẻẽêếềệểễóòọỏõôốồộổỗơớờợởỡúùụủũưứừựửữíìịỉĩđýỳỵỷỹ_ --()]+\.[a-z]{3}/i,
     },
 
     NUMBER_FORMAT: {

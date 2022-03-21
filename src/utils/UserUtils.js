@@ -1,4 +1,4 @@
-import { App } from "constants/Constants";
+import { Config } from "constants/Constants";
 
 const find = require('lodash/find');
 
@@ -19,40 +19,40 @@ export const UserUtils = {
 };
 
 function setUserInfoLocal (info) {
-    let localStorageData = JSON.parse(localStorage.getItem(App.CODE) || "{}");
+    let localStorageData = JSON.parse(localStorage.getItem(Config.CODE) || "{}");
     localStorageData.userInfo = info;
 
-    localStorage.setItem(App.CODE, JSON.stringify(localStorageData));
+    localStorage.setItem(Config.CODE, JSON.stringify(localStorageData));
 };
 
 function getUserInfoLocal () {
-    let localStorageData = JSON.parse(localStorage.getItem(App.CODE) || "{}");
+    let localStorageData = JSON.parse(localStorage.getItem(Config.CODE) || "{}");
 
     return localStorageData.userInfo || {};
 };
 
 function setUserMenuDataLocal (menuData) {
-    let localStorageData = JSON.parse(localStorage.getItem(App.CODE) || "{}");
+    let localStorageData = JSON.parse(localStorage.getItem(Config.CODE) || "{}");
     localStorageData.menuData = menuData;
 
-    localStorage.setItem(App.CODE, JSON.stringify(localStorageData));
+    localStorage.setItem(Config.CODE, JSON.stringify(localStorageData));
 };
 
 function getUserMenuDataLocal () {
-    let localStorageData = JSON.parse(localStorage.getItem(App.CODE) || "{}");
+    let localStorageData = JSON.parse(localStorage.getItem(Config.CODE) || "{}");
 
     return localStorageData.menuData || [];
 };
 
 function setUserMenuSubLocal (subs) {
-    let localStorageData = JSON.parse(localStorage.getItem(App.CODE) || "{}");
+    let localStorageData = JSON.parse(localStorage.getItem(Config.CODE) || "{}");
     localStorageData.menuSubs = subs;
 
-    localStorage.setItem(App.CODE, JSON.stringify(localStorageData));
+    localStorage.setItem(Config.CODE, JSON.stringify(localStorageData));
 };
 
 function getAllUserMenuSubLocal () {
-    let localStorageData = JSON.parse(localStorage.getItem(App.CODE) || "{}");
+    let localStorageData = JSON.parse(localStorage.getItem(Config.CODE) || "{}");
 
     return localStorageData.menuSubs || [];
 };
@@ -64,14 +64,14 @@ function findUserMenuSubLocal (objCondition) {
 };
 
 function setUserMenuItemLocal (items) {
-    let localStorageData = JSON.parse(localStorage.getItem(App.CODE) || "{}");
+    let localStorageData = JSON.parse(localStorage.getItem(Config.CODE) || "{}");
     localStorageData.menuItems = items;
 
-    localStorage.setItem(App.CODE, JSON.stringify(localStorageData));
+    localStorage.setItem(Config.CODE, JSON.stringify(localStorageData));
 };
 
 function getAllUserMenuItemLocal () {
-    let localStorageData = JSON.parse(localStorage.getItem(App.CODE) || "{}");
+    let localStorageData = JSON.parse(localStorage.getItem(Config.CODE) || "{}");
     return localStorageData.menuItems || [];
 };
 

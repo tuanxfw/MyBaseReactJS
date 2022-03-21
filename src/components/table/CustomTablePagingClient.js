@@ -13,6 +13,7 @@ const CustomTablePagingClient = ({
     columns: p_columns,
     funcFeature: p_funcFeature,
     pagingConfig: p_pagingConfig,
+    headerGroup: p_headerGroup,
     ...props
 }) => {
     const { t } = props;
@@ -20,8 +21,12 @@ const CustomTablePagingClient = ({
     const [s_columns, s_setColumns] = useState(p_columns);
     const [s_dataAfterFilter, s_setDataAfterFilter] = useState([]);
     const [s_dataAfterPaging, s_setDataAfterPaging] = useState([]);
-   
+
     //#region Effect
+    useEffect(() => { //did mount
+        p_funcFeature.genHeaderGroup(props.id, p_headerGroup);
+    }, [p_headerGroup]);
+
     useEffect(() => { //trigger when props.columns change
         s_setColumns(p_columns);
     }, [p_columns]);
@@ -50,10 +55,11 @@ const CustomTablePagingClient = ({
 
     //#region Event
     const handleClick = (e) => {
+        console.log(e);
+
         const name = e?.target?.name;
 
         if (name === "btnFilterTable") {
-
             let dataAfterFilter = p_funcFeature.filter(p_data);
 
             s_setDataAfterFilter(dataAfterFilter);
@@ -99,7 +105,7 @@ const CustomTablePagingClient = ({
                         {t("commonDatatable:record")}
                     </span>
                 </div>
-                <Pagination 
+                <Pagination
                     className="page-filed"
                     total={s_dataAfterFilter.length}
                     {...p_pagingConfig}

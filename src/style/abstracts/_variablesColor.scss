@@ -22,6 +22,7 @@ $header-text-color: $paragraph;
 /*#region Breadcrumb*/
 $breadcrumb-init-content-dropdown-background-color: $background;
 $breadcrumb-spinner-color: $highlight;
+$breadcrumb-background-color: #fffffe70;
 /*#endregion*/
 
 /*#region Sidebar*/
@@ -51,6 +52,8 @@ $button-border-color: $highlight;
 
 /*#region Dialog*/
 $dialog-border-color: $highlight;
+$dialog-header-color: $highlight;
+$dialog-header-font-color: $background;
 /*#endregion*/
 
 /*#region Circle Loading*/

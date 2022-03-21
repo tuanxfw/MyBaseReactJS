@@ -35,7 +35,8 @@ function changeFormatDateString (value, fromFormart, toFormat) {
         return null;
     }
     
-    return moment(moment(value, fromFormart)).format(toFormat);
+    let result = moment(moment(value, fromFormart)).format(toFormat);
+    return result;
 }
 
 /* 

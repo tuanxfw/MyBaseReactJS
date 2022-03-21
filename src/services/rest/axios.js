@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { showCircleLoading, closeCircleLoading } from "components/CircleLoading";
 import { showError } from "components/MessageBox";
-import { Services as ConstantsServices } from "constants/Constants";
+import { Config as ConfigConstants, App as AppConstants, Services as ConstantsServices } from "constants/Constants";
 import { Trans } from "translation/i18n";
 import { AuthenUtils } from 'utils/AuthenUtils';
-import { LOGIN } from "constants/AppPath";
+import { LOGOUT } from "constants/AppPath";
 
 export const axiosClient = {
     login,
@@ -28,7 +28,7 @@ function login (path, data, callBackFunc) {
     return axios.post(url, data, requestOptions).then(handleRestApi(callBackFunc)).catch(handleException);
 };
 
-function logout ( path = LOGIN, data = {}, callBackFunc = AuthenUtils.logoutLocal() ) {
+function logout ( path = LOGOUT, data = {}, callBackFunc = AuthenUtils.logoutLocal() ) {
     beforeRest();
 
     const config = genConfig({});
@@ -110,7 +110,11 @@ const genConfig = (configOverrive) => {
 };
 
 const genApiUrl = (path) => {
-    let url = process.env.REACT_APP_URL_API.replace(/\/$/, "") + "/" + path.replace(/^\//, "");
+    if (AppConstants.REGEX.URL.test(path)) {
+        return path;
+    }
+
+    let url = ConfigConstants.URL_API.replace(/\/$/, "") + "/" + path.replace(/^\//, "");
     return url;
 };
 
