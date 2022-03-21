@@ -29,7 +29,7 @@
 
 .action-table-style {
   //background-color: $button-text-color !important;
-  background-color: none;
+  background-color: transparent;
   color: $button-background-color !important;
   width: 25px;
   height: 20px;
@@ -42,6 +42,7 @@
 }
 .action-table-style:hover {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  
 }
 .action-table-style:focus {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;

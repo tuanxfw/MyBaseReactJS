@@ -16,7 +16,7 @@ import CustomTablePagingApi from "components/table/CustomTablePagingApi";
 import CustomTablePagingClient from "components/table/CustomTablePagingClient";
 import { ObjectUtils } from "utils/ObjectUtils";
 import { DateUtils } from 'utils/DateUtils';
-
+import { Trans } from "translation/i18n";
 
 const _ = require('lodash');
 
@@ -73,6 +73,7 @@ const CommonTable = ({
 
     const [s_pagingInfo, s_setPagingInfo] = useState({ current: 1, pageSize: AppConstants.DATATABLE.PAGE_SIZE_DEFAULT });
 
+    let ref_idTable = useRef(props.id || uuidv4());
     let ref_filterConidtion = useRef({});
     let ref_mathMode = useRef({});
     let ref_sortCondition = useRef({});
@@ -126,7 +127,7 @@ const CommonTable = ({
                     <Col key={uuidv4()} className="header-field">
                         {genHeaderName(header)}
                     </Col>
-                    <Col key={uuidv4()}>
+                    <Col key={uuidv4()} onKeyDown={onFilter}>
                         {genFilter(col, filter)}
                     </Col>
                 </Row>
@@ -181,18 +182,33 @@ const CommonTable = ({
         return <h6 className="header-text">{header}</h6>
     };
 
-    const genHeaderGroup = (idTable, newHeaderGroup) => {
-        if (newHeaderGroup) {
-            let oldHeaderGroup = document.evaluate(`//*[@id="${idTable}"]/thead/tr[@name="headerGroup"]`, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-            
-            if (oldHeaderGroup) {
-                for (let i = 0; i < oldHeaderGroup.snapshotLength; i++) {
-                    oldHeaderGroup.snapshotItem(i).remove(); 
-                }
-            }
+    const genHeaderGroup = (idTable, newHeaderGroup, columns) => {
+        let oldHeaderGroup = document.evaluate(`//*[@id="${idTable}"]/thead/tr[@class="headerGroup"]`, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 
+        if (oldHeaderGroup) {
+            for (let i = 0; i < oldHeaderGroup.snapshotLength; i++) {
+                oldHeaderGroup.snapshotItem(i).remove();
+            }
+        }
+
+        if (newHeaderGroup) {
             let header = document.evaluate(`//*[@id="${idTable}"]/thead/tr`, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
             header.insertAdjacentHTML('beforebegin', newHeaderGroup);
+
+            let table = document.evaluate(`//*[@id="${idTable}"]`, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue; //.offsetWidth
+            table.style.tableLayout = "auto";
+
+            let lstWidthCol = [];
+            columns.map((col) => {
+                lstWidthCol.push(col?.headerStyle?.width || "350px");
+            });
+
+            table.style.width = `calc(${lstWidthCol.join(' + ')})`;
+        }
+        else {
+            let table = document.evaluate(`//*[@id="${idTable}"]`, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue; //.offsetWidth
+            table.style.tableLayout = "fixed";
+            table.style.width = "100%";
         }
     };
 
@@ -226,7 +242,7 @@ const CommonTable = ({
                         allowClear={false} showSearch={false}
                         onChange={(value) => buildMathMode(column.dataField, value)}
                         dataRender={optionsMatchMode}
-                        funcRender={renderSingleColumnOptions("value", "value", "name")} />
+                        funcRender={renderSingleColumnOptions("value", "name")} />
                     <CommonInputNumber
                         key={uuidv4()}
                         style={styleCondition}
@@ -271,7 +287,7 @@ const CommonTable = ({
                         allowClear={false} showSearch={false}
                         onChange={(value) => buildMathMode(column.dataField, value)}
                         dataRender={optionsMatchMode}
-                        funcRender={renderSingleColumnOptions("value", "value", "name")} />
+                        funcRender={renderSingleColumnOptions("value", "name")} />
                     <Input
                         style={styleCondition}
                         key={uuidv4()}
@@ -390,6 +406,12 @@ const CommonTable = ({
 
     const onChangePaging = (current, pageSize) => {
         s_setPagingInfo({ current, pageSize });
+    };
+
+    const onFilter = (e) => {
+        if (e.code === "Enter" || e.code === "NumpadEnter") {
+            document.getElementById(`btnFilter-${ref_idTable.current}`).click();
+        }   
     };
     //#endregion
 
@@ -535,8 +557,14 @@ const CommonTable = ({
         options.columns = [...options.columns];
         options.columns = genColumnObject(options.columns);
 
-        if (!options.id) options.id = uuidv4();
+        options.id = ref_idTable.current;
         //options.cellEdit = cellEditFactory({ mode: 'click' });
+
+        //options.striped = true;
+        options.condensed = true;
+        options.hover = true;
+        options.noDataIndication = <Trans ns="commonDatatable" name="commonDatatable:empty" />;
+        options.classes = "table-custom";
 
         options.funcFeature = {
             genHeaderGroup: genHeaderGroup,

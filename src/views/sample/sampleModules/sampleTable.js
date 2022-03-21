@@ -7,7 +7,7 @@ import cellEditFactory from 'react-bootstrap-table2-editor';
 import { v4 as uuidv4 } from 'uuid';
 import { Divider } from 'antd';
 import { renderSingleColumnOptions, renderMultipleColumnOptions, renderListString } from "components/selectAntd/CustomOptions";
-import CommonTable, {genColDateChangeFormatDateString, filterDateStringByString} from 'components/CommonTable';
+import CommonTable, { genColDateChangeFormatDateString, filterDateStringByString } from 'components/CommonTable';
 import CommonButton from "components/CommonButton";
 import { NumberUtils } from 'utils/NumberUtils';
 
@@ -47,7 +47,7 @@ const SampleTable = (props) => {
             {
                 dataField: 'number',
                 header: 'Số',
-                headerStyle: { width: "1000px" },
+                headerStyle: { width: "350px" },
                 filter: {
                     type: "number"
                 },
@@ -80,7 +80,7 @@ const SampleTable = (props) => {
                     type: "select",
                     advanced: {
                         dataRender: [{ value: 0, name: "Chẵn" }, { value: 1, name: "Lẻ" }],
-                        funcRender: renderSingleColumnOptions("value", "value", "name"),
+                        funcRender: renderSingleColumnOptions("value", "name"),
                     }
                 },
                 cellRender: {
@@ -148,26 +148,28 @@ const SampleTable = (props) => {
         <Row>
             <Divider>Table paging client</Divider>
             <Col>
-                <CommonTable
-                    keyField="id" //trường sẽ dùng làm key định danh cho mỗi bản ghi
-                    pagingType="client"//mặc định = client
-                    //scrollHeight="600px" //chiều cao table, mặc định = 500px
-                    headerGroup={`
-                    <tr name='headerGroup'>
-                        <th colspan="7">Nhóm</th>
-                    </tr>
-                    `}
-                    data={s_data}
-                    columns={s_columns}
-                    selectRow={{
-                        mode: 'checkbox', //checkbox hoặv radio
-                        //selected: [{ id: "key0", number: 0, text: "text0", status: 0, date: "22/02/1973" }], //dùng trong trường hợp muốn chỉ định selected row
-                        onChangeSelected: (e) => console.log(e),
-                    }}
+                <div style={{width: "100%"}}>
+                    <CommonTable
+                        keyField="id" //trường sẽ dùng làm key định danh cho mỗi bản ghi
+                        pagingType="client"//mặc định = client
+                        scrollHeight="600px" //chiều cao table, mặc định = 500px
+                        // headerGroup={`
+                        // <tr class='headerGroup'>
+                        //     <th colspan="7">Nhóm</th>
+                        // </tr>
+                        // `}
+                        data={s_data}
+                        columns={s_columns}
+                        selectRow={{
+                            mode: 'checkbox', //checkbox hoặv radio
+                            //selected: [{ id: "key0", number: 0, text: "text0", status: 0, date: "22/02/1973" }], //dùng trong trường hợp muốn chỉ định selected row
+                            onChangeSelected: (e) => console.log(e),
+                        }}
                     // cellEdit={cellEditFactory({ 
                     //     mode: 'dbclick',
                     // })}
-                />
+                    />
+                </div>
             </Col>
 
             {/* <Divider>Table paging api</Divider>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import PropTypes from 'prop-types';
 import { App as AppConstants } from 'constants/Constants';
 import { v4 as uuidv4 } from 'uuid';
@@ -12,8 +12,9 @@ import CustomQuarterPicker from 'components/datePicker/CustomQuarterPicker';
 import CustomYearPicker from 'components/datePicker/CustomYearPicker';
 
 const CommonDatePicker = ({typePicker: p_typePicker, ...props}) => {
-    const id = uuidv4();
-    
+
+    let ref_id = useRef(props.id || uuidv4());
+
     const format = {
         date: {
             inputFormat: AppConstants.DATE_TIME_FORMAT.DATE,
@@ -85,7 +86,7 @@ const CommonDatePicker = ({typePicker: p_typePicker, ...props}) => {
 
         let options = { ...props };
 
-        options.id  = props.id || id;
+        options.id  = ref_id.current;
         options.style = { width: '100%', marginTop: '0px' };
         options.onChange = onChangeValue;
 
@@ -144,7 +145,7 @@ const CommonDatePicker = ({typePicker: p_typePicker, ...props}) => {
     return (
         <div 
         className="common-date-picker" 
-        id={"parent-" + (props.id || id)}
+        id={"parent-" + ref_id.current}
         style={props.style}>
             {selectComponent()}
         </div>

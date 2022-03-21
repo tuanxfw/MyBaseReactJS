@@ -2,7 +2,7 @@
   width: 100%;
   border: 1px solid $table-border-color;
   border-radius: 2px;
-
+  
   ::-webkit-scrollbar {
     -webkit-appearance: none;
     width: 8px;
@@ -19,9 +19,7 @@
     margin: 0px;
     overflow: auto;
 
-    table {
-      table-layout: auto;
-
+    .table-custom {
       thead {
         position: sticky;
         top: 0;
@@ -32,12 +30,9 @@
           text-align: center;
         }
 
-        tr{ 
-          //box-shadow: rgba(red(#dee2e6), green(#dee2e6), blue(#dee2e625), 0.16) 0px 1px 1px, rgb(red(#dee2e6), green(#dee2e6), blue(#dee2e6)) 0px 0px 0px 1px;
-        }
-
-        tr[name="headerGroup"] {  
+        .headerGroup {
           text-align: center;
+          box-shadow: rgba(red(#dee2e6), green(#dee2e6), blue(#dee2e625), 0.16) 0px 1px 1px, rgb(red(#dee2e6), green(#dee2e6), blue(#dee2e6)) 0px 0px 0px 1px;
 
           th {
             font-weight: 500;
@@ -124,7 +119,6 @@
   }
 
   .page-filed {
-
   }
 
   .action-field {

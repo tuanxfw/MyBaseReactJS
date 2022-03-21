@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { withTranslation } from "react-i18next";
 import BootstrapTable from 'react-bootstrap-table-next';
 import { Form } from "reactstrap";
+import { Button } from 'antd';
 
 const _ = require('lodash');
 
@@ -17,11 +18,11 @@ const CustomTableNoPaging = ({
 
     const [s_columns, s_setColumns] = useState(p_columns);
     const [s_dataAfterFilter, s_setDataAfterFilter] = useState([]);
-   
+
     //#region Effect
-    useEffect(() => { //did mount
-        p_funcFeature.genHeaderGroup(props.id, p_headerGroup);
-    }, [p_headerGroup]);
+    useEffect(() => {
+        p_funcFeature.genHeaderGroup(props.id, p_headerGroup, s_columns);
+    }, [p_headerGroup, s_columns]);
 
     useEffect(() => { //trigger when props.columns change
         s_setColumns(p_columns);
@@ -66,6 +67,7 @@ const CustomTableNoPaging = ({
                 onClick={handleClick}
                 noValidate='novalidate' autoComplete="off"
                 onSubmit={(e) => e.preventDefault()}>
+                <Button hidden name="btnFilterTable" id={`btnFilter-${props.id}`}/>
                 <BootstrapTable
                     {...props}
                     columns={_.filter(s_columns, { visible: true }) || []}
