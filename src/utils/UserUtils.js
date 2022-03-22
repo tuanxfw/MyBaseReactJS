@@ -16,6 +16,7 @@ export const UserUtils = {
     setUserMenuItemLocal,
     getAllUserMenuItemLocal,
     findUserMenuItemLocal,
+    getCurrentUserMenuLocal,
 };
 
 function setUserInfoLocal (info) {
@@ -79,5 +80,14 @@ function findUserMenuItemLocal (objCondition) {
     let menu = getAllUserMenuItemLocal();
 
     return find(menu, objCondition) || null;
+};
+
+function getCurrentUserMenuLocal () {
+    const url = new URL(window.location.href);
+    const pathForm = url.pathname.replaceAll(Config.PUBLIC_URL, "");
+
+    const menuItem = UserUtils.findUserMenuItemLocal({path: pathForm});
+
+    return menuItem;
 };
 

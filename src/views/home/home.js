@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import {Row, Col, InputGroup, InputGroupText, Input, Button } from "reactstrap";
+import {Row, Col} from "reactstrap";
 import {withTranslation} from "react-i18next";
 
-const Login = (props) => {
+const Home = (props) => {
   const {t} = props;
 
   return (
@@ -14,4 +14,4 @@ const Login = (props) => {
 };
 
 
-export default withTranslation(["home", "common"])(Login);
+export default withTranslation(["home", "common"])(Home);

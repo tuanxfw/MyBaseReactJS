@@ -61,6 +61,10 @@ const CommonTable = ({
             value: "^{str}$",
             name: "==",
         },
+        {//!=
+            value: "^((?!{str}).)*$",
+            name: "!=",
+        },
         {//start
             value: "^{str}",
             name: "%.",
@@ -596,6 +600,7 @@ const CommonTable = ({
                 selected: options.selectRow?.selected ? getListSelectdKey(options.selectRow?.selected) : ref_dataSelected.current,
                 onSelect: onSelectRow(options.selectRow.mode, options.selectRow?.onChangeSelected),
                 onSelectAll: onSelectAllRow(options.selectRow.mode, options.selectRow?.onChangeSelected),
+                classes: 'selection-row',
             }
 
             configSelect = { ...configSelectCustom, ...configSelectDefault };

@@ -33,6 +33,8 @@ const CommonInputNumber = ({ onChange, ...props }) => {
         {...props}
         onValueChange={onChange ? (values) => { onChange(values); } : undefined}
         isAllowed={isAllowed}
+        decimalSeparator={props.decimalSeparator || undefined}
+        thousandSeparator={props.thousandSeparator || undefined}
     />;
 }
 
