@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Offcanvas, OffcanvasHeader, OffcanvasBody, Button } from "reactstrap";
-import { Menu } from "antd";
+import { Menu, Tooltip } from "antd";
 import { v4 as uuidv4 } from "uuid";
 import { UserUtils } from 'utils/UserUtils';
 import store from "redux/store";
@@ -63,7 +63,12 @@ const DefaultSideBar = (props) => {
           <Menu.SubMenu
             key={item.path}
             icon={<i key={uuidv4()} className={item.icon} />}
-            title={item.title}
+            title={<Tooltip
+              title={item["title"]}
+              mouseEnterDelay={0.05}
+              mouseLeaveDelay={0}>
+              {item["title"]}
+            </Tooltip>}
           >
             {genMenu(item.children, false)}
           </Menu.SubMenu>
@@ -75,7 +80,12 @@ const DefaultSideBar = (props) => {
             key={item.path}
             icon={<i key={uuidv4()} className={item.icon} />}
           >
-            <Link to={item.path}>{item.title}</Link>
+            <Tooltip
+              title={item["title"]}
+              mouseEnterDelay={0.05}
+              mouseLeaveDelay={0}>
+              <Link to={item["path"] || "/"}>{item["title"]}</Link>
+            </Tooltip>
           </Menu.Item>
         );
       }
@@ -113,6 +123,7 @@ const DefaultSideBar = (props) => {
         <OffcanvasBody className="sidebar-body-style">
           <Menu
             mode="inline"
+            //mode="vertical"
             style={{ width: "100%" }}
             onOpenChange={onSubMenuClick}
             openKeys={s_subSelected}

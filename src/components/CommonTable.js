@@ -91,11 +91,11 @@ const CommonTable = ({
     }, [p_pagingConfig]);
 
     useEffect(() => { //trigger when props.data or props.columns change
-        return () => { //before changeS
+        return () => { //before change
             resetTable();
             s_setPagingInfo({ current: 1, pageSize: AppConstants.DATATABLE.PAGE_SIZE_DEFAULT });
         };
-    }, [props.data, props.columns]);
+    }, [JSON.stringify(props.data), JSON.stringify(props.columns)]);
     //#endregion
 
     //#region Gen component
