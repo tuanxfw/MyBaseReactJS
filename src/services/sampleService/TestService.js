@@ -5,8 +5,8 @@ import {
 
 export const TestService = {
     testGet: () => {
-        return axiosClient.post(TEST_GET, null);
+        return axiosClient.get(TEST_GET, null);
+        // let data = { test2: 2, test3: 3};
+        // return axiosClient.get('http://localhost:85/api/Test/GetTest.php?test1=1', data);
     },
-
-    
 };

@@ -1,11 +1,22 @@
 import React from "react";
 import CommonButton from "components/CommonButton";
+import { TestService } from "services/sampleService/TestService";
 
 const SampleButtons = (props) => {
 
+    const onClick = async (e) => {
+        let data = await TestService.testGet();
+        console.log(data);
+    };
+
     return (
         <>
-            <CommonButton type="text">Text</CommonButton>
+            <CommonButton
+                type="text"
+                onClick={onClick}
+            >
+                Text
+            </CommonButton>
             <hr />
 
             <CommonButton type="iconText">
