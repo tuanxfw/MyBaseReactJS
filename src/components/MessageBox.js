@@ -4,7 +4,7 @@ import { withTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import CommonButton from "components/CommonButton";
-import { Trans } from "translation/i18n";
+import i18n from "translation/i18n";
 import {
   getStatusMessageBox,
   getMessageData,
@@ -77,7 +77,7 @@ export default withTranslation(["messageBox", "common"])(MessageBox);
 
 export const showInfo =  (content, callBackFunc, title) => {
   let message = {
-    title: title || <Trans ns="messageBox" name="messageBox:title.info" />,
+    title: title || i18n.t("messageBox:title.info"),
     content: content,
     style: "info-message",
     callBackFunc: callBackFunc || null,
@@ -96,7 +96,7 @@ export const showInfo =  (content, callBackFunc, title) => {
 
 export const showWarning = function (content, callBackFunc, title) {
   let message = {
-    title: title || <Trans ns="messageBox" name="messageBox:title.warning" />,
+    title: title || i18n.t("messageBox:title.warning"),
     content: content,
     style: "warning-message",
     callBackFunc: callBackFunc || null,
@@ -115,7 +115,7 @@ export const showWarning = function (content, callBackFunc, title) {
 
 export const showConfirm = function (content, callBackFunc, title) {
   let message = {
-    title: title || <Trans ns="messageBox" name="messageBox:title.confirm" />,
+    title: title || i18n.t("messageBox:title.confirm"),
     content: content,
     style: "confirm-message",
     callBackFunc: callBackFunc || null,
@@ -134,7 +134,7 @@ export const showConfirm = function (content, callBackFunc, title) {
 
 export const showError = function (content, callBackFunc, title) {
   let message = {
-    title: title || <Trans ns="messageBox" name="messageBox:title.error" />,
+    title: title || i18n.t("messageBox:title.error"),
     content: content,
     style: "error-message",
     callBackFunc: callBackFunc || null,

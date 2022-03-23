@@ -16,7 +16,7 @@ import CustomTablePagingApi from "components/table/CustomTablePagingApi";
 import CustomTablePagingClient from "components/table/CustomTablePagingClient";
 import { ObjectUtils } from "utils/ObjectUtils";
 import { DateUtils } from 'utils/DateUtils';
-import { Trans } from "translation/i18n";
+import i18n from "translation/i18n";
 
 const _ = require('lodash');
 
@@ -566,8 +566,8 @@ const CommonTable = ({
 
         //options.striped = true;
         options.condensed = true;
-        options.hover = true;
-        options.noDataIndication = <Trans ns="commonDatatable" name="commonDatatable:empty" />;
+        options.hover = true; 
+        options.noDataIndication = i18n.t("commonDatatable:empty");
         options.classes = "table-custom";
 
         options.funcFeature = {

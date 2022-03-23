@@ -29,9 +29,3 @@ i18n
 
 
 export default i18n;
-
-export function Trans(props) {
-  const { t } = useTranslation(props.ns);
-
-  return t(props.name);
-}

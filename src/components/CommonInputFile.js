@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { Button } from "antd";
 import { InputGroup, Input } from "reactstrap";
 import { showError } from "components/MessageBox";
-import { Trans } from "translation/i18n";
+import i18n from "translation/i18n";
 import { App as AppConstants } from "constants/Constants";
  
 const CommonInputFile = ({ onChange: onChangeFile, config, ...props }) => {
@@ -34,7 +34,7 @@ const CommonInputFile = ({ onChange: onChangeFile, config, ...props }) => {
         }
 
         if (isValid === false) {
-            showError(<Trans ns="commonInputText" name={"commonInputText:filenameIsValid"}/>);
+            showError(i18n.t("commonInputText:filenameIsValid"));
 
             inputFile.value = [];
             inputText.value = "";
