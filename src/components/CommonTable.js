@@ -286,7 +286,7 @@ const CommonTable = ({
 
                 filterComponent = <>
                     <CommonSelect
-                        style={styleMatchMode} id="testSelect"
+                        style={styleMatchMode}
                         defaultValue={defaultMatchMode}
                         allowClear={false} showSearch={false}
                         onChange={(value) => buildMathMode(column.dataField, value)}

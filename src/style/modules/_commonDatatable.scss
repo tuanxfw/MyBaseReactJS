@@ -77,6 +77,10 @@
       tbody {
         border-top: none;
 
+        .selection-cell {
+          text-align: center;
+        }
+
         .cell {
           width: 100%;
           display: table;

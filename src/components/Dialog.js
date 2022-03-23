@@ -25,7 +25,7 @@ const Dialog = (props) => {
   //#region Method
   const genContent = (lstContent) => {
     const lstDialog = lstContent.map((item) => {
-      return <DialogItem id={item.id} options={item.options}>{item.content}</DialogItem>
+      return <DialogItem key={uuidv4()} id={item.id} options={item.options}>{item.content}</DialogItem>
     });
 
     return lstDialog;
@@ -42,7 +42,7 @@ const Dialog = (props) => {
 
 export default withTranslation(["common"])(Dialog);
 
-const DialogItem = (props) => {
+const DialogItem = ({id: p_id, ...props}) => {
   const [s_isOpen, s_setIsOpen] = useState(true);
 
   return (
@@ -55,7 +55,7 @@ const DialogItem = (props) => {
         isOpen={s_isOpen}
         {...props.options}
       >
-        <button hidden name="closeDialog" id={props.id} onClick={() => s_setIsOpen(false)} />
+        <button hidden name="closeDialog" id={p_id} onClick={() => s_setIsOpen(false)} />
         <ErrorBoundary>
           {props.children}
         </ErrorBoundary>
@@ -93,6 +93,10 @@ export const closeDialog = (dialogId, callback) => {
   setTimeout(
     () => {
       let dialogItems = [...store.getState().dialog.dialogItems];
+
+      if (!dialogId) {
+        dialogId = dialogItems[dialogItems.length - 1].id;
+      }
 
       let newDialogItem = _.filter(dialogItems, (obj) => obj.id !== dialogId);
       store.dispatch(setDialogItems(newDialogItem));
