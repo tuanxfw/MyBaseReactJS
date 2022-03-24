@@ -10,6 +10,8 @@ import DisplayBox from "components/DisplayBox";
 
 import { TestService } from "services/sampleService/TestService";
 
+import CommonFieldset from "components/CommonFieldset";
+
 import SampleButtons from "./sampleModules/sampleButtons";
 import SampleMessageBox from "./sampleModules/sampleMessageBox";
 import SampleDialog from "./sampleModules/sampleDialog";
@@ -71,6 +73,15 @@ const Login = (props) => {
           <DisplayBox title={"Table"} isOpen={false}>
             <SampleTable />
           </DisplayBox>
+        </Col>
+        
+        <Col>
+          <CommonFieldset>
+            <legend>Title</legend>
+            <p>
+              Content
+            </p>
+          </CommonFieldset>
         </Col>
       </Row>
     </>

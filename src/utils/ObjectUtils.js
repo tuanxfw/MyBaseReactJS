@@ -1,12 +1,15 @@
+
+import { Config } from 'constants/Constants';
+
 const _ = require('lodash');
 
 export const ObjectUtils = {
-    objectIsNull,
+    objectNullOrEmpty,
     compareProps
 };
 
 
-function objectIsNull(obj) {
+function objectNullOrEmpty(obj) {
     if (
         obj === undefined
         || obj === null
@@ -18,6 +21,10 @@ function objectIsNull(obj) {
 }
 
 function compareProps(obj1, obj2) {
+    if (Config.MODE === "development") {
+        return false;
+    }
+
     if (String(typeof obj1) !== "object" && String(typeof obj2) !== "object") {
         return;
     }

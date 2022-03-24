@@ -1,14 +1,25 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Tooltip } from "antd";
 
 const CommonTooltip = ({ title: p_title, ...props }) => {
 
-    return (
-        <div
-            onMouseEnter={openTooltip(p_title)}
-            onMouseLeave={closeTooltip}
-            {...props} />
-    );
+    const selectComponent = () => {
+        if (p_title) {
+            return <Tooltip
+                {...props} title={p_title}
+                mouseEnterDelay={0.03}
+                mouseLeaveDelay={0} />;
+        }
+        else {
+            return <div
+                onMouseEnter={openTooltip(p_title)}
+                onMouseLeave={closeTooltip}
+                {...props} />
+        }
+    };
+
+    return (selectComponent());
 }
 
 export default CommonTooltip;

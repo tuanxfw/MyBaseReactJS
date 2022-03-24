@@ -1,5 +1,6 @@
 export const Config = {
     CODE: 9,
+    MODE: process.env.REACT_APP_MODE,
     PUBLIC_URL: process.env.PUBLIC_URL,
     URL_API: process.env.REACT_APP_URL_API,
 };

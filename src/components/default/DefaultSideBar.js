@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Offcanvas, OffcanvasHeader, OffcanvasBody, Button } from "reactstrap";
-import { Menu, Tooltip } from "antd";
+import { Menu } from "antd";
 import { v4 as uuidv4 } from "uuid";
 import { UserUtils } from 'utils/UserUtils';
 import store from "redux/store";
 import { getStatusSidebar } from "redux/selectors/defaultSidebarSelectors";
 import { toggleSideBar } from "redux/actions/defaultSidebarActions";
 import { Config } from 'constants/Constants';
+import CommonTooltip from "components/CommonTooltip";
 
 const DefaultSideBar = (props) => {
   const dispatch = useDispatch();
@@ -63,12 +64,10 @@ const DefaultSideBar = (props) => {
           <Menu.SubMenu
             key={item.path}
             icon={<i key={uuidv4()} className={item.icon} />}
-            title={<Tooltip
-              title={item["title"]}
-              mouseEnterDelay={0.05}
-              mouseLeaveDelay={0}>
+            title={<CommonTooltip
+              title={item["title"]}>
               {item["title"]}
-            </Tooltip>}
+            </CommonTooltip>}
           >
             {genMenu(item.children, false)}
           </Menu.SubMenu>
@@ -80,12 +79,10 @@ const DefaultSideBar = (props) => {
             key={item.path}
             icon={<i key={uuidv4()} className={item.icon} />}
           >
-            <Tooltip
-              title={item["title"]}
-              mouseEnterDelay={0.05}
-              mouseLeaveDelay={0}>
+            <CommonTooltip
+              title={item["title"]}>
               <Link to={item["path"] || "/"}>{item["title"]}</Link>
-            </Tooltip>
+            </CommonTooltip>
           </Menu.Item>
         );
       }

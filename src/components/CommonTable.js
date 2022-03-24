@@ -23,6 +23,7 @@ const _ = require('lodash');
 const CommonTable = ({
     pagingType: p_pagingType,
     pagingConfig: p_pagingConfig,
+    resetWhenDataChange: p_resetWhenDataChange,
     watch: p_watch,
     ...props
 }) => {
@@ -83,6 +84,8 @@ const CommonTable = ({
     let ref_sortCondition = useRef({});
     let ref_dataSelected = useRef([]);
 
+    let ref_elementFocus = useRef("");
+
     //#region useEffect
     useEffect(() => { //trigger when p_pagingConfig change
         if (p_pagingConfig) {
@@ -92,10 +95,13 @@ const CommonTable = ({
 
     useEffect(() => { //trigger when props.data or props.columns change
         return () => { //before change
-            resetTable();
-            s_setPagingInfo({ current: 1, pageSize: AppConstants.DATATABLE.PAGE_SIZE_DEFAULT });
+            if (p_resetWhenDataChange) {
+                resetTable();
+                s_setPagingInfo({ current: 1, pageSize: AppConstants.DATATABLE.PAGE_SIZE_DEFAULT });
+            }
         };
-    }, [JSON.stringify(props.data), JSON.stringify(props.columns)]);
+    }, [JSON.stringify(props.data)]);
+    //}, [JSON.stringify(props.data), JSON.stringify(props.columns)]);
     //#endregion
 
     //#region Gen component
@@ -248,7 +254,9 @@ const CommonTable = ({
                         dataRender={optionsMatchMode}
                         funcRender={renderSingleColumnOptions("value", "name")} />
                     <CommonInputNumber
-                        key={uuidv4()}
+                        key={ref_idTable.current + "-" + column.dataField}
+                        id={ref_idTable.current + "-" + column.dataField}
+                        onFocus={handleFocus} onBlur={handleFocus}
                         style={styleCondition}
                         allowClear
                         onChange={(values) => buildFilterCondition(column.dataField, String(values.floatValue || ""))}
@@ -259,7 +267,9 @@ const CommonTable = ({
 
             case "select":
                 filterComponent = <CommonSelect
-                    key={uuidv4()}
+                    key={ref_idTable.current + "-" + column.dataField}
+                    id={ref_idTable.current + "-" + column.dataField}
+                    onFocus={handleFocus} onBlur={handleFocus}
                     style={{ width: "calc(100% - 42px)" }}
                     onChange={(value) => buildFilterCondition(column.dataField, value)}
                     defaultValue={defaultConditionFilter}
@@ -268,7 +278,9 @@ const CommonTable = ({
 
             case "date":
                 filterComponent = <CommonDatePicker
-                    key={uuidv4()}
+                    key={ref_idTable.current + "-" + column.dataField}
+                    id={ref_idTable.current + "-" + column.dataField}
+                    onFocus={handleFocus} onBlur={handleFocus}
                     style={{ width: "calc(100% - 42px)" }}
                     onChange={(value) => buildFilterCondition(column.dataField, value)}
                     defaultValue={defaultConditionFilter}
@@ -294,7 +306,9 @@ const CommonTable = ({
                         funcRender={renderSingleColumnOptions("value", "name")} />
                     <Input
                         style={styleCondition}
-                        key={uuidv4()}
+                        key={ref_idTable.current + "-" + column.dataField}
+                        id={ref_idTable.current + "-" + column.dataField}
+                        onFocus={handleFocus} onBlur={handleFocus}
                         onChange={(e) => buildFilterCondition(column.dataField, e.target.value)}
                         allowClear
                         defaultValue={defaultConditionFilter}
@@ -302,6 +316,8 @@ const CommonTable = ({
                 </>
                 break;
         }
+
+        focusElementAfterRender();
 
         return <Input.Group key={uuidv4()} compact className="filter-field">
             {filterComponent}
@@ -350,6 +366,7 @@ const CommonTable = ({
 
         return resultElement;
     };
+    
 
     //#endregion
 
@@ -415,7 +432,19 @@ const CommonTable = ({
     const onFilter = (e) => {
         if (e.code === "Enter" || e.code === "NumpadEnter") {
             document.getElementById(`btnFilter-${ref_idTable.current}`).click();
-        }   
+        }
+    };
+
+    const handleFocus = (e) => {
+        console.log(e);
+        let id = e.target.id;
+
+        if (e.type === "focus") {
+            ref_elementFocus.current = id;
+        }
+        else if (e.type === "blur") {
+            ref_elementFocus.current = "";
+        }
     };
     //#endregion
 
@@ -553,6 +582,17 @@ const CommonTable = ({
         return _.map(data, props.keyField);
     };
 
+    const focusElementAfterRender = () => {
+        if (ref_elementFocus.current !== "") {
+            let interval = setInterval(() => {
+                try {
+                    document.getElementById(ref_elementFocus.current).focus();
+                    clearInterval(interval);
+                } catch (error) { }
+            }, 100);
+        }
+    };
+
     //#endregion
 
     const selectTable = () => {
@@ -566,7 +606,7 @@ const CommonTable = ({
 
         //options.striped = true;
         options.condensed = true;
-        options.hover = true; 
+        options.hover = true;
         options.noDataIndication = i18n.t("commonDatatable:empty");
         options.classes = "table-custom";
 
@@ -672,5 +712,6 @@ CommonTable.defaultProps = {
     data: [],
     columns: [],
     scrollHeight: "500px",
+    resetWhenDataChange: true,
     //pagingConfig: {},
 };
