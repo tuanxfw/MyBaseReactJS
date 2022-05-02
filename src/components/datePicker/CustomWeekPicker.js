@@ -41,8 +41,8 @@ const CustomWeekPicker = (props) => {
       <DatePicker
         {...props}
         getPopupContainer={props.id ? () => document.getElementById("parent-" + props.id) : undefined}
-        placeholder={props.format.viewFormat}
-        format={[props.format.viewFormat]}
+        placeholder={props.format.viewFormat[0]}
+        format={props.format.viewFormat}
         value={s_value}
         picker={'week'}
         showTime

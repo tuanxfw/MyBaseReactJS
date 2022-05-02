@@ -8,6 +8,7 @@ import CommonLabel from 'components/CommonLabel';
 import CommonValidTooltip from 'components/CommonValidTooltip';
 import CommonInputNumber from "components/CommonInputNumber";
 import CommonInputFile from "components/CommonInputFile";
+import CommonTextEditor from "components/CommonTextEditor";
 
 const SampleInput = (props) => {
 
@@ -46,6 +47,12 @@ const SampleInput = (props) => {
                 <CommonLabel>{"Input textare"}</CommonLabel>
                 <CommonValidTooltip></CommonValidTooltip>
                 <Input.TextArea/>
+            </Col>
+
+            <Col md={12}>
+                <CommonLabel>{"Text editor"}</CommonLabel>
+                <CommonValidTooltip></CommonValidTooltip>
+                <CommonTextEditor/>
             </Col>
         </Row>
     );

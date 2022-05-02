@@ -20,6 +20,8 @@ import SampleDatepicker from "./sampleModules/sampleDatepicker";
 import SampleSelect from "./sampleModules/sampleSelect";
 import SampleInput from "./sampleModules/sampleInput";
 import SampleTable from "./sampleModules/sampleTable";
+import SampleCustomDatatable from "./sampleModules/sampleCustomDatatable";
+import SampleReactHookForm from "./sampleModules/sampleReactHookForm";
 
 const Login = (props) => {
   const { t } = props;
@@ -71,7 +73,19 @@ const Login = (props) => {
 
         <Col>
           <DisplayBox title={"Table"} isOpen={false}>
-            <SampleTable />
+            {/* <SampleTable /> */}
+          </DisplayBox>
+        </Col>
+
+        <Col>
+          <DisplayBox title={"Custom Table"} isOpen={false}>
+            <SampleCustomDatatable/>
+          </DisplayBox>
+        </Col>
+
+        <Col>
+          <DisplayBox title={"React Hook Form"} isOpen={true}>
+            <SampleReactHookForm/>
           </DisplayBox>
         </Col>
         

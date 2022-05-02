@@ -41,14 +41,14 @@ function logout(path = LOGOUT, data = {}, callBackFunc = AuthenUtils.logoutLocal
 
     const requestOptions = {
         timeout: config.timeout,
-        headers: config.headers
+        headers: config.headers,
     };
 
     return axios.post(url, data, requestOptions).then(handleRestApi(callBackFunc)).catch(handleException);
 };
 //#endregion
 
-function get(path, data, callBackFunc, config = {}) {
+function get(path, data, callBackFunc, config = {}, isFullRequest = false) {
     if (beforeRest() === false) return;
 
     let url = genApiUrl(path);
@@ -62,13 +62,14 @@ function get(path, data, callBackFunc, config = {}) {
 
     const requestOptions = {
         timeout: config.timeout,
-        headers: config.headers
+        headers: config.headers,
+        ...config.request,
     };
 
-    return axios.get(url, requestOptions).then(handleRestApi(callBackFunc)).catch(handleException);
+    return axios.get(url, requestOptions).then(handleRestApi(callBackFunc, isFullRequest)).catch(handleException);
 };
 
-function post(path, data, callBackFunc, config = {}) {
+function post(path, data, callBackFunc, config = {}, isFullRequest = false) {
     if (beforeRest() === false) return;
 
     let url = genApiUrl(path);
@@ -80,13 +81,14 @@ function post(path, data, callBackFunc, config = {}) {
 
     const requestOptions = {
         timeout: config.timeout,
-        headers: config.headers
+        headers: config.headers,
+        ...config.request,
     };
 
-    return axios.post(url, data, requestOptions).then(handleRestApi(callBackFunc)).catch(handleException);
+    return axios.post(url, data, requestOptions).then(handleRestApi(callBackFunc, isFullRequest)).catch(handleException);
 };
 
-function put(path, data, callBackFunc, config = {}) {
+function put(path, data, callBackFunc, config = {}, isFullRequest = false) {
     if (beforeRest() === false) return;
 
     let url = genApiUrl(path);
@@ -98,13 +100,14 @@ function put(path, data, callBackFunc, config = {}) {
 
     const requestOptions = {
         timeout: config.timeout,
-        headers: config.headers
+        headers: config.headers,
+        ...config.request,
     };
 
-    return axios.put(url, data, requestOptions).then(handleRestApi(callBackFunc)).catch(handleException);
+    return axios.put(url, data, requestOptions).then(handleRestApi(callBackFunc, isFullRequest)).catch(handleException);
 };
 
-function del(path, data, callBackFunc, config = {}) {
+function del(path, data, callBackFunc, config = {}, isFullRequest = false) {
     if (beforeRest() === false) return;
 
     let url = genApiUrl(path);
@@ -118,10 +121,11 @@ function del(path, data, callBackFunc, config = {}) {
 
     const requestOptions = {
         timeout: config.timeout,
-        headers: config.headers
+        headers: config.headers,
+        ...config.request,
     };
 
-    return axios.delete(url, requestOptions).then(handleRestApi(callBackFunc)).catch(handleException);
+    return axios.delete(url, requestOptions).then(handleRestApi(callBackFunc, isFullRequest)).catch(handleException);
 };
 
 //#region default function
@@ -182,10 +186,17 @@ const genApiUrl = (path) => {
     return url;
 };
 
-const handleRestApi = (callBackFunc) => (res) => {
+const handleRestApi = (callBackFunc, isFullRequest) => (res) => {
     closeCircleLoading();
 
-    let result = res.data;
+    let result;
+
+    if(isFullRequest) {
+        result = res;
+    }
+    else {
+        result = res.data
+    }
 
     if (callBackFunc) {
         callBackFunc(result);

@@ -11,75 +11,75 @@ import CustomMonthPicker from 'components/datePicker/CustomMonthPicker';
 import CustomQuarterPicker from 'components/datePicker/CustomQuarterPicker';
 import CustomYearPicker from 'components/datePicker/CustomYearPicker';
 
+const format = {
+    time: {
+        inputFormat: AppConstants.DATE_TIME_FORMAT.TIME,
+        outputFormat: AppConstants.DATE_TIME_FORMAT.TIME,
+        viewFormat: [AppConstants.DATE_TIME_FORMAT.TIME],
+    },
+
+    date: {
+        inputFormat: AppConstants.DATE_TIME_FORMAT.DATE,
+        outputFormat: AppConstants.DATE_TIME_FORMAT.DATE,
+        viewFormat: [AppConstants.DATE_TIME_FORMAT.DATE].concat(AppConstants.INPUT_PICKER.DATE),
+    },
+
+    datetime: {
+        inputFormat: AppConstants.DATE_TIME_FORMAT.DATE_TIME,
+        outputFormat: AppConstants.DATE_TIME_FORMAT.DATE_TIME,
+        viewFormat: [AppConstants.DATE_TIME_FORMAT.DATE_TIME],
+    },
+
+    week: {
+        inputFormat: AppConstants.DATE_TIME_FORMAT.WEEK + "-" + AppConstants.DATE_TIME_FORMAT.YEAR,
+        outputFormat: {
+            weekYearFormat: AppConstants.DATE_TIME_FORMAT.WEEK + "-" + AppConstants.DATE_TIME_FORMAT.YEAR,
+            weekFormat: AppConstants.DATE_TIME_FORMAT.WEEK,
+            yearFormat: AppConstants.DATE_TIME_FORMAT.YEAR,
+            startDateFormat: AppConstants.DATE_TIME_FORMAT.DATE,
+            endDateFormat: AppConstants.DATE_TIME_FORMAT.DATE,
+        },
+        viewFormat: [AppConstants.DATE_TIME_FORMAT.WEEK + "-" + AppConstants.DATE_TIME_FORMAT.YEAR]
+    },
+
+    month: {
+        inputFormat: AppConstants.DATE_TIME_FORMAT.MONTH + "/" + AppConstants.DATE_TIME_FORMAT.YEAR,
+        outputFormat: {
+            monthYearFormat: AppConstants.DATE_TIME_FORMAT.MONTH + "/" + AppConstants.DATE_TIME_FORMAT.YEAR,
+            monthFormat: AppConstants.DATE_TIME_FORMAT.MONTH,
+            yearFormat: AppConstants.DATE_TIME_FORMAT.YEAR,
+            startDateFormat: AppConstants.DATE_TIME_FORMAT.DATE,
+            endDateFormat: AppConstants.DATE_TIME_FORMAT.DATE,
+        },
+        viewFormat: [AppConstants.DATE_TIME_FORMAT.MONTH + "/" + AppConstants.DATE_TIME_FORMAT.YEAR]
+    },
+
+    quarter: {
+        inputFormat: AppConstants.DATE_TIME_FORMAT.QUARTER + "-" + AppConstants.DATE_TIME_FORMAT.YEAR,
+        outputFormat: {
+            quarterYearFormat: AppConstants.DATE_TIME_FORMAT.QUARTER + "-" + AppConstants.DATE_TIME_FORMAT.YEAR,
+            quarterFormat: AppConstants.DATE_TIME_FORMAT.QUARTER,
+            yearFormat: AppConstants.DATE_TIME_FORMAT.YEAR,
+            startDateFormat: AppConstants.DATE_TIME_FORMAT.DATE,
+            endDateFormat: AppConstants.DATE_TIME_FORMAT.DATE,
+        },
+        viewFormat: [AppConstants.DATE_TIME_FORMAT.QUARTER + "-" + AppConstants.DATE_TIME_FORMAT.YEAR]
+    },
+
+    year: {
+        inputFormat: AppConstants.DATE_TIME_FORMAT.YEAR,
+        outputFormat: {
+            yearFormat: AppConstants.DATE_TIME_FORMAT.YEAR,
+            startDateFormat: AppConstants.DATE_TIME_FORMAT.DATE,
+            endDateFormat: AppConstants.DATE_TIME_FORMAT.DATE,
+        },
+        viewFormat: [AppConstants.DATE_TIME_FORMAT.YEAR]
+    }
+};
+
 const CommonDatePicker = ({typePicker: p_typePicker, ...props}) => {
 
     let ref_id = useRef(props.id || uuidv4());
-
-    const format = {
-        date: {
-            inputFormat: AppConstants.DATE_TIME_FORMAT.DATE,
-            outputFormat: AppConstants.DATE_TIME_FORMAT.DATE,
-            viewFormat: AppConstants.DATE_TIME_FORMAT.DATE
-        },
-
-        time: {
-            inputFormat: AppConstants.DATE_TIME_FORMAT.TIME,
-            outputFormat: AppConstants.DATE_TIME_FORMAT.TIME,
-            viewFormat: AppConstants.DATE_TIME_FORMAT.TIME
-        },
-
-        datetime: {
-            inputFormat: AppConstants.DATE_TIME_FORMAT.DATE_TIME,
-            outputFormat: AppConstants.DATE_TIME_FORMAT.DATE_TIME,
-            viewFormat: AppConstants.DATE_TIME_FORMAT.DATE_TIME
-        },
-
-        week: {
-            inputFormat: AppConstants.DATE_TIME_FORMAT.WEEK + "-" + AppConstants.DATE_TIME_FORMAT.YEAR,
-            outputFormat: {
-                weekYearFormat: AppConstants.DATE_TIME_FORMAT.WEEK + "-" + AppConstants.DATE_TIME_FORMAT.YEAR,
-                weekFormat: AppConstants.DATE_TIME_FORMAT.WEEK,
-                yearFormat: AppConstants.DATE_TIME_FORMAT.YEAR,
-                startDateFormat: AppConstants.DATE_TIME_FORMAT.DATE,
-                endDateFormat: AppConstants.DATE_TIME_FORMAT.DATE,
-            },
-            viewFormat: AppConstants.DATE_TIME_FORMAT.WEEK + "-" + AppConstants.DATE_TIME_FORMAT.YEAR
-        },
-
-        month: {
-            inputFormat: AppConstants.DATE_TIME_FORMAT.MONTH + "/" + AppConstants.DATE_TIME_FORMAT.YEAR,
-            outputFormat: {
-                monthYearFormat: AppConstants.DATE_TIME_FORMAT.MONTH + "/" + AppConstants.DATE_TIME_FORMAT.YEAR,
-                monthFormat: AppConstants.DATE_TIME_FORMAT.MONTH,
-                yearFormat: AppConstants.DATE_TIME_FORMAT.YEAR,
-                startDateFormat: AppConstants.DATE_TIME_FORMAT.DATE,
-                endDateFormat: AppConstants.DATE_TIME_FORMAT.DATE,
-            },
-            viewFormat: AppConstants.DATE_TIME_FORMAT.MONTH + "/" + AppConstants.DATE_TIME_FORMAT.YEAR
-        },
-
-        quarter: {
-            inputFormat: AppConstants.DATE_TIME_FORMAT.QUARTER + "-" + AppConstants.DATE_TIME_FORMAT.YEAR,
-            outputFormat: {
-                quarterYearFormat: AppConstants.DATE_TIME_FORMAT.QUARTER + "-" + AppConstants.DATE_TIME_FORMAT.YEAR,
-                quarterFormat: AppConstants.DATE_TIME_FORMAT.QUARTER,
-                yearFormat: AppConstants.DATE_TIME_FORMAT.YEAR,
-                startDateFormat: AppConstants.DATE_TIME_FORMAT.DATE,
-                endDateFormat: AppConstants.DATE_TIME_FORMAT.DATE,
-            },
-            viewFormat: AppConstants.DATE_TIME_FORMAT.QUARTER + "-" + AppConstants.DATE_TIME_FORMAT.YEAR
-        },
-
-        year: {
-            inputFormat: AppConstants.DATE_TIME_FORMAT.YEAR,
-            outputFormat: {
-                yearFormat: AppConstants.DATE_TIME_FORMAT.YEAR,
-                startDateFormat: AppConstants.DATE_TIME_FORMAT.DATE,
-                endDateFormat: AppConstants.DATE_TIME_FORMAT.DATE,
-            },
-            viewFormat: AppConstants.DATE_TIME_FORMAT.YEAR
-        }
-    };
 
     const selectComponent = () => {
         let element = null;

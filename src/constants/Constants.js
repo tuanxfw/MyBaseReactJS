@@ -11,6 +11,11 @@ export const App = {
         PAGE_SIZE_DEFAULT: 50,
     },
 
+    INPUT_PICKER: {
+        DATE: ["DD/MM/YYYY", "DDMMYYYY", "D/MM/YYYY", "D/M/YYYY", "D/M/YY", "D/MM/YY", "DD/M/YYYY", "DD/M/YY", "DD/MM/YY"],
+    },
+
+
     DATE_TIME_FORMAT: {
         TIME: "HH:mm:ss",
         DATE: "DD/MM/YYYY",
@@ -42,7 +47,7 @@ export const Action = {
 };
 
 export const Services = {
-    TIMEOUT_REST_API: 10000,
+    TIMEOUT_REST_API: undefined,
 
     RESPONSE_CODE: {
         SUCCESS: "API-000",

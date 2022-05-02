@@ -17,6 +17,15 @@
   .row {
     margin: 0px !important;
   }
+
+  .content-single-col {
+    * {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+  
   .content {
     border-right: 1px solid rgba(0, 0, 0, 0.226);
     border-bottom: 1px solid rgba(0, 0, 0, 0.226);

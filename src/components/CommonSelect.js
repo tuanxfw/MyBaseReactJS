@@ -5,9 +5,18 @@ import debounce from 'lodash/debounce';
 
 const CommmonSelect = ({ dataRender, funcRender, lazyLoad, ...props }) => {
 
-  const onChangeValue = (e) => {
-    if (props.onChange) {
-      props.onChange(e || "");
+  const onChangeValue = (value) => {
+    if (props.onChange && value !== "all") {
+      props.onChange(value);
+    }
+  }
+
+  const onSelectOption = (value, element) => {
+    if (props.onSelect) {
+      props.onSelect(value, element?.item);
+    }
+    if (props.onChange && value === "all") {
+      props.onChange(value);
     }
   }
 
@@ -15,6 +24,7 @@ const CommmonSelect = ({ dataRender, funcRender, lazyLoad, ...props }) => {
     let options = { ...props };
     options.className = "common-select " + props.className;
     options.onChange = onChangeValue;
+    options.onSelect = onSelectOption;
 
     if (!lazyLoad) {
       return <NormalSelect {...options}>
@@ -77,7 +87,8 @@ const filterSelectOption = (input, event) => {
 CommmonSelect.defaultProps = {
   showSearch: true,
   allowClear: true,
+  maxTagCount: 'responsive',
   //optionLabelProp: "label",
   //labelInValue: true,
-  filterOption: filterSelectOption,
+  filterOption: filterSelectOption
 };

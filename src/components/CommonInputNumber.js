@@ -39,7 +39,7 @@ const CommonInputNumber = ({ onChange, ...props }) => {
 }
 
 CommonInputNumber.propTypes = {
-    value: PropTypes.number,
+    //value: PropTypes.number,
     maxlength: PropTypes.number,
     min: PropTypes.number,
     max: PropTypes.number,

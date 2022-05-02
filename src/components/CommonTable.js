@@ -16,6 +16,7 @@ import CustomTablePagingApi from "components/table/CustomTablePagingApi";
 import CustomTablePagingClient from "components/table/CustomTablePagingClient";
 import { ObjectUtils } from "utils/ObjectUtils";
 import { DateUtils } from 'utils/DateUtils';
+import { StringUtils } from 'utils/StringUtils';
 import i18n from "translation/i18n";
 
 const _ = require('lodash');
@@ -54,24 +55,24 @@ const CommonTable = ({
     ];
 
     const optionsMatchMode = [
-        {//like
-            value: "{str}",
+        {
+            value: "contains",
             name: "%%",
         },
-        {//==
-            value: "^{str}$",
+        {
+            value: "equals",
             name: "==",
         },
-        {//!=
-            value: "^((?!{str}).)*$",
+        {
+            value: "notContains",
             name: "!=",
         },
-        {//start
-            value: "^{str}",
+        {
+            value: "startWith",
             name: "%.",
         },
-        {//end
-            value: "{str}$",
+        {
+            value: "endWith",
             name: ".%",
         },
     ];
@@ -143,9 +144,11 @@ const CommonTable = ({
                 </Row>
             </>;
 
-            col.formatter = (cell, row, rowIndex) => <CommonTooltip className="cell">
+            col.formatExtraData = (cell, row, rowIndex) => <CommonTooltip className="cell">
                 {genCellContent(cell, row, rowIndex, cellRender)}
             </CommonTooltip>;
+
+            col.formatter = (cell, row, rowIndex, formatExtra) => formatExtra(cell, row, rowIndex);
 
             if (col.visible === undefined) col.visible = true;
 
@@ -366,7 +369,7 @@ const CommonTable = ({
 
         return resultElement;
     };
-    
+
 
     //#endregion
 
@@ -493,6 +496,10 @@ const CommonTable = ({
     const filter = (data) => {
         let dataAfterFilter = [...data];
 
+        if (JSON.stringify(ref_filterConidtion.current) === "{}") {
+            return dataAfterFilter;
+        }
+
         const lstField = _.keys(ref_filterConidtion.current);
         lstField.map((field) => {
 
@@ -500,22 +507,19 @@ const CommonTable = ({
 
             let mathMode = "";
             if (col?.filter?.type === "select" || col?.filter?.type === "date") {
-                mathMode = "^{str}$"; //==
+                mathMode = "equals";
             }
             else {
                 mathMode = ref_mathMode.current[field] || optionsMatchMode[0].value;
             }
 
-            const findString = mathMode.replaceAll("{str}", ref_filterConidtion.current[field]);
-            const regex = new RegExp(findString, 'i'); //i: không biệt hoa thường
+            const findString = ref_filterConidtion.current[field];
 
             if (col?.filter?.function) {
                 dataAfterFilter = col?.filter?.function(dataAfterFilter, ref_filterConidtion.current[field], field);
             }
             else {
-                dataAfterFilter = _.filter(dataAfterFilter, (obj) => {
-                    return regex.test(obj[field]);
-                });
+                dataAfterFilter = _.filter(dataAfterFilter, (obj) => StringUtils.compareString(findString, obj[field], mathMode));
             }
 
         });
@@ -579,7 +583,11 @@ const CommonTable = ({
     };
 
     const getListSelectdKey = (data) => {
-        return _.map(data, props.keyField);
+        let keys = _.map(data, props.keyField);
+
+        ref_dataSelected.current = keys;
+
+        return keys;
     };
 
     const focusElementAfterRender = () => {

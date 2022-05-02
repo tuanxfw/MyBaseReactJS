@@ -12,7 +12,7 @@ export const AuthenUtils = {
 };
 
 function setUserTokenLocal (token, timeout = 10000) {
-    let cookieData = JSON.parse(cookies.get(Config.CODE) || "{}");
+    let cookieData = cookies.get(Config.CODE) || {};
     cookieData.userToken = token;
 
     cookies.set(Config.CODE, JSON.stringify(cookieData), {maxAge: timeout});

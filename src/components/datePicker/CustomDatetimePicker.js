@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import 'antd/dist/antd.css';
 import { DatePicker } from 'antd';
 import { DateUtils } from 'utils/DateUtils';
+import moment from 'moment';
 
 const CustomDatetimePicker = (props) => {
   const [s_value, s_setValue] = useState(null);
@@ -39,8 +40,8 @@ const CustomDatetimePicker = (props) => {
       <DatePicker
         {...props}
         getPopupContainer={props.id ? () => document.getElementById("parent-" + props.id) : undefined}
-        placeholder={props.format.viewFormat}
-        format={[props.format.viewFormat]}
+        placeholder={props.format.viewFormat[0]}
+        format={props.format.viewFormat}
         showTime
         value={s_value}
         onChange={onChange} />

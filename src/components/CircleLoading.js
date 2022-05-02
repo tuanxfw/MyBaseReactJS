@@ -16,6 +16,7 @@ const CircleLoading = (props) => {
     <>
       <Modal
         className="circle-loading"
+        autoFocus={false}
         backdrop={true}
         scrollable={false}
         fullscreen={true}

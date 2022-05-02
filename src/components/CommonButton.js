@@ -4,7 +4,7 @@ import ButtonIconText from "components/button/ButtonIconText";
 import ButtonIcon from "components/button/ButtonIcon";
 import ActionTable from "components/button/ActionTable";
 
-const CommonButton = ({code: p_code, type: p_type, ...rest}) => {
+const CommonButton = ({code: p_code, type: p_type, onClick: p_onClick, ...rest}) => {
 
   //#region Method
   const selectButton = () => {
@@ -46,8 +46,8 @@ const CommonButton = ({code: p_code, type: p_type, ...rest}) => {
     
     writeLog(p_code);
 
-    if (rest.onClick) {
-      rest.onClick(e);
+    if (p_onClick) {
+      p_onClick(e);
     }
   };
   //#endregion

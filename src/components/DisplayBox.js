@@ -17,7 +17,7 @@ const DisplayBox = (props) => {
 
   return (
     <Card className="display-box-sytyle">
-      <CardHeader className="header-display-box" onClick={onToggle}>
+      <CardHeader className="header-display-box" onClick={onToggle} hidden={!props.title}>
         <Button>
           <span>{props.title}</span>
           <i className={s_isOpen ? "fa fa-caret-down" : "fa fa-caret-right"} />

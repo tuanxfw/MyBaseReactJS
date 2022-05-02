@@ -120,7 +120,7 @@ const DefaultSideBar = (props) => {
         <OffcanvasBody className="sidebar-body-style">
           <Menu
             mode="inline"
-            //mode="vertical"
+            //mode="vertical" subMenuCloseDelay={0.5}
             style={{ width: "100%" }}
             onOpenChange={onSubMenuClick}
             openKeys={s_subSelected}

@@ -39,7 +39,7 @@ const CustomTimePicker = (props) => {
         {...props}
         getPopupContainer={props.id ? () => document.getElementById("parent-" + props.id) : undefined}
         placeholder={props.format.viewFormat}
-        format={[props.format.viewFormat]}
+        format={props.format.viewFormat[0]}
         value={s_value}
         picker={'time'}
         showTime

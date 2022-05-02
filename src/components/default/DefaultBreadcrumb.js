@@ -128,7 +128,7 @@ const BreadcrumbSub = (props) => {
 
     //#region Method
     const findSubMenu = (currentSub, menuData) => {
-        let sub = null;
+        let sub = {};
 
         for (let i = 0; i < menuData.length; i++) {
             const menu = menuData[i];
