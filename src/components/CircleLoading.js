@@ -1,16 +1,16 @@
-import React from "react";
+import React, {useEffect} from "react";
 import store from "redux/store";
 import { useSelector } from "react-redux";
 import { Modal } from "reactstrap";
 import {
-  getStatusCircleLoading,
+  getRegistrationCircleLoading,
 } from "redux/selectors/circleLoadingSelectors";
 import {
-  toggleCircleLoading,
+  setRegistrationCircleLoading,
 } from "redux/actions/circleLoadingActions";
 
 const CircleLoading = (props) => {
-  const r_statusCircleLoading = useSelector(getStatusCircleLoading);
+  const r_registration = useSelector(getRegistrationCircleLoading);
 
   return (
     <>
@@ -21,7 +21,7 @@ const CircleLoading = (props) => {
         scrollable={false}
         fullscreen={true}
         zIndex={3000}
-        isOpen={r_statusCircleLoading}
+        isOpen={r_registration > 0 ? true : false}
       >
         <div className="dashed-loading"/>
       </Modal>
@@ -32,9 +32,15 @@ const CircleLoading = (props) => {
 export default CircleLoading;
 
 export const showCircleLoading = () => {
-  store.dispatch(toggleCircleLoading(true));
+  let registration = store.getState().circleLoading.registration;
+  registration++;
+
+  store.dispatch(setRegistrationCircleLoading(registration));
 };
 
 export const closeCircleLoading = () => {
-  store.dispatch(toggleCircleLoading(false));
+  let registration = store.getState().circleLoading.registration;
+  registration--;
+
+  store.dispatch(setRegistrationCircleLoading(registration));
 };

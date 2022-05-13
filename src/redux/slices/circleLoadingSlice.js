@@ -3,11 +3,11 @@ import { createSlice } from '@reduxjs/toolkit';
 export default createSlice({
   name: 'circleLoading',
   initialState: {
-    isOpen: false,
+    registration: 0,
   },
   reducers: {
-    toggleCircleLoading: (state, action) => {
-      state.isOpen = action.payload;
+    setRegistrationCircleLoading: (state, action) => {
+      state.registration = action.payload;
     },
   },
 });

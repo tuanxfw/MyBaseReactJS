@@ -1,3 +1,3 @@
 //import { createSelector } from '@reduxjs/toolkit';
 
-export const getStatusCircleLoading = (state) => state.circleLoading.isOpen;
+export const getRegistrationCircleLoading = (state) => state.circleLoading.registration;

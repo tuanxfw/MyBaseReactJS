@@ -117,6 +117,7 @@ const BreadcrumbSub = (props) => {
             let menu = genMenuBreadcrumb(meunSub.children);
             s_setContent(
                 <Menu
+                    className="breadcrumb-style-scroll"
                     key={uuidv4()}>
                     {menu}
                 </Menu>

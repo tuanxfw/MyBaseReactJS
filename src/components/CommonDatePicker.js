@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { forwardRef, useRef } from "react";
 import PropTypes from 'prop-types';
 import { App as AppConstants } from 'constants/Constants';
 import { v4 as uuidv4 } from 'uuid';
@@ -77,7 +77,7 @@ const format = {
     }
 };
 
-const CommonDatePicker = ({typePicker: p_typePicker, ...props}) => {
+const CommonDatePicker = forwardRef(({typePicker: p_typePicker, ...props}, ref) => {
 
     let ref_id = useRef(props.id || uuidv4());
 
@@ -150,7 +150,7 @@ const CommonDatePicker = ({typePicker: p_typePicker, ...props}) => {
             {selectComponent()}
         </div>
     );
-}
+});
 
 export default CommonDatePicker;
 
@@ -159,5 +159,5 @@ CommonDatePicker.propTypes = {
 };
 
 CommonDatePicker.defaultProps = {
-    //id: uuidv4(),
+    
 };

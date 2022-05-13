@@ -1,30 +1,58 @@
-import React, { useState, useMemo } from "react";
-import { Select, Spin } from "antd";
+import React, {forwardRef, useState, useMemo } from "react";
+import { Select, Checkbox, Spin } from "antd";
 import { ObjectUtils } from "utils/ObjectUtils";
 import debounce from 'lodash/debounce';
+import PropTypes from "prop-types";
 
-const CommmonSelect = ({ dataRender, funcRender, lazyLoad, ...props }) => {
+const _ = require('lodash');
 
-  const onChangeValue = (value) => {
+const CommmonSelect = forwardRef(({ dataRender, funcRender, lazyLoad, checkAll, ...props}, ref) => {
+
+  const [s_isCheckAll, s_setIsCheckAll] = useState(false);
+
+  const onChangeValue = (value, options) => {
     if (props.onChange && value !== "all") {
-      props.onChange(value);
+      props.onChange(value, options?.item);
     }
-  }
 
-  const onSelectOption = (value, element) => {
-    if (props.onSelect) {
-      props.onSelect(value, element?.item);
+    if (props.mode === "multiple") {
+      value.length === dataRender.length ? s_setIsCheckAll(true) : s_setIsCheckAll(false);;
     }
-    if (props.onChange && value === "all") {
-      props.onChange(value);
+  };
+
+  const onCheckAll = (e) => {
+    let fieldValue = _.toString(checkAll);
+
+    if (!props.onChange || fieldValue === "" || _.isEmpty(dataRender)) {
+      return;
     }
-  }
+
+    if (e.target.checked) {
+      props.onChange(_.map(dataRender, obj => String(obj[fieldValue])), dataRender);
+
+      s_setIsCheckAll(true);
+    }
+    else {
+      props.onChange([], []);
+
+      s_setIsCheckAll(false);
+    }
+
+  };
 
   const selectComponent = () => {
     let options = { ...props };
     options.className = "common-select " + props.className;
     options.onChange = onChangeValue;
-    options.onSelect = onSelectOption;
+
+    if (options.mode === "multiple" && !options.dropdownRender && checkAll) {
+      options.dropdownRender = (menu) => <>
+          {menu}
+          <div className="common-select-check-all">
+              <Checkbox checked={s_isCheckAll} onChange={onCheckAll}>Chọn tất cả</Checkbox>
+          </div>
+      </>;
+  }
 
     if (!lazyLoad) {
       return <NormalSelect {...options}>
@@ -42,9 +70,8 @@ const CommmonSelect = ({ dataRender, funcRender, lazyLoad, ...props }) => {
 
   return <>
     {selectComponent()}
-    {/* <input hidden /> */}
   </>;
-};
+});
 
 export default React.memo(CommmonSelect, ObjectUtils.compareProps);
 
@@ -89,6 +116,21 @@ CommmonSelect.defaultProps = {
   allowClear: true,
   maxTagCount: 'responsive',
   //optionLabelProp: "label",
-  //labelInValue: true,
   filterOption: filterSelectOption
+};
+
+CommmonSelect.propTypes = {
+  showSearch: PropTypes.bool,
+  allowClear: PropTypes.bool,
+  dataRender: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.func
+  ]),
+  filterOption: PropTypes.func,
+  funcRender: PropTypes.func,
+  onChange: PropTypes.func,
+  value: PropTypes.any,
+  mode: PropTypes.oneOf(['single', 'multiple']),
+  checkAll: PropTypes.string,
+  disabled: PropTypes.bool
 };

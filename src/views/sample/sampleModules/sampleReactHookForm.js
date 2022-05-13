@@ -3,6 +3,7 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Input } from "antd";
 import yup from 'utils/Validation'
+import useFocusError from "hook/useFocusError";
 
 import CommonLabel from 'components/CommonLabel';
 import CommonValidTooltip from 'components/CommonValidTooltip';
@@ -32,8 +33,18 @@ const SampleReactHookForm = (props) => {
 
 
     const { control, watch, handleSubmit, getValues, setValue, formState: { errors, isDirty } } = useForm({
+        defaultValues: {
+            text: "te",
+            number: 1,
+            select: "value1",
+            date: "30/04/2022",
+
+        },
         resolver: yupResolver(schema)
     });
+
+    useFocusError("testForm", errors);
+    useFocusError("testForm2", errors);
 
     const onSubmit = data => {
         console.log({ data });
@@ -42,6 +53,13 @@ const SampleReactHookForm = (props) => {
 
     const getValue = () => {
         let valueForm = getValues();
+
+
+        schema.isValid(valueForm).then((valid) => {
+            console.log({ valid });
+        })
+
+
         console.log({ valueForm });
     };
 
@@ -56,13 +74,20 @@ const SampleReactHookForm = (props) => {
             <form id="testForm" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
                 <CommonLabel>{"Input text"}</CommonLabel>
                 <CommonValidTooltip>{errors?.["text"]?.message}</CommonValidTooltip>
-                <Controller
-                    control={control}
-                    name="text"
-                    render={({ field }) => (
-                        <Input {...field} />
-                    )}
-                />
+                <div>
+                    <div>
+                        <div>
+                            <Controller
+                                control={control}
+                                name="text"
+                                render={({ field }) => (
+                                    <Input {...field} />
+                                )}
+                            //defaultValue={"te"}
+                            />
+                        </div>
+                    </div>
+                </div>
 
                 <CommonLabel>{"Input number"}</CommonLabel>
                 <CommonValidTooltip>{errors?.["number"]?.message}</CommonValidTooltip>
@@ -75,14 +100,20 @@ const SampleReactHookForm = (props) => {
                             onChange={(e) => onChange(e.value)}
                         />
                     )}
+                //defaultValue={1}
                 />
+
+                <CommonButton htmlType="submit">Submit</CommonButton>
+                <CommonButton onClick={getValue}>Get Value</CommonButton>
+            </form>
+            <form  id="testForm2" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
 
                 <CommonLabel>{"Select"}</CommonLabel>
                 <CommonValidTooltip>{errors?.["select"]?.message}</CommonValidTooltip>
                 <Controller
                     control={control}
                     name="select"
-                    render={({ field: { onChange, ...field} }) => (
+                    render={({ field: { onChange, ...field } }) => (
                         <CommonSelect
                             {...field}
                             //defaultValueonChange={onChange}
@@ -108,11 +139,11 @@ const SampleReactHookForm = (props) => {
                     control={control}
                     name="date"
                     render={({ field }) => (
-                        <CommonDatePicker
+                        <CommonDatePicker id="testDate"
                             {...field}
                             typePicker="date" />
                     )}
-                    defaultValue={"30/04/2022"}
+                //defaultValue={"30/04/2022"}
                 />
 
                 <CommonButton htmlType="submit">Submit</CommonButton>

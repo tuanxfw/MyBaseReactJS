@@ -5,7 +5,7 @@ const _ = require('lodash');
 export const StringUtils = {
     checkEmailFormat,
     checkDateFormat,
-    stringIsNullOrEmpty,
+    getBytesString,
     compareString,
 };
 
@@ -33,11 +33,6 @@ function checkDateFormat(str) {
     }
 
     return true;
-};
-
-function stringIsNullOrEmpty(string) {
-    if (string === undefined || string === null || String(string) === "") return true
-    return false
 };
 
 function compareString(targetStr, str, mode) {
@@ -73,4 +68,11 @@ function compareString(targetStr, str, mode) {
     }
 
     return result;
-}
+};
+
+function getBytesString (value) {
+    let m = encodeURIComponent(value).match(/%[89ABab]/g);
+    let bytes = value.length + (m ? m.length : 0);
+
+    return bytes
+};

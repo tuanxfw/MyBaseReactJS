@@ -1,6 +1,6 @@
-export const toggleCircleLoading = (isOpen) => {
+export const setRegistrationCircleLoading = (value) => {
   return {
-    type: 'circleLoading/toggleCircleLoading',
-    payload: isOpen,
+    type: 'circleLoading/setRegistrationCircleLoading',
+    payload: value,
   };
 };

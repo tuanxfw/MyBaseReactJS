@@ -38,3 +38,9 @@
 .breadcrumbItem {
   cursor: pointer;
 }
+
+.breadcrumb-style-scroll {
+  background-color: white;
+  overflow-y: auto;
+  max-height: 80vh;
+}

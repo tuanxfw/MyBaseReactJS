@@ -14,14 +14,14 @@ const CommonTreeSelect = ({
 }) => {
 
   const onChangeValue = (value) => {
-    if (props.onChange) {
-      props.onChange(value);
+    if (_.isEmpty(value) && props.onChange) {
+      props.onChange(value, value);
     }
   };
 
   const onSelectOption = (value, element) => {
-    if (props.onSelect) {
-      props.onSelect(_.toString(value), element?.item);
+    if (props.onChange) {
+      props.onChange(_.toString(value), element?.item);
     }
   };
 
@@ -31,8 +31,8 @@ const CommonTreeSelect = ({
         {...props}
         className="common-tree-select"
         showCheckedStrategy={showCheckedStrategy === "child" ? SHOW_CHILD : showCheckedStrategy === "parent" ? SHOW_PARENT : SHOW_ALL}
-        onChange={onChangeValue}
         onSelect={onSelectOption}
+        onChange={onChangeValue}
       >
         {funcRender(dataRender)}
       </TreeSelect>
@@ -64,3 +64,4 @@ CommonTreeSelect.defaultProps = {
   dataRender: [],
   funcRender: () => { },
 };
+

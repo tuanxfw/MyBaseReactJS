@@ -3,8 +3,8 @@ module.exports = {
         configure: (webpackConfig) => {
             return {
                 ...webpackConfig,
-               
-                //devtool: 'eval',
+                devtool: 'eval',
+                stats: 'errors-only',
             }
         }
     }

@@ -4,21 +4,8 @@ import { Config } from 'constants/Constants';
 const _ = require('lodash');
 
 export const ObjectUtils = {
-    objectNullOrEmpty,
     compareProps
 };
-
-
-function objectNullOrEmpty(obj) {
-    if (
-        obj === undefined
-        || obj === null
-    ) {
-        return true;
-    }
-
-    return false;
-}
 
 function compareProps(obj1, obj2) {
     if (Config.MODE === "development") {
@@ -56,4 +43,26 @@ function compareProps(obj1, obj2) {
     }
 
     return result;
-}
+};
+
+function compareObjectValue(obj1, obj2, fnCompare) {
+    let values1 = _.values(obj1);
+    let values2 = _.values(obj2);
+
+    if (!fnCompare) {
+        fnCompare = (value1, value2) => {
+           return _.toString(value1) === _.toString(value2)
+        };
+    }
+
+    let result = true;
+
+    for (let i = 0; i < values1.length; i++) {
+        if (!fnCompare(values1[i], values2[i])) {
+            result = false;
+            break;
+        }
+    }
+
+    return result;
+};

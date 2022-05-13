@@ -5,8 +5,22 @@ import { TestService } from "services/sampleService/TestService";
 const SampleButtons = (props) => {
 
     const onClick = async (e) => {
-        let data = await TestService.testGet();
-        console.log(data);
+        setTimeout(async () => {
+            let data = await TestService.testGet();
+            console.log(data);
+        }, 500)
+        setTimeout(async () => {
+            let data = await TestService.testGet();
+            console.log(data);
+        }, 750)
+        setTimeout(async () => {
+            let data = await TestService.testGet();
+            console.log(data);
+        }, 1000)
+        setTimeout(async () => {
+            let data = await TestService.testGet();
+            console.log(data);
+        }, 1200)
     };
 
     return (

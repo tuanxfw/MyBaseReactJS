@@ -9,9 +9,12 @@
     pointer-events: none;
   }
 }
-.button-style:hover,
-.button-style:focus {
+.button-style:hover {
+  color: $button-text-color;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+.button-style:focus {
+  box-shadow: rgba(0, 61, 131, 0.3) 0px 0px 0px 5px;
   color: $button-text-color;
 }
 

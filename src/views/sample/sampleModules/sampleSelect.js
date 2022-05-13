@@ -75,7 +75,7 @@ const SampleSelect = (props) => {
         <CommonLabel>{"Gen collection with multiple col"}</CommonLabel>
         <CommonValidTooltip>{""}</CommonValidTooltip>
         <CommonSelect
-          onChange={(e) => console.log(e)}
+          onChange={(value, option) => console.log({value, option})}
           dataRender={s_testList}
           funcRender={renderMultipleColumnOptions(
             "value",
@@ -100,7 +100,7 @@ const SampleSelect = (props) => {
         <CommonLabel>{"Tree select"}</CommonLabel>
         <CommonValidTooltip></CommonValidTooltip>
         <CommonTreeSelect
-          onChange={(e) => console.log(e)}
+          onChange={(value, option) => console.log({value, option})}
           dataRender={dataTree} //function rest api, param = value search
           funcRender={renderTreeOptions("value", "name", "child")}
         />

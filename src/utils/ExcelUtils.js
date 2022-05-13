@@ -2,6 +2,19 @@ import * as XLSX from 'xlsx';
 
 export const ExcelUtils = {
     readXLSX,
+    writeXLSX,
+};
+
+function writeXLSX(inputData) {
+    const { data, headers, fileName, options } = inputData;
+
+    let ws = XLSX.utils.json_to_sheet(data, options);
+    XLSX.utils.sheet_add_aoa(ws, [headers], { origin: 0 });
+
+    let wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws);
+
+    XLSX.writeFile(wb, fileName);
 };
 
 function readXLSX(file, callBackFunc, config = {}){
