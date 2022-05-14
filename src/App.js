@@ -2,7 +2,8 @@ import React, { Suspense, lazy, useState, useEffect } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { withTranslation } from "react-i18next";
 import { ConfigProvider } from 'antd';
-import { QueryClient, QueryClientProvider } from 'react-query'
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
 import ErrorBoundary from "components/default/ErrorBoundary";
 import { Language } from "translation/language"
@@ -44,6 +45,7 @@ const App = (props) => {
             </Suspense>
           </BrowserRouter>
         </ErrorBoundary>
+        {Config.MODE === "development" ? <ReactQueryDevtools/> : <></>}
       </QueryClientProvider>
     </ConfigProvider >
   );

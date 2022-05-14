@@ -9,6 +9,7 @@ import CommonValidTooltip from 'components/CommonValidTooltip';
 import CommonInputNumber from "components/CommonInputNumber";
 import CommonInputFile from "components/CommonInputFile";
 import CommonTextEditor from "components/CommonTextEditor";
+import WrappedLoading from "components/WrappedLoading";
 
 const SampleInput = (props) => {
 
@@ -17,13 +18,15 @@ const SampleInput = (props) => {
             <Col>
                 <CommonLabel>{"Input number"}</CommonLabel>
                 <CommonValidTooltip>{"Lỗi gì đó"}</CommonValidTooltip>
-                <CommonInputNumber onChange={(value) => console.log(value)}/>
+                <WrappedLoading isLoading={true}>
+                    <CommonInputNumber onChange={(value) => console.log(value)} />
+                </WrappedLoading>
             </Col>
 
             <Col>
                 <CommonLabel>{"Input text"}</CommonLabel>
                 <CommonValidTooltip></CommonValidTooltip>
-                <Input onChange={(e) => console.log(e)}/>
+                <Input onChange={(e) => console.log(e)} />
             </Col>
 
             <Col>
@@ -35,24 +38,24 @@ const SampleInput = (props) => {
             <Col>
                 <CommonLabel>{"Input file"}</CommonLabel>
                 <CommonValidTooltip></CommonValidTooltip>
-                <CommonInputFile 
-                onChange={(e) => console.log(e)} 
-                config={{
-                    multiple: true,
-                    accept: "image/png, image/jpeg",
-                }}/>
+                <CommonInputFile
+                    onChange={(e) => console.log(e)}
+                    config={{
+                        multiple: true,
+                        accept: "image/png, image/jpeg",
+                    }} />
             </Col>
 
             <Col>
                 <CommonLabel>{"Input textare"}</CommonLabel>
                 <CommonValidTooltip></CommonValidTooltip>
-                <Input.TextArea/>
+                <Input.TextArea />
             </Col>
 
             <Col md={12}>
                 <CommonLabel>{"Text editor"}</CommonLabel>
                 <CommonValidTooltip></CommonValidTooltip>
-                <CommonTextEditor/>
+                <CommonTextEditor />
             </Col>
         </Row>
     );
