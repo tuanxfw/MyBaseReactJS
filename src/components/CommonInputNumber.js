@@ -4,6 +4,8 @@ import { Input } from 'antd';
 import NumberFormat from "react-number-format";
 import { App as AppConstants } from "constants/Constants";
 
+const _ = require('lodash');
+
 const CommonInputNumber = forwardRef(({
     onChange: p_onChange,
     fieldValue: p_fieldValue,
@@ -37,3 +39,17 @@ CommonInputNumber.propTypes = {
 };
 
 export default CommonInputNumber;
+
+export const exceptionChar = (chars = []) => (values) => {
+    let value = _.toString(values["value"]);
+
+    for (let i = 0; i < chars.length; i++) {
+        const char = chars[i];
+
+        if (value.includes(char)) {
+            return false;
+        }
+    }
+
+    return true;
+};

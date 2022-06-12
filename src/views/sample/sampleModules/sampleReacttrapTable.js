@@ -58,11 +58,8 @@ const SampleReacttrapTable = (props) => {
     };
 
     const getFilter = (onFilter) => {
-        let handleFilter = (e) => {
-            onFilter(e?.target?.value ?? e);
-        }
 
-        return _.debounce(handleFilter, 700);
+        return _.debounce((e) => onFilter(e.target.value ), 700);
     };
 
     const columns = [
@@ -171,7 +168,6 @@ const SampleReacttrapTable = (props) => {
                             <BootstrapTable
                                 keyField='id' //remote
                                 data={s_data}
-                                loading={ true }
                                 columns={columns}
                                 filterPosition="top"
                                 filter={filterFactory()}

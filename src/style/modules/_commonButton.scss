@@ -1,7 +1,7 @@
 .button-style {
   color: $button-text-color;
   background-color: $button-background-color !important;
-  border: $button-border-color !important;
+  border: $button-border-color ;
   outline: none;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 
@@ -14,7 +14,14 @@
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 .button-style:focus {
-  box-shadow: rgba(0, 61, 131, 0.3) 0px 0px 0px 5px;
+  box-shadow: rgba(3, 102, 214, 0.3) 0px 0px 0px 5px;
+  color: $button-text-color;
+}
+.button-style:disabled {
+  color: $button-text-color;
+  opacity: 0.6;
+}
+.button-style:hover:disabled {
   color: $button-text-color;
 }
 
@@ -31,7 +38,6 @@
 }
 
 .action-table-style {
-  //background-color: $button-text-color !important;
   background-color: transparent;
   color: $button-background-color !important;
   width: 25px;
@@ -45,11 +51,19 @@
 }
 .action-table-style:hover {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  
 }
 .action-table-style:focus {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 .action-table-style:disabled {
   opacity: 0.5 !important;
+  outline-color: none;
+  background-color: none;
+  background: none;
+  box-shadow: none;
 }
+.action-table-style:hover:disabled {
+  background: none !important;
+}
+
+

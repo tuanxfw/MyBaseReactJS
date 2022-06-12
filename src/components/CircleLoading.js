@@ -40,7 +40,10 @@ export const showCircleLoading = () => {
 
 export const closeCircleLoading = () => {
   let registration = store.getState().circleLoading.registration;
-  registration--;
+  
+  if (registration > 0){
+    registration--;
+  }
 
   store.dispatch(setRegistrationCircleLoading(registration));
 };

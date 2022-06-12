@@ -71,20 +71,20 @@ const Login = (props) => {
           </DisplayBox>
         </Col>
 
-        {/* <Col>
-          <DisplayBox title={"Table"} isOpen={false}>
+        <Col>
+          <DisplayBox title={"Table"} isOpen={true}>
             <SampleTable />
           </DisplayBox>
-        </Col> */}
+        </Col>
         
-        <Col>
+        {/* <Col>
           <DisplayBox title={"SampleReacttrapTable"} isOpen={false}>
             <SampleReacttrapTable />
           </DisplayBox>
-        </Col>
+        </Col> */}
 
         <Col>
-          <DisplayBox title={"React Hook Form"} isOpen={true}>
+          <DisplayBox title={"React Hook Form"} isOpen={false}>
             <SampleReactHookForm/>
           </DisplayBox>
         </Col>

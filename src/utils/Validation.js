@@ -1,35 +1,114 @@
 import * as yup from "yup";
 import i18n from "translation/i18n";
+import { StringUtils } from 'utils/StringUtils';
+import { DateUtils } from 'utils//DateUtils';
 
 const _ = require('lodash');
 
-yup.addMethod(yup.string, "maxByte", function (size) {
-    return this.test("maxByte", "", function (value) {
+//#region Mixed
+yup.addMethod(yup.mixed, 'notEmpty', function () {
+    return this.test('notEmpty', '', function (value) {
         const { path, createError } = this;
 
-        value = _.toString(value);
+        console.log(value, 'valuevaluevalue');
 
-        let m = encodeURIComponent(value).match(/%[89ABab]/g);
-        let bytes = value.length + (m ? m.length : 0);
+        if (!_.isBoolean(value) && !_.isNumber(value) && _.isEmpty(value)) {
+            return createError({
+                path,
+                message: i18n.t('common:common.msg.emptyMessage'),
+            });
+        }
 
-        if (bytes > size) {
-            return createError({ path, message: "Độ dài kí tự vượt quá cho phép" });
+        return true;
+    });
+});
+
+yup.addMethod(yup.mixed, "custom", function (functionCustom) {
+    return this.test("custom", "", function (value) {
+        const { path, createError, parent } = this;
+        
+        let customPath = path;
+
+        const {anotherPath, isValid, message} = functionCustom(value, parent);
+
+        if (!_.isEmpty(anotherPath)) {
+            customPath = anotherPath;
+        }
+
+        if(isValid === false) {
+            return createError({path: customPath, message});
         }
         
         return true;
     });
 });
+//#endregion
 
-yup.addMethod(yup.mixed, "notEmpty", function () {
-    return this.test("notEmpty", "", function (value) {
+//#region String
+yup.addMethod(yup.string, "maxByte", function (size) {
+    return this.test("maxByte", "", function (value) {
         const { path, createError } = this;
 
-        if (_.isEmpty(value)) {
-            return createError({ path, message: i18n.t("common:common.msg.emptyMessage") });
+        let bytes = StringUtils.getBytesString(value);
+
+        if (bytes > size) {
+            return createError({ path, message: i18n.t("common:validate.textLengthIsLarget") });
         }
 
         return true;
     });
 });
+
+yup.addMethod(yup.string, "trim", function (size) {
+    return this.transform(function (value) {
+        return _.toString(value).trim();
+    });
+});
+//#endregion
+
+//#region Date
+yup.addMethod(yup.string, "minDate", function (fieldCompare, format = "") {
+    return this.test("minDate", "", function (value) {
+        const { path, createError, parent } = this;
+
+        let date1 = DateUtils.convertStringToDate(_.toString(value), format);
+        let date2 = DateUtils.convertStringToDate(_.toString(parent?.[fieldCompare]), format);
+
+        if (_.isEmpty(parent?.[fieldCompare])) {
+            return true;
+        }
+
+        if (date1 < date2) {
+            return createError({ path, message: i18n.t("common:validate.min").format(_.toString(parent?.[fieldCompare])) });
+        }
+
+        return true;
+    });
+});
+
+yup.addMethod(yup.string, "maxDate", function (fieldCompare, format = "") {
+
+    return this.test("maxDate", "", function (value) {
+        const { path, createError, parent } = this;
+
+        let date1 = DateUtils.convertStringToDate(_.toString(value), format);
+        let date2 = DateUtils.convertStringToDate(_.toString(parent?.[fieldCompare]), format);
+
+        if (_.isEmpty(parent?.[fieldCompare])) {
+            return true;
+        }
+
+        if (date1 > date2) {
+            return createError({ path, message: i18n.t("common:validate.max").format(_.toString(parent?.[fieldCompare])) });
+        }
+
+        return true;
+    });
+});
+//#endregion
+
+//#region Number
+
+//#endregion
 
 export default yup;

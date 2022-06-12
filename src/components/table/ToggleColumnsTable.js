@@ -9,18 +9,19 @@ import {
     ListGroupItem
 } from 'reactstrap';
 
-const SelectColumnsTable = (props) => {
+const ToggleColumnsTable = (props) => {
 
     const genContnet = () => {
+        const { columns, onColumnToggle, toggles } = props;
 
-        let items = props.columns.map((col) => {
+        let items = columns.map((col) => {
             return <ListGroupItem
                 key={uuidv4()}
                 tag="div"
             >
                 <Checkbox
-                    checked={col.visible}
-                    onChange={(e) => props.onChange(col.dataField, e.target.checked)}>
+                    checked={toggles[col.dataField]}
+                    onChange={(e) => onColumnToggle(col.dataField)}>
                     {col.text}
                 </Checkbox>
             </ListGroupItem>
@@ -33,11 +34,11 @@ const SelectColumnsTable = (props) => {
 
     return (
         <div className="select-columns-table">
-            <UncontrolledDropdown>
+            <UncontrolledDropdown direction="up">
                 <DropdownToggle tag="button" title={props.title}>
                     <i className="fa-solid fa-list" />
                 </DropdownToggle>
-                <DropdownMenu className="select-columns-content">
+                <DropdownMenu container="body" className="select-columns-content">
                     {genContnet()}
                 </DropdownMenu>
             </UncontrolledDropdown>
@@ -45,4 +46,4 @@ const SelectColumnsTable = (props) => {
     );
 }
 
-export default SelectColumnsTable;
+export default ToggleColumnsTable;

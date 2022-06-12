@@ -1,6 +1,9 @@
 import React, { useState, useRef } from "react";
-import { withTranslation } from "react-i18next";
+import i18n from "translation/i18n";
 import { Modal } from "reactstrap";
+import {
+  showConfirm,
+} from "components/MessageBox";
 
 import { v4 as uuidv4 } from 'uuid';
 import ErrorBoundary from "components/default/ErrorBoundary";
@@ -11,7 +14,7 @@ const Dialog = (props) => {
 
   const ref_id = useRef(uuidv4());
 
-  const defaultOptions = {
+  const options = {
     zIndex: 1050,
     backdrop: "static",
     size: "xl",
@@ -24,7 +27,7 @@ const Dialog = (props) => {
       let xpath = `//*[@id="${ref_id.current}"]//button[@class="btn-close"]`;
       let element = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
       element.click();
-      
+
     } catch (error) {
       console.log(error);
     }
@@ -38,7 +41,7 @@ const Dialog = (props) => {
         scrollable={false}
         isOpen={true}
         toggle={onToggleDialog}
-        {...defaultOptions}
+        {...options}
       >
         <ErrorBoundary>
           {props.children}
@@ -49,3 +52,15 @@ const Dialog = (props) => {
 };
 
 export default Dialog;
+
+export const checkDirty = (isDirty, cancelFunc) => {
+  if (isDirty) {
+    showConfirm(
+      i18n.t("common:messages.confirmCancel"),
+      cancelFunc
+    );
+  }
+  else {
+    cancelFunc();
+  }
+};

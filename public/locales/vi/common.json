@@ -3,6 +3,40 @@
     "appName": "My base"
   },
 
+  "action": {
+    "insert": "Thêm mới",
+    "clone": "Sao chép",
+    "update": "Cập nhật",
+    "delete": "Xóa"
+  },
+
+  "messages": {
+    "insertSuccess": "Thêm mới thành công",
+    "updateSuccess": "Cập nhật thành công",
+    "deleteSuccess": "Xóa thành công",
+    "actionSuccess": "Thao tác thành công",
+    "actionFail": "Thao tác thất bại",
+    "confirmCancel": "Dữ liệu đã bị thay đổi. Bạn có chắc chắn muốn thoát?"
+  },
+
+  "button": {
+    "insert": "Thêm mới",
+    "clone": "Sao chép",
+    "update": "Cập nhật",
+    "delete": "Xóa",
+    "save": "Lưu",
+    "sort": "Sắp xếp",
+    "close": "Đóng",
+    "cancel": "Hủy"
+  },
+
+  "validate": {
+    "notEmpty": "Không được trống!",
+    "textLengthIsLarget": "Độ dài kí tự vượt quá cho phép!",
+    "min": "Giá trị không được nhỏ hơn {0}!",
+    "max": "Giá trị không được lớn hơn {0}!"
+  },
+
   "errors": {
     "cantAccessThisPage": "Bạn không có quyền truy cập màn hình này!",
     "sessionLoginIsExpired": "Phiên đăng nhập của bạn đã hết hạn!",

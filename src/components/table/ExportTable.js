@@ -1,17 +1,12 @@
 import React from "react";
 import * as XLSX from "xlsx";
 
-const ExportTable = ({
-    idTable: p_idTable,
-    data: p_data,
-    columns: p_columns,
-    ...props
-}) => {
+const ExportTable = (props) => {
 
     //#region Event
     const onExport = () => {
         //let ws = fullDataToSheet();
-        let ws = currentPageDataToSheet();
+        let ws = fullDataToSheet();
 
         let wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws);
@@ -22,11 +17,13 @@ const ExportTable = ({
 
     //#region Method
     const currentPageDataToSheet = () => {
-        let headers = p_columns.map((col) => {
+        const { idTable, columns } = props;
+
+        let headers = columns.map((col) => {
             return col.text;
         });
 
-        let table = document.getElementById(p_idTable);
+        let table = document.getElementById(idTable);
 
         let opts = {
             raw: true
@@ -39,13 +36,19 @@ const ExportTable = ({
     };
 
     const fullDataToSheet = () => {
-        let headers = p_columns.map((col) => {
-            return col.text;
-        });
+        const { columns, data } = props;
+
+        let headers = [];
+        for (let i = 0; i < columns.length; i++) {
+            const col = columns[i];
+            if (!col.isDummyField) {
+                headers.push(col.text);
+            }
+        }
 
         let opts = {};
 
-        let ws = XLSX.utils.json_to_sheet(p_data, opts);
+        let ws = XLSX.utils.json_to_sheet(data, opts);
         XLSX.utils.sheet_add_aoa(ws, [headers], { origin: 0 });
 
         return ws;
@@ -54,7 +57,7 @@ const ExportTable = ({
 
     return (
         <>
-            <button {...props} onClick={onExport}>
+            <button title={props.title} onClick={onExport}>
                 <i className="fa-solid fa-file-export" />
             </button>
         </>

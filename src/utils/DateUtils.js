@@ -30,12 +30,12 @@ value: giá trị date dạng string,
 fromFormart: format hiện tại của value
 toFormat: format muốn đổi thành
 */
-function changeFormatDateString (value, fromFormart, toFormat) {
+function changeFormatDateString (value, fromFormat, toFormat) {
     if(value === null || value === undefined){
         return null;
     }
     
-    let result = moment(moment(value, fromFormart)).format(toFormat);
+    let result = moment(moment(value, fromFormat)).format(toFormat);
     return result;
 }
 

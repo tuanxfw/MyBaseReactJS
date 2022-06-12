@@ -39,5 +39,11 @@ function logoutLocal() {
     localStorage.removeItem(Config.CODE);
     cookies.remove(Config.CODE);
 
-    document.location.reload(true);
+    window.dispatchEvent(new Event("storage"));
 };
+
+window.addEventListener('storage', (e) => {
+    if (!e?.newValue && !AuthenUtils.checkLoginLocal()) {
+        document.location.reload(true);
+    }
+});

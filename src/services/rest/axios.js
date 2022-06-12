@@ -191,11 +191,11 @@ const handleRestApi = (callBackFunc, isFullRequest) => (res) => {
 
     let result;
 
-    if(isFullRequest) {
+    if (isFullRequest) {
         result = res;
     }
     else {
-        result = res.data
+        result = res.data;
     }
 
     if (callBackFunc) {
@@ -210,8 +210,10 @@ const handleException = (error) => {
     closeCircleLoading();
 
     if (error?.response?.status === 401 || error?.response?.status === 403) {
-        alert(i18n.t("common:errors.sessionLoginIsExpired"))
-        logout();
+        if (AuthenUtils.checkLoginLocal()) {
+            alert(i18n.t("common:errors.sessionLoginIsExpired"));
+            logout();
+        }
     }
     else {
         console.log(error);

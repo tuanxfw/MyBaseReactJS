@@ -36,22 +36,9 @@
   
   }
   
-  // @media only screen and (max-width: 1200px) {
-  //   .modal-dialog {
-  //     max-width: 80%;
-  //   }
-  // }
-  
-  // @media only screen and (max-width: 995px) {
-  //   .modal-dialog {
-  //     max-width: 90%;
-  //   }
-  // }
-
-  // @media only screen and (max-width: 580px) {
-  //   .modal-dialog {
-  //     max-width: 100%;
-  //   }
-  // }
-  
+  @media only screen and (max-width: 580px) {
+    .modal-dialog {
+      max-width: 100% !important;
+    }
+  }
   

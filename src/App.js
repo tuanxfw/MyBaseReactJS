@@ -22,7 +22,16 @@ const App = (props) => {
 
   const [s_langAntd, s_setLangAntd] = useState(null);
 
-  const queryClient = new QueryClient()
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+        refetchOnWindowFocus: false,
+        staleTime: 60 * 1000,
+        //keepPreviousData: true,
+      }
+    }
+  });
 
   useEffect(() => {
     let lang = Language.changeLanguage(i18n);

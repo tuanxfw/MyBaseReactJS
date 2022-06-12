@@ -1,4 +1,4 @@
-import React, {forwardRef, useState, useMemo } from "react";
+import React, { forwardRef, useState, useMemo } from "react";
 import { Select, Checkbox, Spin } from "antd";
 import { ObjectUtils } from "utils/ObjectUtils";
 import debounce from 'lodash/debounce';
@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 
 const _ = require('lodash');
 
-const CommmonSelect = forwardRef(({ dataRender, funcRender, lazyLoad, checkAll, ...props}, ref) => {
+const CommmonSelect = forwardRef(({ dataRender, funcRender, lazyLoad, checkAll, ...props }, ref) => {
 
   const [s_isCheckAll, s_setIsCheckAll] = useState(false);
 
@@ -47,12 +47,12 @@ const CommmonSelect = forwardRef(({ dataRender, funcRender, lazyLoad, checkAll, 
 
     if (options.mode === "multiple" && !options.dropdownRender && checkAll) {
       options.dropdownRender = (menu) => <>
-          {menu}
-          <div className="common-select-check-all">
-              <Checkbox checked={s_isCheckAll} onChange={onCheckAll}>Chọn tất cả</Checkbox>
-          </div>
+        {menu}
+        <div className="common-select-check-all">
+          <Checkbox checked={s_isCheckAll} onChange={onCheckAll}>Chọn tất cả</Checkbox>
+        </div>
       </>;
-  }
+    }
 
     if (!lazyLoad) {
       return <NormalSelect {...options}>
@@ -112,14 +112,20 @@ const filterSelectOption = (input, event) => {
 };
 
 CommmonSelect.defaultProps = {
+  showArrow: true,
   showSearch: true,
   allowClear: true,
   maxTagCount: 'responsive',
-  //optionLabelProp: "label",
-  filterOption: filterSelectOption
+  filterOption: filterSelectOption,
+  dataRender: [],
+  funcRender: () => {
+  },
+  mode: 'single',
+  checkAll: "",
 };
 
 CommmonSelect.propTypes = {
+  showArrow: PropTypes.bool,
   showSearch: PropTypes.bool,
   allowClear: PropTypes.bool,
   dataRender: PropTypes.oneOfType([

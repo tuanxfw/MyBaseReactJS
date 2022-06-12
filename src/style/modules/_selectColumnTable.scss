@@ -1,6 +1,12 @@
 .select-columns-table {
-  .select-columns-content {
-    padding: 0px 5px 0px 5px;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  }
+  
+}
+
+.select-columns-content {
+  z-index: 5000;
+  padding: 0px 5px 0px 5px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+
+  overflow-y: auto;
+  max-height: 50vh;
 }

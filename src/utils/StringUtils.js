@@ -70,7 +70,9 @@ function compareString(targetStr, str, mode) {
     return result;
 };
 
-function getBytesString (value) {
+function getBytesString(value) {
+    value = _.toString(value);
+    
     let m = encodeURIComponent(value).match(/%[89ABab]/g);
     let bytes = value.length + (m ? m.length : 0);
 

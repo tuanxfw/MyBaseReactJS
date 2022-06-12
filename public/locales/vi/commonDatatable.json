@@ -1,6 +1,7 @@
 {
     "empty": "Không có dữ liệu",
     "record": " bản ghi",
+    "filter": "Lọc",
     "resetFilterAndSort": "Reset lọc và sắp xếp",
     "visibleColumn": "Ẩn/hiện cột",
     "exportExcel": "Xuất excel"

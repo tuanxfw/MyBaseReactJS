@@ -2,110 +2,82 @@ import React, { useState, useEffect, useRef } from "react";
 import PropTypes from 'prop-types';
 import { v4 as uuidv4 } from 'uuid';
 import { Col, Row } from "reactstrap";
-import { Input, Button } from "antd";
+import { Input, Button, Checkbox } from "antd";
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
-import { App as AppConstants } from "constants/Constants"
+import filterFactory, { customFilter } from 'react-bootstrap-table2-filter';
+import { Action as ActionConst, App as AppConstants } from "constants/Constants";
 import CommonButton from 'components/CommonButton';
 import CommonInputNumber from 'components/CommonInputNumber';
 import CommonSelect from 'components/CommonSelect';
 import CommonDatePicker from 'components/CommonDatePicker';
 import CommonTooltip from 'components/CommonTooltip';
-import { renderSingleColumnOptions } from "components/selectAntd/CustomOptions";
-import CustomTableNoPaging from "components/table/CustomTableNoPaging";
-import CustomTablePagingApi from "components/table/CustomTablePagingApi";
+// import CustomTableNoPaging from "components/table/CustomTableNoPaging";
+// import CustomTablePagingApi from "components/table/CustomTablePagingApi";
 import CustomTablePagingClient from "components/table/CustomTablePagingClient";
+import filterTable from "components/table/FilterTable";
 import { ObjectUtils } from "utils/ObjectUtils";
 import { DateUtils } from 'utils/DateUtils';
 import { StringUtils } from 'utils/StringUtils';
+import { NumberUtils } from 'utils/NumberUtils';
 import i18n from "translation/i18n";
 
 const _ = require('lodash');
 
+const FilterText = filterTable(Input);
+const FilterNumber = filterTable(CommonInputNumber);
+const FilterSelect = filterTable(CommonSelect);
+const FilterDate = filterTable(CommonDatePicker);
+
 const CommonTable = ({
     pagingType: p_pagingType,
+    pagingConfigDefault: p_pagingConfigDefault,
     pagingConfig: p_pagingConfig,
-    resetWhenDataChange: p_resetWhenDataChange,
-    watch: p_watch,
+    size: p_size,
     ...props
 }) => {
-    const sampleDataColumn = [
-        {
-            dataField: "", //tên trường
-            header: "",
-            headerStyle: {},
 
-            cellRender: { //không cần custom cell thì có thể bỏ
-                style: {}, //style cho cell, không cần thì có thể bỏ
-                function: (cell, row, rowIndex) => { }, //hàm render (không cần custom thì có thể bỏ) 
-            },
+    const [s_pagingInfo, s_setPagingInfo] = useState({
+        current: 1,
+        pageSize: AppConstants.DATATABLE.PAGE_SIZE_DEFAULT,
+        pageSizeOptions: AppConstants.DATATABLE.PAGE_SIZE_OPTIONS,
+        ...p_pagingConfigDefault
+    });
 
-            filter: {
-                type: "text", //loại element filter text/number/select/date
-                advanced: {}, //cấu hình đặc biệt cho element filter (không cần có thể bỏ)
-                function: (data, condition) => { }, //trong trường hợp muốn custom hàm filter (không cần có thể bỏ) 
-            },
-            sort: { //(không cần có thể bỏ)
-                type: "text", // text/number/date (type = text hoặc number có thể bỏ qua)
-                formatDate: "DD/MM/YYYY", //formart date của trường cần date cần sort, chỉ áp dụng cho sort.type: date
-                function: (row) => { }, //trong trường hợp muốn custom hàm sort (không cần có thể bỏ) 
-            },
-            visible: true,
-            editor: null,
-        }
-    ];
+    const [s_tableIdentify, s_setTableIdentify] = useState({ id: props.id || uuidv4(), key: uuidv4() });
 
-    const optionsMatchMode = [
-        {
-            value: "contains",
-            name: "%%",
-        },
-        {
-            value: "equals",
-            name: "==",
-        },
-        {
-            value: "notContains",
-            name: "!=",
-        },
-        {
-            value: "startWith",
-            name: "%.",
-        },
-        {
-            value: "endWith",
-            name: ".%",
-        },
-    ];
-
-    const [s_pagingInfo, s_setPagingInfo] = useState({ current: 1, pageSize: AppConstants.DATATABLE.PAGE_SIZE_DEFAULT });
-
-    let ref_idTable = useRef(props.id || uuidv4());
-    let ref_filterConidtion = useRef({});
-    let ref_mathMode = useRef({});
-    let ref_sortCondition = useRef({});
-    let ref_dataSelected = useRef([]);
-
-    let ref_elementFocus = useRef("");
-
+    const ref_selectedKey = useRef([]);
     //#region useEffect
-    useEffect(() => { //trigger when p_pagingConfig change
-        if (p_pagingConfig) {
-            s_setPagingInfo(p_pagingConfig);
-        }
-    }, [p_pagingConfig]);
 
-    useEffect(() => { //trigger when props.data or props.columns change
-        return () => { //before change
-            if (p_resetWhenDataChange) {
-                resetTable();
-                s_setPagingInfo({ current: 1, pageSize: AppConstants.DATATABLE.PAGE_SIZE_DEFAULT });
-            }
-        };
-    }, [JSON.stringify(props.data)]);
-    //}, [JSON.stringify(props.data), JSON.stringify(props.columns)]);
     //#endregion
 
-    //#region Gen component
+    //#region method
+    const resetTable = () => {
+        s_setPagingInfo(prev => {
+            let next = { ...prev };
+
+            next.current = 1;
+
+            return next;
+        });
+
+        let newIdentify = { ...s_tableIdentify };
+        newIdentify.key = uuidv4();
+
+        s_setTableIdentify(newIdentify);
+    };
+
+    const setPage = (page) => {
+        s_setPagingInfo(prev => {
+            let next = { ...prev };
+
+            next.current = page;
+
+            return next;
+        });
+    };
+    //#endregion
+
+    //#region genMethod
     const genColumnObject = (data) => {
         let columnsData = [...data];
 
@@ -119,7 +91,7 @@ const CommonTable = ({
         }
 
         const columns = columnsData.map((item) => {
-            const { header, sort, filter, cellRender, ...col } = item;
+            const { header, cellRender, filter, sort, ...col } = item;
 
             if (col.dataField === "#") {
                 cellRender.function = genRowIndex;
@@ -127,30 +99,36 @@ const CommonTable = ({
 
             if (typeof header === "string") {
                 col.text = header;
-            }
-            else {
+            } else {
                 col.text = col.dataField;
             }
 
-            col.headerFormatter = () => <>
-                <Row key={uuidv4()} className="header-column" xs={1}>
-                    {genSort(col, sort)}
-                    <Col key={uuidv4()} className="header-field">
-                        {genHeaderName(header)}
-                    </Col>
-                    <Col key={uuidv4()} onKeyDown={onFilter}>
-                        {genFilter(col, filter)}
-                    </Col>
-                </Row>
-            </>;
+            if (filter) {
+                col.filter = customFilter();
+                col.filterRenderer = genFilter(filter);
+            }
 
-            col.formatExtraData = (cell, row, rowIndex) => <CommonTooltip className="cell">
+            if (sort) {
+                col.sort = true;
+                col.headerSortingClasses = (column, sortOrder, isLastSorting, colIndex) => sortOrder === 'asc' ? 'sorting-asc' : 'sorting-desc';
+                //col.sortFunc = sort.function;
+                col.sortFunc = gentSortFunction(sort);
+            }
+
+            col.headerFormatter = () => <div className="header-filed">
+                {header}
+                {col.sort === true ? <>
+                    <i className="sort-icon none fa-solid fa-sort" />
+                    <i className="sort-icon asc fa-solid fa-arrow-down-short-wide" />
+                    <i className="sort-icon desc fa-solid fa-arrow-down-wide-short" />
+                </> : null}
+            </div>;
+
+            col.formatter = (cell, row, rowIndex, formatExtra) => formatExtra(cell, row, rowIndex);
+            col.formatExtraData = (cell, row, rowIndex) => <CommonTooltip key={uuidv4()} className="cell">
                 {genCellContent(cell, row, rowIndex, cellRender)}
             </CommonTooltip>;
 
-            col.formatter = (cell, row, rowIndex, formatExtra) => formatExtra(cell, row, rowIndex);
-
-            if (col.visible === undefined) col.visible = true;
 
             return col;
         });
@@ -158,192 +136,62 @@ const CommonTable = ({
         return columns;
     };
 
-    const genSort = (column, sort) => {
+    const genFilter = (filterOptions) => (onFilter, column) => {
+        let options = { onFilter, column };
+        options.filterOptions = filterOptions;
 
-        let icon = "fa-solid fa-sort";
+        let component = null;
 
-        switch (ref_sortCondition.current[column.dataField]) {
-            case "desc":
-                icon = "fa-solid fa-arrow-down-wide-short";
-                break;
-
-            case "asc":
-                icon = "fa-solid fa-arrow-down-short-wide";
-                break;
-
-            default:
-                break;
-        }
-
-        if (sort) {
-            return <Button
-                key={uuidv4()}
-                className="btn-sort"
-                name="btnSortTable"
-                data-info={JSON.stringify({
-                    fieldName: column.dataField,
-                })}
-            >
-                <i disabled className={icon} />
-            </Button>;
-        }
-
-        return null;
-    };
-
-    const genHeaderName = (header) => {
-        return <h6 className="header-text">{header}</h6>
-    };
-
-    const genHeaderGroup = (idTable, newHeaderGroup, columns) => {
-        let oldHeaderGroup = document.evaluate(`//*[@id="${idTable}"]/thead/tr[@class="headerGroup"]`, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-
-        if (oldHeaderGroup) {
-            for (let i = 0; i < oldHeaderGroup.snapshotLength; i++) {
-                oldHeaderGroup.snapshotItem(i).remove();
-            }
-        }
-
-        if (newHeaderGroup) {
-            let header = document.evaluate(`//*[@id="${idTable}"]/thead/tr`, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-            header.insertAdjacentHTML('beforebegin', newHeaderGroup);
-
-            let table = document.evaluate(`//*[@id="${idTable}"]`, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue; //.offsetWidth
-            table.style.tableLayout = "auto";
-
-            let lstWidthCol = [];
-            columns.map((col) => {
-                lstWidthCol.push(col?.headerStyle?.width || "350px");
-            });
-
-            table.style.width = `calc(${lstWidthCol.join(' + ')})`;
-        }
-        else {
-            let table = document.evaluate(`//*[@id="${idTable}"]`, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue; //.offsetWidth
-            table.style.tableLayout = "fixed";
-            table.style.width = "100%";
-        }
-    };
-
-    const genFilter = (column, filter) => {
-
-        if (!filter) {
-            return null;
-        }
-
-        let defaultMatchMode = ref_mathMode.current[column.dataField] || optionsMatchMode[0].value;
-        let defaultConditionFilter = ref_filterConidtion.current[column.dataField] || filter?.advanced?.defaultValue || "";
-
-        let filterComponent = null;
-        let styleMatchMode = {};
-        let styleCondition = {};
-
-        switch (filter.type) {
-            case "number":
-                styleMatchMode = { width: "60px" };
-                styleCondition = { width: "calc(100% - 42px - 60px)" };
-
-                if (filter.function) {
-                    styleMatchMode = { display: "none" };
-                    styleCondition = { width: "calc(100% - 42px)" };
-                };
-
-                filterComponent = <>
-                    <CommonSelect
-                        style={styleMatchMode}
-                        defaultValue={defaultMatchMode}
-                        allowClear={false} showSearch={false}
-                        onChange={(value) => buildMathMode(column.dataField, value)}
-                        dataRender={optionsMatchMode}
-                        funcRender={renderSingleColumnOptions("value", "name")} />
-                    <CommonInputNumber
-                        key={ref_idTable.current + "-" + column.dataField}
-                        id={ref_idTable.current + "-" + column.dataField}
-                        onFocus={handleFocus} onBlur={handleFocus}
-                        style={styleCondition}
-                        allowClear
-                        onChange={(values) => buildFilterCondition(column.dataField, String(values.floatValue || ""))}
-                        defaultValue={defaultConditionFilter}
-                        {...filter.advanced} />
-                </>
-                break;
-
+        switch (filterOptions?.type) {
             case "select":
-                filterComponent = <CommonSelect
-                    key={ref_idTable.current + "-" + column.dataField}
-                    id={ref_idTable.current + "-" + column.dataField}
-                    onFocus={handleFocus} onBlur={handleFocus}
-                    style={{ width: "calc(100% - 42px)" }}
-                    onChange={(value) => buildFilterCondition(column.dataField, value)}
-                    defaultValue={defaultConditionFilter}
-                    {...filter.advanced} />
+                component = <FilterSelect {...options} />
                 break;
 
             case "date":
-                filterComponent = <CommonDatePicker
-                    key={ref_idTable.current + "-" + column.dataField}
-                    id={ref_idTable.current + "-" + column.dataField}
-                    onFocus={handleFocus} onBlur={handleFocus}
-                    style={{ width: "calc(100% - 42px)" }}
-                    onChange={(value) => buildFilterCondition(column.dataField, value)}
-                    defaultValue={defaultConditionFilter}
-                    {...filter.advanced} />
+                component = <FilterDate {...options} />
+                break;
+
+            case "number":
+                component = <FilterNumber {...options} />
                 break;
 
             default: //text
-                styleMatchMode = { width: "60px" };
-                styleCondition = { width: "calc(100% - 42px - 60px)" };
+                component = <FilterText  {...options} />
+                break;
+        };
 
-                if (filter.function) {
-                    styleMatchMode = { display: "none" };
-                    styleCondition = { width: "calc(100% - 42px)" };
-                };
+        return <div className="filter-field">
+            {component}
+        </div>;
+    };
 
-                filterComponent = <>
-                    <CommonSelect
-                        style={styleMatchMode}
-                        defaultValue={defaultMatchMode}
-                        allowClear={false} showSearch={false}
-                        onChange={(value) => buildMathMode(column.dataField, value)}
-                        dataRender={optionsMatchMode}
-                        funcRender={renderSingleColumnOptions("value", "name")} />
-                    <Input
-                        style={styleCondition}
-                        key={ref_idTable.current + "-" + column.dataField}
-                        id={ref_idTable.current + "-" + column.dataField}
-                        onFocus={handleFocus} onBlur={handleFocus}
-                        onChange={(e) => buildFilterCondition(column.dataField, e.target.value)}
-                        allowClear
-                        defaultValue={defaultConditionFilter}
-                        {...filter.advanced} />
-                </>
+    const gentSortFunction = (sortOptions) => (sortField) => {
+        let iteratees = null;
+
+        if (sortOptions.function) {
+            return sortOptions.function;
+        }
+
+        switch (sortOptions.type) {
+            case "date":
+                iteratees = (obj) => DateUtils.convertStringToDate(obj[sortField], sortOptions?.formatDate)
+                break;
+
+            default:
+                iteratees = sortField;
                 break;
         }
 
-        focusElementAfterRender();
-
-        return <Input.Group key={uuidv4()} compact className="filter-field">
-            {filterComponent}
-            <CommonButton
-                key={uuidv4()}
-                style={{ width: "42px" }}
-                type="icon"
-                name="btnFilterTable"
-            >
-                <i key={uuidv4()} className="fa-solid fa-magnifying-glass" />
-            </CommonButton>
-        </Input.Group>
+        return iteratees;
     };
 
     const genCellContent = (cell, row, rowIndex, cellRender) => {
         if (cellRender?.function) {
-            return <div style={cellRender?.style}>{cellRender.function(cell, row, rowIndex)}</div>;
+            return <div key={uuidv4()} style={cellRender?.style}>{cellRender.function(cell, row, rowIndex)}</div>;
         }
 
-        return <div style={cellRender?.style}>{cell}</div>;
+        return <div key={uuidv4()} style={cellRender?.style}>{cell}</div>;
     };
-
-    const genRowIndex = (cell, row, rowIndex) => <>{(s_pagingInfo.current - 1) * s_pagingInfo.pageSize + rowIndex + 1}</>;
 
     const genItemPaging = (page, type, element) => {
         let resultElement = null;
@@ -370,311 +218,141 @@ const CommonTable = ({
         return resultElement;
     };
 
+    const genRowIndex = (cell, row, rowIndex) => ((s_pagingInfo.current - 1) * s_pagingInfo.pageSize + rowIndex + 1);
+
+    const genConfigSelectRow = (config) => {
+
+        if (!config) {
+            return null;
+        }
+
+        const { selected, onSelect, ...customConfig } = config;
+
+        ref_selectedKey.current = selected ? _.map(selected, props.keyField) : ref_selectedKey.current;
+
+        const defaultConfig = {
+            selected: ref_selectedKey.current,
+            hideSelectColumn: false,
+            clickToSelect: true,
+            clickToEdit: true,
+            hideSelectAll: config.mode !== "checkbox",
+            classes: () => "selection-row",
+            selectionHeaderRenderer: ({ indeterminate, mode, checked }) => {
+                return <input
+                    type="checkbox"
+                    ref={(input) => {
+                        if (input) {
+                            input.indeterminate = props.data.length !== ref_selectedKey.current.length && ref_selectedKey.current.length > 0
+                            input.checked = props.data.length === ref_selectedKey.current.length;
+                        };
+                    }}
+                />;
+            },
+            onSelect: (row, isSelect, rowIndex, e) => {
+                let selectedKey = [...ref_selectedKey.current];
+
+                if (isSelect) {
+                    selectedKey.push(row[props.keyField]);
+                }
+                else {
+                    selectedKey = _.remove(selectedKey, key => key !== row[props.keyField]);
+                }
+
+                ref_selectedKey.current = selectedKey;
+
+                if (onSelect) {
+                    onSelect({
+                        rowsSelected: _.filter(props.data, obj => selectedKey.indexOf(obj[props.keyField]) !== -1),
+                        row,
+                        event: e
+                    });
+                }
+            },
+            onSelectAll: (isSelect, rows, e) => {
+                let selectedKey = [];
+
+                if (isSelect) {
+                    selectedKey = _.map(props.data, props.keyField);
+                }
+                else {
+                    selectedKey = [];
+                }
+
+                ref_selectedKey.current = selectedKey;
+
+                if (onSelect) {
+                    onSelect({
+                        rowsSelected: isSelect ? props.data : [],
+                        row: null,
+                        event: e
+                    });
+                }
+            },
+        };
+
+        return { ...defaultConfig, ...customConfig };
+    };
 
     //#endregion
 
     //#region Event
-    const onSelectRow = (mode, callBackFunc) => (row, isSelect, rowIndex, e) => {
-        const keyField = props.keyField;
+    const onPagingChange = (current, pageSize) => {
+        let pagingInfo = { ...s_pagingInfo };
 
-        let dataSelected = [...ref_dataSelected.current];
+        pagingInfo.current = current;
+        pagingInfo.pageSize = pageSize;
 
-        let rowsSelected = [];
-
-        if (mode === "radio") {
-            dataSelected = [row[keyField]]
-            rowsSelected = [row];
-        }
-        else {
-            let key = row[keyField];
-
-            if (isSelect) {
-                dataSelected.push(key);
-            }
-            else {
-                dataSelected = _.remove(dataSelected, (item) => item !== key);
-                //dataSelected = dataSelected.splice(rowIndex, 1);
-            };
-
-            rowsSelected = _.filter(props.data, (obj) => dataSelected.indexOf(obj[keyField]) !== -1);
-        }
-
-        ref_dataSelected.current = dataSelected;
-
-        if (callBackFunc) {
-            callBackFunc({ rowsSelected, rowIndex, e });
-        }
-    };
-
-    const onSelectAllRow = (mode, callBackFunc) => (isSelect, rows, e) => {
-        const keyField = props.keyField;
-
-        let keySelected = [];
-        let rowsSelected = [];
-
-        if (!isSelect) {
-            keySelected = [];
-            rowsSelected = [];
-        }
-        else {
-            keySelected = _.map(props.data, keyField);
-            rowsSelected = [...props.data];
-        }
-
-        ref_dataSelected.current = keySelected;
-
-        if (callBackFunc) {
-            callBackFunc({ rowsSelected, e });
-        }
-    };
-
-    const onChangePaging = (current, pageSize) => {
-        s_setPagingInfo({ current, pageSize });
-    };
-
-    const onFilter = (e) => {
-        if (e.code === "Enter" || e.code === "NumpadEnter") {
-            document.getElementById(`btnFilter-${ref_idTable.current}`).click();
-        }
-    };
-
-    const handleFocus = (e) => {
-        console.log(e);
-        let id = e.target.id;
-
-        if (e.type === "focus") {
-            ref_elementFocus.current = id;
-        }
-        else if (e.type === "blur") {
-            ref_elementFocus.current = "";
-        }
-    };
-    //#endregion
-
-    //#region Method 
-    const buildFilterCondition = (field, value) => {
-        let filterCondition = { ...ref_filterConidtion.current };
-
-        if (!value || value.trim() === "") {
-            delete filterCondition[field];
-        }
-        else {
-            filterCondition[field] = value;
-        }
-
-        ref_filterConidtion.current = filterCondition;
-
-        if (p_watch) console.log(ref_filterConidtion.current);
-    };
-
-    const buildMathMode = (field, value) => {
-        let mathMode = { ...ref_mathMode.current };
-
-        mathMode[field] = value;
-
-        ref_mathMode.current = mathMode;
-
-        if (p_watch) console.log(ref_mathMode.current);
-    };
-
-    const buildSortCondition = (field) => {
-        let sortCondition = { ...ref_sortCondition.current };
-
-        if (sortCondition[field]) {
-            sortCondition[field] = sortCondition[field] === "asc" ? "desc" : "asc";
-        }
-        else {
-            sortCondition[field] = "asc";
-        }
-
-        ref_sortCondition.current = sortCondition;
-        //ref_sortCondition.current = { [field]: sortCondition[field] };
-
-        if (p_watch) console.log(ref_sortCondition.current);
-    };
-
-    const filter = (data) => {
-        let dataAfterFilter = [...data];
-
-        if (JSON.stringify(ref_filterConidtion.current) === "{}") {
-            return dataAfterFilter;
-        }
-
-        const lstField = _.keys(ref_filterConidtion.current);
-        lstField.map((field) => {
-
-            let col = _.find(props.columns, { dataField: field }) || {};
-
-            let mathMode = "";
-            if (col?.filter?.type === "select" || col?.filter?.type === "date") {
-                mathMode = "equals";
-            }
-            else {
-                mathMode = ref_mathMode.current[field] || optionsMatchMode[0].value;
-            }
-
-            const findString = ref_filterConidtion.current[field];
-
-            if (col?.filter?.function) {
-                dataAfterFilter = col?.filter?.function(dataAfterFilter, ref_filterConidtion.current[field], field);
-            }
-            else {
-                dataAfterFilter = _.filter(dataAfterFilter, (obj) => StringUtils.compareString(findString, obj[field], mathMode));
-            }
-
-        });
-
-        return dataAfterFilter;
-    };
-
-    const sort = (fieldName, data) => {
-        if (fieldName) buildSortCondition(fieldName);
-
-        let dataAfterSort = [];
-
-        const iteratees = _.keys(ref_sortCondition.current);
-        const orders = _.values(ref_sortCondition.current);
-
-        props.columns.map((col) => {
-            if (col.sort?.function) {
-                let indexIteratees = _.indexOf(iteratees, col.dataField);
-                iteratees[indexIteratees] = col.sort?.function;
-            }
-            else {
-                switch (col.sort?.type) {
-                    case "date":
-                        let indexIteratees = _.indexOf(iteratees, col.dataField);
-                        iteratees[indexIteratees] = (obj) => DateUtils.convertStringToDate(obj[fieldName], col.sort?.formatDate)
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-        });
-
-        dataAfterSort = _.orderBy(data, iteratees, orders);
-
-        return dataAfterSort;
-    };
-
-    const resetTable = () => {
-        ref_filterConidtion.current = {};
-        ref_mathMode.current = {};
-        ref_sortCondition.current = {};
-        ref_dataSelected.current = [];
-    };
-
-    const changeVisibleCol = (lstCol, colName, visible) => {
-        const index = _.findIndex(lstCol, { dataField: colName });
-
-        let countVisibleCol = _.countBy(lstCol, { visible: true }).true;
-
-        if (countVisibleCol === 1 && visible === false) {
-            return lstCol;
-        }
-
-        let lstColNew = [...lstCol];
-        lstColNew[index] = { ...lstColNew[index] };
-
-        lstColNew[index].visible = visible;
-
-        return lstColNew;
-    };
-
-    const getListSelectdKey = (data) => {
-        let keys = _.map(data, props.keyField);
-
-        ref_dataSelected.current = keys;
-
-        return keys;
-    };
-
-    const focusElementAfterRender = () => {
-        if (ref_elementFocus.current !== "") {
-            let interval = setInterval(() => {
-                try {
-                    document.getElementById(ref_elementFocus.current).focus();
-                    clearInterval(interval);
-                } catch (error) { }
-            }, 100);
-        }
+        s_setPagingInfo(pagingInfo);
     };
 
     //#endregion
 
     const selectTable = () => {
-        let options = { ...props };
+        let { keyField, data, columns, method, ...options } = props;
 
-        options.columns = [...options.columns];
-        options.columns = genColumnObject(options.columns);
+        let baseOptions = { keyField, data, columns }
 
-        options.id = ref_idTable.current;
-        //options.cellEdit = cellEditFactory({ mode: 'click' });
+        baseOptions.columns = genColumnObject(baseOptions.columns);
 
-        //options.striped = true;
+        method({ resetTable, setPage });
+
+        options.key = s_tableIdentify.key;
+        options.id = s_tableIdentify.id;
+        options.striped = true;
         options.condensed = true;
         options.hover = true;
         options.noDataIndication = i18n.t("commonDatatable:empty");
         options.classes = "table-custom";
-
-        options.funcFeature = {
-            genHeaderGroup: genHeaderGroup,
-            filter: filter,
-            sort: sort,
-            changeVisibleCol: changeVisibleCol,
-            resetFilterAndSort: resetTable,
-        };
-
-        const pagingConfigDefault = {
+        options.rowClasses = "custom-row";
+        options.filterPosition = "top";
+        options.filter = filterFactory();
+        options.pagingConfig = {
+            onChange: onPagingChange,
+            ...s_pagingInfo,
+            className: "page-filed",
             showSizeChanger: true,
             showLessItems: true,
             responsive: true,
             itemRender: genItemPaging,
-            pageSizeOptions: AppConstants.DATATABLE.PAGE_SIZE_OPTIONS,
-            current: s_pagingInfo.current,
-            pageSize: s_pagingInfo.pageSize,
-            onChange: onChangePaging,
+            ...p_pagingConfig,
         };
-        const pagingConfigCustom = p_pagingConfig;
-
-        let configSelect = undefined;
-        if (options?.selectRow) {
-
-            let configSelectCustom = { ...options.selectRow };
-            let configSelectDefault = {
-                clickToSelect: options.selectRow?.clickToSelect || true,
-                clickToEdit: true,
-                selected: options.selectRow?.selected ? getListSelectdKey(options.selectRow?.selected) : ref_dataSelected.current,
-                onSelect: onSelectRow(options.selectRow.mode, options.selectRow?.onChangeSelected),
-                onSelectAll: onSelectAllRow(options.selectRow.mode, options.selectRow?.onChangeSelected),
-                classes: 'selection-row',
-            }
-
-            configSelect = { ...configSelectCustom, ...configSelectDefault };
-        }
-        options.selectRow = configSelect;
+        options.selectRow = genConfigSelectRow(options.selectRow);
+        options.resetTable = resetTable;
 
         switch (p_pagingType) {
-            case "none":
-                return <CustomTableNoPaging {...options} />
-
-            case "api":
-                options.pagingConfig = { ...pagingConfigDefault, ...pagingConfigCustom };
-                return <CustomTablePagingApi {...options} />
-
             default: //client
-                options.pagingConfig = { ...pagingConfigDefault, ...pagingConfigCustom };
-                return <CustomTablePagingClient {...options} />
+
+                return <CustomTablePagingClient baseOptions={baseOptions} {...options} />
         }
     };
 
     return (
-        <div className="common-datatble">
+        <div id={"field-table-" + s_tableIdentify.id} className="common-datatble">
             <style>
                 {`
-                    .react-bootstrap-table {
-                        max-height: ${props.scrollHeight};
+                    #field-table-${s_tableIdentify.id} .react-bootstrap-table {
+                        max-height: ${p_size.scrollHeight};
+                        height: ${p_size.height || "auto"};
                     }
                 `}
             </style>
@@ -686,40 +364,84 @@ const CommonTable = ({
 export default React.memo(CommonTable, ObjectUtils.compareProps);
 //export default CommonTable;
 
-//#region Gen Body function
-export const genColDateChangeFormatDateString = (fromFormat, toFormat = AppConstants.DATE_TIME_FORMAT.DATE_FORMAT) => (cell, row, rowIndex) => {
-    return <>{DateUtils.changeFormatDateString(cell, fromFormat, toFormat)}</>;
-};
-//#endregion
 
-//#region Filter function
-export const filterDateStringByString = (fromFormat, toFormat) => (data, condition, field) => {
-    let result = [];
-
-    try {
-        result = _.filter(
-            data,
-            (obj) => DateUtils.changeFormatDateString(obj[field], fromFormat, toFormat).includes(condition)
-        );
-    } catch (error) {
-        console.log(error);
-        result = [];
-    }
-
-    return result;
-};
 //#endregion
 
 CommonTable.propTypes = {
     keyField: PropTypes.string,
     data: PropTypes.array,
     columns: PropTypes.array,
+    size: PropTypes.object,
+    pagingConfig: PropTypes.object,
 };
 
 CommonTable.defaultProps = {
     data: [],
     columns: [],
-    scrollHeight: "500px",
-    resetWhenDataChange: true,
-    //pagingConfig: {},
+    size: {
+        scrollHeight: "600px",
+        height: "auto",
+    },
 };
+
+
+//#region gen cell funtion
+export const genCellAction = (options = {}) => (cell, row) => {
+    // {
+    //     onView: null,
+    //     onInsert: null,
+    //     onUpdate: null,
+    //     onDelete: null,
+    // }
+
+    return <div key={uuidv4()} style={{ textAlign: "center" }}>
+
+        {options?.onView ? <CommonButton
+            key={uuidv4()}
+            type="actionTable"
+            action={ActionConst.VIEW}
+            title={i18n.t("common:common.tooltip.button-view")}
+            onClick={options.onView(row)}
+        >
+            <i key={uuidv4()} className="fa-solid fa-eye" />
+        </CommonButton> : <></>}
+
+        {options?.onInsert ? <CommonButton
+            key={uuidv4()}
+            type="actionTable"
+            action={ActionConst.INSERT}
+            title={i18n.t("common:common.tooltip.button-insert")}
+            onClick={options.onInsert(row)}
+        >
+            <i key={uuidv4()} className="fa-solid fa-plus" />
+        </CommonButton> : <></>}
+
+        {options?.onUpdate ? <CommonButton
+            key={uuidv4()}
+            type="actionTable"
+            action={ActionConst.UPDATE}
+            title={i18n.t("common:common.tooltip.button-update")}
+            onClick={options.onUpdate(row)}
+        >
+            <i key={uuidv4()} className="fa-regular fa-pen-to-square" />
+        </CommonButton> : <></>}
+
+        {options?.onDelete ? <CommonButton
+            key={uuidv4()}
+            type="actionTable"
+            action={ActionConst.DELETE}
+            title={i18n.t("common:common.tooltip.button-delete")}
+            onClick={options.onDelete(row)}
+        >
+            <i key={uuidv4()} className="fa-regular fa-trash-can" />
+        </CommonButton> : <></>}
+
+    </div>
+};
+
+export const genCellNumber = (cell, row) => NumberUtils.formatToNumberString(cell);
+
+export const genCellDate = (fromFormat, toFormat) => (cell, row) => DateUtils.changeFormatDateString(cell, fromFormat, toFormat);
+
+//#endregion
+

@@ -2,7 +2,7 @@
   width: 100%;
   border: 1px solid $table-border-color;
   border-radius: 2px;
-  
+
   ::-webkit-scrollbar {
     -webkit-appearance: none;
     width: 8px;
@@ -13,70 +13,85 @@
     border-radius: 0px;
     background-color: $scrollbar;
   }
+}
 
-  .react-bootstrap-table {
-    min-height: 500px;
-    margin: 0px;
-    overflow: auto;
+.react-bootstrap-table {
+  margin: 0px;
+  overflow: auto;
 
-    .table-custom {
-      thead {
-        position: sticky;
-        top: 0;
-        background: $table-header-background-color;
-        z-index: 1;
+  .table>:not(caption)>*>* {
+    padding: 0px 8px 0px 8px;
+  }
 
-        .selection-cell-header {
-          text-align: center;
+  .table-custom {
+    table {
+      border-collapse: collapse;
+    }
+
+    thead {
+      position: sticky;
+      top: 0;
+      background: $table-header-background-color;
+      z-index: 1;
+
+      .header-filed {
+        overflow-wrap: normal;
+        text-align: center;
+        position: relative;
+
+        .sort-icon {
+          position: absolute;
+          right: 0;
+          top: 4px;
+          visibility: hidden;
         }
 
-        .headerGroup {
-          text-align: center;
-          box-shadow: rgba(red(#dee2e6), green(#dee2e6), blue(#dee2e625), 0.16) 0px 1px 1px, rgb(red(#dee2e6), green(#dee2e6), blue(#dee2e6)) 0px 0px 0px 1px;
-
-          th {
-            font-weight: 500;
-          }
-        }
-
-        .header-column {
-          position: relative;
-          margin: auto;
-          padding: 10px;
-
-          .btn-sort {
-            border: none;
-            box-shadow: none;
-            padding: 0px;
-            position: absolute;
-            right: 3px;
-            top: 0px;
-            width: 22px;
-            background-color: transparent;
-            color: $table-button-sort-font-color;
-
-            * {
-              pointer-events: none;
-            }
-          }
-
-          .header-field {
-            text-align: center;
-          }
-
-          .filter-field {
-          }
-        }
-
-        .ant-select-single.ant-select-show-arrow .ant-select-selection-item {
-          padding: 0px;
-          margin-right: 10px;
+        .sort-icon.none {
+          visibility: visible;
         }
       }
 
-      tbody {
-        border-top: none;
+      .sorting-asc {
+        .sort-icon.asc {
+          visibility: visible;
+        }
 
+        .sort-icon.none {
+          visibility: hidden;
+        }
+      }
+
+      .sorting-desc {
+        .sort-icon.desc {
+          visibility: visible;
+        }
+
+        .sort-icon.none {
+          visibility: hidden;
+        }
+      }
+
+      .selection-cell-header {
+        text-align: center;
+      }
+    }
+
+    tbody[style="display: table-header-group;"] {
+      border-top: none;
+      position: sticky;
+      top: 20px;
+      background: #f3f3f3;
+      z-index: 1;
+
+      th {
+        font-weight: normal;
+      }
+    }
+
+    tbody {
+      border-top: none;
+
+      .custom-row {
         .selection-cell {
           text-align: center;
         }
@@ -92,28 +107,37 @@
             text-overflow: ellipsis;
           }
         }
+      }
 
-        .selection-row {
-          box-shadow: rgba(50, 50, 93, 0.09) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.09) 0px 18px 36px -18px inset;
+      .custom-row.selection-row,
+      .custom-row:hover {
+
+        // td {
+        //   border-top: 1pt solid;
+        //   border-bottom: 1pt solid;
+        // }
+        // td:first-child {
+        //   border-left: 1pt solid;
+        // }
+        // td:last-child {
+        //   border-right: 1pt solid;
+        // }
+
+        outline-color: $table-border-color;
+        outline-style: auto;
+        outline-width: thin;
+
+        * {
+          font-weight: bold;
+          color: $table-border-color;
         }
       }
 
-      tfoot {
-        position: sticky;
-        bottom: 0;
-        border-top: none;
-        background: #f2f2f2;
-      }
     }
-  }
-
-  .react-bootstrap-table thead tr th {
-    padding: 0px;
-    vertical-align: middle;
   }
 }
 
-.common-datatble-paging {
+.common-datatable-paging {
   display: flex;
   justify-content: space-between;
   padding: 7px 0px 5px 0px;
@@ -126,8 +150,7 @@
     color: $paging-font-color;
   }
 
-  .page-filed {
-  }
+  .page-filed {}
 
   .action-field {
     display: flex;
@@ -149,9 +172,10 @@
   }
 }
 
-.common-datatble-paging.client,
-.common-datatble-paging.api {
+.common-datatable-paging.client,
+.common-datatable-paging.api {
   @media only screen and (max-width: 620px) {
+
     .total-field *,
     .action-field * {
       display: none;
