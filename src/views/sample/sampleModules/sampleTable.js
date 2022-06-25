@@ -19,6 +19,10 @@ const SampleTable = (props) => {
     const [s_columns, s_setColumns] = useState([]);
     const [s_data, s_setData] = useState([{}]);
 
+    const [s_pagingInfo, s_setPagingInfo] = useState({
+        total: 1000,
+    });
+
     useEffect(() => { //didmount
         //s_setColumns(columns);
         s_setData(genDataTest());
@@ -26,7 +30,7 @@ const SampleTable = (props) => {
 
     let test = () => { };
 
-    const genDataTest = (size = 100, start = 1000) => {
+    const genDataTest = (size = 15, start = 1000) => {
         let data = [];
 
         for (let index = start; index < start + size; index++) {
@@ -129,13 +133,13 @@ const SampleTable = (props) => {
     ];
 
     return (
-        <Row>
+        <Row xs={1}>
             <Divider>Table paging client</Divider>
             <Col>
-                <button onClick={() => test(2)}>test</button>
+                {/* <button onClick={() => test(2)}>test</button> */}
                 <div style={{ width: "100%" }}>
                     <CommonTable
-                        method={({ resetTable, setPage }) => test = setPage}
+                        //method={({ resetTable, setPage }) => test = setPage}
                         keyField="id" //trường sẽ dùng làm key định danh cho mỗi bản ghi
                         data={s_data}
                         columns={columns}
@@ -147,6 +151,30 @@ const SampleTable = (props) => {
 
                     />
                 </div>
+            </Col>
+
+            <Divider>Table paging Api</Divider>
+            <Col>
+                <div style={{ width: "100%" }}>
+                    <CommonTable
+                        //method={({ resetTable, setPage }) => test = setPage}
+                        pagingType="api"
+                        onChangeTable={(type, options) => {
+                            console.log({ type, options });
+                        }}
+                        keyField="id" //trường sẽ dùng làm key định danh cho mỗi bản ghi
+                        data={s_data}
+                        columns={columns}
+                        pagingInfo={s_pagingInfo}
+                        selectRow={{
+                            mode: 'checkbox',
+                            //selected: [s_data[2]],
+                            onSelect: e => console.log(e)
+                        }}
+
+                    />
+                </div>
+                
             </Col>
         </Row>
     );

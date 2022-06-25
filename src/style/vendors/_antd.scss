@@ -4,3 +4,38 @@
         margin-bottom: 7px;
     }
 }
+
+.ant-tabs-top>.ant-tabs-nav,
+.ant-tabs-bottom>.ant-tabs-nav,
+.ant-tabs-top>div>.ant-tabs-nav,
+.ant-tabs-bottom>div>.ant-tabs-nav {
+    margin: 0px 0px 5px 0px;
+}
+
+.ant-tooltip-inner {
+    padding: 4px 4px 1px 4px;
+}
+.ant-tooltip {
+    max-width: 400px;
+}
+
+.ant-select-disabled.ant-select:not(.ant-select-customize-input) .ant-select-selector,
+.ant-input:disabled {
+    color: rgba(0, 0, 0, 0.70);
+}
+
+.ant-collapse>.ant-collapse-item>.ant-collapse-header {
+    padding: 5px 10px 5px 10px;
+    font-weight: 650;
+
+    div {
+        margin-top: -3px;
+    }
+}
+.ant-collapse-content>.ant-collapse-content-box {
+    padding: 5px 3px 5px 3px;
+}
+
+.ant-divider-horizontal.ant-divider-with-text {
+    margin: 5px 0;
+}

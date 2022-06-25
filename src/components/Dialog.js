@@ -24,6 +24,10 @@ const Dialog = (props) => {
 
   const onToggleDialog = () => {
     try {
+      if (document.getElementById("circleLoading") !== null) {
+        return;
+      }
+
       let xpath = `//*[@id="${ref_id.current}"]//button[@class="btn-close"]`;
       let element = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
       element.click();

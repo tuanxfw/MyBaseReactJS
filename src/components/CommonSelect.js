@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, useMemo } from "react";
+import React, { forwardRef, useState, useMemo, useEffect } from "react";
 import { Select, Checkbox, Spin } from "antd";
 import { ObjectUtils } from "utils/ObjectUtils";
 import debounce from 'lodash/debounce';
@@ -80,18 +80,18 @@ const NormalSelect = (props) => {
 };
 
 const LazySelect = ({ dataRender, funcRender, ...props }) => {
-  const [r_fetching, r_setFetching] = useState(false);
-  const [r_data, r_setData] = useState([]);
+  const [s_fetching, s_setFetching] = useState(false);
+  const [s_data, s_setData] = useState(dataRender());
 
   const onSearch = useMemo(() => {
     const loadOptions = async (value) => {
-      r_setFetching(true);
-      r_setData([]);
+      s_setFetching(true);
+      s_setData([]);
 
       let newData = await dataRender(value);
 
-      r_setFetching(false);
-      r_setData(newData);
+      s_setFetching(false);
+      s_setData(newData);
     };
 
     return debounce(loadOptions, 1000);
@@ -99,9 +99,9 @@ const LazySelect = ({ dataRender, funcRender, ...props }) => {
 
   return <Select
     onSearch={onSearch}
-    notFoundContent={r_fetching ? <Spin size="small" /> : null}
+    notFoundContent={s_fetching ? <Spin size="small" /> : null}
     {...props}>
-    {funcRender(r_data)}
+    {funcRender(s_data)}
   </Select>
 };
 

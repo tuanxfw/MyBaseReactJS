@@ -14,6 +14,7 @@ import CommonTooltip from 'components/CommonTooltip';
 // import CustomTableNoPaging from "components/table/CustomTableNoPaging";
 // import CustomTablePagingApi from "components/table/CustomTablePagingApi";
 import CustomTablePagingClient from "components/table/CustomTablePagingClient";
+import CustomTablePagingApi from "components/table/CustomTablePagingApi";
 import filterTable from "components/table/FilterTable";
 import { ObjectUtils } from "utils/ObjectUtils";
 import { DateUtils } from 'utils/DateUtils';
@@ -31,8 +32,9 @@ const FilterDate = filterTable(CommonDatePicker);
 const CommonTable = ({
     pagingType: p_pagingType,
     pagingConfigDefault: p_pagingConfigDefault,
-    pagingConfig: p_pagingConfig,
     size: p_size,
+    pagingInfo: p_pagingInfo,
+    onTableChange: p_onTableChange,
     ...props
 }) => {
 
@@ -46,6 +48,7 @@ const CommonTable = ({
     const [s_tableIdentify, s_setTableIdentify] = useState({ id: props.id || uuidv4(), key: uuidv4() });
 
     const ref_selectedKey = useRef([]);
+
     //#region useEffect
 
     //#endregion
@@ -314,8 +317,6 @@ const CommonTable = ({
 
         baseOptions.columns = genColumnObject(baseOptions.columns);
 
-        method({ resetTable, setPage });
-
         options.key = s_tableIdentify.key;
         options.id = s_tableIdentify.id;
         options.striped = true;
@@ -327,20 +328,39 @@ const CommonTable = ({
         options.filterPosition = "top";
         options.filter = filterFactory();
         options.pagingConfig = {
-            onChange: onPagingChange,
-            ...s_pagingInfo,
+            itemRender: genItemPaging,
             className: "page-filed",
             showSizeChanger: true,
             showLessItems: true,
             responsive: true,
-            itemRender: genItemPaging,
-            ...p_pagingConfig,
         };
         options.selectRow = genConfigSelectRow(options.selectRow);
-        options.resetTable = resetTable;
+
 
         switch (p_pagingType) {
+            case "api":
+                method({ resetTable, setPage });
+
+                options.onTableChange = p_onTableChange;
+                options.pagingConfig = {
+                    ...options.pagingConfig,
+                    onChange: onPagingChange,
+                    ...s_pagingInfo,
+                    ...p_pagingInfo,
+                };
+                options.resetTable = resetTable;
+
+                return <CustomTablePagingApi baseOptions={baseOptions} {...options} />
+
             default: //client
+                method({ resetTable, setPage });
+
+                options.pagingConfig = {
+                    ...options.pagingConfig,
+                    onChange: onPagingChange,
+                    ...s_pagingInfo,
+                };
+                options.resetTable = resetTable;
 
                 return <CustomTablePagingClient baseOptions={baseOptions} {...options} />
         }
@@ -373,9 +393,12 @@ CommonTable.propTypes = {
     columns: PropTypes.array,
     size: PropTypes.object,
     pagingConfig: PropTypes.object,
+    onTableChange: PropTypes.func,
+    method: PropTypes.func,
 };
 
 CommonTable.defaultProps = {
+    method : () => {},
     data: [],
     columns: [],
     size: {
@@ -400,7 +423,7 @@ export const genCellAction = (options = {}) => (cell, row) => {
             key={uuidv4()}
             type="actionTable"
             action={ActionConst.VIEW}
-            title={i18n.t("common:common.tooltip.button-view")}
+            title={i18n.t("common:button.view")}
             onClick={options.onView(row)}
         >
             <i key={uuidv4()} className="fa-solid fa-eye" />
@@ -410,7 +433,7 @@ export const genCellAction = (options = {}) => (cell, row) => {
             key={uuidv4()}
             type="actionTable"
             action={ActionConst.INSERT}
-            title={i18n.t("common:common.tooltip.button-insert")}
+            title={i18n.t("common:button.insert")}
             onClick={options.onInsert(row)}
         >
             <i key={uuidv4()} className="fa-solid fa-plus" />
@@ -420,7 +443,7 @@ export const genCellAction = (options = {}) => (cell, row) => {
             key={uuidv4()}
             type="actionTable"
             action={ActionConst.UPDATE}
-            title={i18n.t("common:common.tooltip.button-update")}
+            title={i18n.t("common:button.update")}
             onClick={options.onUpdate(row)}
         >
             <i key={uuidv4()} className="fa-regular fa-pen-to-square" />
@@ -430,7 +453,7 @@ export const genCellAction = (options = {}) => (cell, row) => {
             key={uuidv4()}
             type="actionTable"
             action={ActionConst.DELETE}
-            title={i18n.t("common:common.tooltip.button-delete")}
+            title={i18n.t("common:button.delete")}
             onClick={options.onDelete(row)}
         >
             <i key={uuidv4()} className="fa-regular fa-trash-can" />

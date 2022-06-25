@@ -53,6 +53,7 @@ const filterTreeNode = (input, event) => {
 CommonTreeSelect.defaultProps = {
   showSearch: true,
   allowClear: true,
+  showArrow: true,
   maxTagCount: 'responsive',
   treeDefaultExpandAll: false,
   multiple: false,

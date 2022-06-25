@@ -1,7 +1,15 @@
 
 import { Config } from 'constants/Constants';
 
-export const CommonUtils = {
-
+const pipe = (...func) => (data) => {
+    return func.reduce((preVal, currentFunc) => {
+        return currentFunc(preVal);
+    }, data);
 };
+
+export const CommonUtils = {
+    pipe,
+};
+
+
 

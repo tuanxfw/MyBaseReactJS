@@ -1,8 +1,10 @@
 import moment from "moment";
+import {App as AppConstants} from 'constants/Constants';
 
 export const DateUtils = {
     convertStringToDate,
     convertDateToString,
+    getCurrentDate,
     changeFormatDateString,
     dateDiff,
     getDayOfWeek,
@@ -15,7 +17,7 @@ function convertStringToDate (value, format) {
     }
 
     return moment(value, format);
-}
+};
 
 function convertDateToString (value, format) {
     if(value === null || value === undefined){
@@ -23,7 +25,11 @@ function convertDateToString (value, format) {
     }
 
     return moment(value).format(format);
-}
+};
+
+function getCurrentDate (format = AppConstants.DATE_TIME_FORMAT.DATE) {
+    return moment(new Date()).format(format);
+};
 
 /* 
 value: giá trị date dạng string,
@@ -37,7 +43,7 @@ function changeFormatDateString (value, fromFormat, toFormat) {
     
     let result = moment(moment(value, fromFormat)).format(toFormat);
     return result;
-}
+};
 
 /* 
 date1 date2: string,
@@ -55,7 +61,7 @@ function dateDiff (date1, date2, format, typeRsult, isFloat = false) {
     let valueDate2 = convertStringToDate(date2, format);
 
     return valueDate1.diff(valueDate2, typeRsult, isFloat);
-}
+};
 
 //d: Mon | Tue | Wed | Thu | Fri | Sat | Sun
 //w: tuần
@@ -74,7 +80,7 @@ function getDayOfWeek (d, w, y, formatDate) {
     const day = moment(`${w}-${y}`, "ww-YYYY").day(indexDay);
 
     return convertDateToString (day, formatDate);
-}
+};
 
 //d: số thự tự của ngày trong tháng
 //w: tuần
@@ -90,4 +96,4 @@ function getDayOfMonth (d, m, y, formatDate) {
     let reuslt = moment(d + '/' + m + '/' + y, 'DD/MM/YYYY');
     
     return convertDateToString (reuslt, formatDate);
-}
+};

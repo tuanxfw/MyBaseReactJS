@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import store from "redux/store";
 import { useSelector } from "react-redux";
 import { Modal } from "reactstrap";
@@ -15,6 +15,7 @@ const CircleLoading = (props) => {
   return (
     <>
       <Modal
+        id="circleLoading"
         className="circle-loading"
         autoFocus={false}
         backdrop={true}
@@ -23,7 +24,7 @@ const CircleLoading = (props) => {
         zIndex={3000}
         isOpen={r_registration > 0 ? true : false}
       >
-        <div className="dashed-loading"/>
+        <div className="dashed-loading" />
       </Modal>
     </>
   );
@@ -40,8 +41,8 @@ export const showCircleLoading = () => {
 
 export const closeCircleLoading = () => {
   let registration = store.getState().circleLoading.registration;
-  
-  if (registration > 0){
+
+  if (registration > 0) {
     registration--;
   }
 

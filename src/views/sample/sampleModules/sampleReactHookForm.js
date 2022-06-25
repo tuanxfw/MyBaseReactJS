@@ -3,7 +3,7 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Input } from "antd";
 import yup from 'utils/Validation'
-import useFocusError from "hooks/useFocusError";
+import useFocusError from "hooks/form/useFocusError";
 
 import CommonLabel from 'components/CommonLabel';
 import CommonValidTooltip from 'components/CommonValidTooltip';
