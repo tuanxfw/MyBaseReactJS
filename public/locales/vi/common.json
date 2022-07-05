@@ -4,10 +4,11 @@
   },
 
   "action": {
-    "insert": "Thêm mới",
-    "clone": "Sao chép",
-    "update": "Cập nhật",
-    "delete": "Xóa"
+    "INSERT": "Thêm mới",
+    "CLONE": "Sao chép",
+    "UPDATE": "Cập nhật",
+    "DELETE": "Xóa",
+    "VIEW": "Chi tiết"
   },
 
   "messages": {
@@ -16,7 +17,13 @@
     "deleteSuccess": "Xóa thành công",
     "actionSuccess": "Thao tác thành công",
     "actionFail": "Thao tác thất bại",
-    "confirmCancel": "Dữ liệu đã bị thay đổi. Bạn có chắc chắn muốn thoát?"
+    "confirmCancel": "Dữ liệu đã bị thay đổi. Bạn có chắc chắn muốn thoát?",
+    "validate": {
+      "notEmpty": "Không được trống!",
+      "textLengthIsLarget": "Lượng ký tự vượt quá quy định!",
+      "min": "Giá trị không được nhỏ hơn {0}!",
+      "max": "Giá trị không được lớn hơn {0}!"
+    }
   },
 
   "button": {

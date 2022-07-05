@@ -72,7 +72,7 @@ const Login = (props) => {
         </Col>
 
         <Col>
-          <DisplayBox title={"Table"} isOpen={true}>
+          <DisplayBox title={"Table"} isOpen={false}>
             <SampleTable />
           </DisplayBox>
         </Col>
@@ -84,7 +84,7 @@ const Login = (props) => {
         </Col> */}
 
         <Col>
-          <DisplayBox title={"React Hook Form"} isOpen={false}>
+          <DisplayBox title={"React Hook Form"} isOpen={true}>
             <SampleReactHookForm/>
           </DisplayBox>
         </Col>

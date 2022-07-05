@@ -395,15 +395,22 @@ CommonTable.propTypes = {
     pagingConfig: PropTypes.object,
     onTableChange: PropTypes.func,
     method: PropTypes.func,
+    pagingType: PropTypes.oneOf(['api', 'client']),
 };
 
 CommonTable.defaultProps = {
-    method : () => {},
+    method: () => { },
+    pagingType: 'client',
     data: [],
     columns: [],
     size: {
         scrollHeight: "600px",
         height: "auto",
+    },
+    selectRow: {
+        mode: 'radio',
+        hideSelectColumn: true,
+        onSelect: e => { },
     },
 };
 
@@ -437,6 +444,16 @@ export const genCellAction = (options = {}) => (cell, row) => {
             onClick={options.onInsert(row)}
         >
             <i key={uuidv4()} className="fa-solid fa-plus" />
+        </CommonButton> : <></>}
+
+        {options?.onClone ? <CommonButton
+            key={uuidv4()}
+            type="actionTable"
+            action={ActionConst.INSERT}
+            title={i18n.t("common:button.clone")}
+            onClick={options.onClone(row)}
+        >
+            <i key={uuidv4()} className="fa-solid fa-copy" />
         </CommonButton> : <></>}
 
         {options?.onUpdate ? <CommonButton

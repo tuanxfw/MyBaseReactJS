@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 const _ = require('lodash');
 
-export default function useFocusError(formId, errors) {
+export default function useFocusError(formName, errors) {
     useEffect(() => {
         if (!_.isEmpty(errors)) {
 
@@ -14,9 +14,9 @@ export default function useFocusError(formId, errors) {
 
                 if (firstFieldError !== null) {
                     try {
-                        document.evaluate(`//*[@id="${formId}"]//*[@name="${firstFieldError}"]`, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.focus();
+                        document.evaluate(`//form[@name="${formName}"]//*[@name="${firstFieldError}"]`, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.focus();
                     } catch (error) {
-                        document.evaluate(`//*[@id="${formId}"]//*[@name="${firstFieldError}"]//input`, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.focus();
+                        document.evaluate(`//form[@name="${formName}"]//*[@name="${firstFieldError}"]//input`, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.focus();
                     }
                 }
             } catch (errors) { }
