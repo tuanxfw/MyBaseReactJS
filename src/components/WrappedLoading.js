@@ -1,10 +1,13 @@
 import React from "react";
 import { Spin } from 'antd';
-
-const WrappedLoading = (props) => {
+  
+const WrappedLoading = ({isLoading, ...props}) => {
     return (
         <>
-            <Spin spinning={props.isLoading}>
+            <Spin
+                spinning={isLoading}
+                {...props}
+            >
                 {props.children}
             </Spin>
         </>

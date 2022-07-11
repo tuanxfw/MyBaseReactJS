@@ -1,13 +1,34 @@
 <!DOCTYPE html>
 <html lang="vi">
-  <head>
-    <meta name="google" content="notranslate" />
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <span id="common-tooltip"></span>
-  </body>
+
+<head>
+  <meta name="google" content="notranslate" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <script>
+    String.prototype.format = function () {
+      var formatted = this;
+      for (var arg in arguments) {
+        formatted = formatted.replaceAll(
+          '{' + arg + '}',
+          arguments[arg]
+        );
+      }
+      return formatted;
+    };
+
+    console.logDev = function (...params) {
+      if ('%REACT_APP_MODE%' === 'development') {
+        console.log.apply(null, params);
+      }
+    };
+  </script>
+  <div id="root"></div>
+  <span id="common-tooltip"></span>
+</body>
+
 </html>

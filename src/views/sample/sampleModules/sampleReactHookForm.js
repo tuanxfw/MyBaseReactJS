@@ -12,8 +12,9 @@ import CommonButton from "components/CommonButton";
 import CommonSelect from "components/CommonSelect";
 import CommonDatePicker from "components/CommonDatePicker";
 import CommonForm from "components/CommonForm";
+import WrappedLoading from "components/WrappedLoading";
 
-import { useTestFetch } from "hooks/api/useSampleQuery";
+import { useTestFetch, useTestInsert } from "hooks/api/useSampleQuery";
 
 
 const _ = require('lodash');
@@ -36,7 +37,7 @@ const SampleReactHookForm = (props) => {
         }),
     });
 
-    const { control, handleSubmit, getValues, setValue, setError, formState: { errors, isDirty } } = useForm({
+    const { control, watch, handleSubmit, getValues, setValue, formState: { errors, isDirty } } = useForm({
         defaultValues: {
             text: "",
             number: "",
@@ -44,22 +45,40 @@ const SampleReactHookForm = (props) => {
         resolver: yupResolver(schema),
     });
 
-    const { data: dataFetch, isFetching, refetch } = useTestFetch(getValues);
+    //#region hooks
+    const find = useTestFetch(getValues); //{ data, isFetching, refetch }
 
+    const create = useTestInsert(); //{ data: dataInsert, isLoading, mutate }
+
+    useEffect(() => {
+        console.log(find.data);
+    }, [find.data]);
+
+    useEffect(() => {
+        if (create.isSuccess) {
+            console.log(create.data)
+        };
+    }, [create.data, create.isSuccess]);
+    //#endregion
+
+    //#region Method
+
+    //#endregion
+
+    //#region Event
     const onSubmit = data => {
         // console.log({ data });
         // console.log({ isDirty });
 
-        refetch();
-    };
+        //find.refetch();
 
-    useEffect(() => {
-        console.log({dataFetch});
-    }, [dataFetch]);
+        create.mutate(getValues());
+    };
+    //#endregion
 
     return (
         <div>
-            <CommonForm errors={errors} onSubmit={handleSubmit(onSubmit)}>
+            <CommonForm errors={errors} watch={watch} onSubmit={handleSubmit(onSubmit)}>
                 <CommonLabel>{"Input text"}</CommonLabel>
                 <Controller
                     control={control}

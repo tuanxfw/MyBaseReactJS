@@ -1,24 +1,33 @@
-import React, {useEffect, useRef} from "react";
+import React, { useEffect, useRef } from "react";
 import { v4 as uuidv4 } from 'uuid';
 
 import useFocusError from "hooks/form/useFocusError";
-import { CommonUtils } from "utils/CommonUtils";
+import useFocusFirstElement from "hooks/form/useFocusFirstElement";
+import useConsoleLog from 'hooks/form/useConsoleLog';
 
-const CommonForm = (props) => {
+const CommonForm = ({
+    errors: p_errors,
+    watch: p_watch,
+    ...props
+}) => {
+
     const ref_nameForm = useRef(uuidv4())
 
-    useEffect(() => {
-        CommonUtils.focusFirstElementInForm(ref_nameForm.current);
-    }, []);
-
-    useFocusError(ref_nameForm.current, props.errors);
+    useFocusFirstElement(ref_nameForm.current);
+    useFocusError(ref_nameForm.current, p_errors);
+    useConsoleLog(p_watch);
 
     return (
-        <form 
-        name={ref_nameForm.current}
-        autoComplete='off'
-        {...props}/>
+        <form
+            name={ref_nameForm.current}
+            autoComplete='off'
+            {...props}
+        />
     );
 }
 
 export default CommonForm;
+
+CommonForm.defaultProps = {
+    watch: () => { }
+}

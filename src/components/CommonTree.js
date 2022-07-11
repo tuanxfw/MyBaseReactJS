@@ -95,15 +95,8 @@ const CommonTree = ({
       key: item[p_field.fieldValue],
     };
   });
-  //#endregion
 
-  //#region Event
-  const onExpand = (expandedKeys) => {
-    s_setExpandedKeys(expandedKeys);
-    s_setAutoExpandParent(false);
-  };
-
-  const onSearch = (value) => {
+  const filter = (value) => {
     ref_searchCondition.current = value;
 
     let dataList = ref_dataList.current;
@@ -128,9 +121,20 @@ const CommonTree = ({
   };
   //#endregion
 
+  //#region Event
+  const onExpand = (expandedKeys) => {
+    s_setExpandedKeys(expandedKeys);
+    s_setAutoExpandParent(false);
+  };
+
+  const onSearch = _.debounce((e) => {
+    filter(e.target.value);
+  }, 300);
+  //#endregion
+
   return (
     <div className="common-tree">
-      {p_showSearch === true ? <Input.Search className="search-field" defaultValue={ref_searchCondition.current} allowClear onSearch={onSearch} /> : null}
+      {p_showSearch === true ? <Input className="search-field" defaultValue={ref_searchCondition.current} allowClear onChange={onSearch} /> : null}
       <div className="content-tree">
         <Tree
           expandedKeys={s_expandedKeys}
@@ -144,8 +148,8 @@ const CommonTree = ({
   );
 };
 
-//export default CommonTree;
-export default React.memo(CommonTree, ObjectUtils.compareProps);
+export default CommonTree;
+//export default React.memo(CommonTree, ObjectUtils.compareProps);
 
 CommonTree.defaultProps = {
   showSearch: true,
