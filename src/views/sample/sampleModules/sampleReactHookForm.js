@@ -70,9 +70,9 @@ const SampleReactHookForm = (props) => {
         // console.log({ data });
         // console.log({ isDirty });
 
-        //find.refetch();
+        find.refetch();
 
-        create.mutate(getValues());
+        //create.mutate(getValues());
     };
     //#endregion
 
