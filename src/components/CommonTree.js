@@ -10,6 +10,7 @@ const CommonTree = ({
   dataRender: p_data,
   showSearch: p_showSearch,
   field: p_field,
+  onSelect: p_onSelect,
   ...props
 }) => {
   const [s_treeData, s_setTreeData] = useState([]);
@@ -17,6 +18,7 @@ const CommonTree = ({
   const [s_autoExpandParent, s_setAutoExpandParent] = useState(true);
 
   const ref_dataList = useRef([]);
+  const ref_flatList = useRef([]);
   const ref_searchCondition = useRef('');
 
   useEffect(() => {
@@ -44,6 +46,8 @@ const CommonTree = ({
         [p_field.fieldName]: item[p_field.fieldName],
         [p_field.fieldValue]: item[p_field.fieldValue]
       });
+
+      ref_flatList.current.push(item);
 
       if (item[p_field.fieldChild]) {
         parseTreeToList(item[p_field.fieldChild]);
@@ -122,6 +126,19 @@ const CommonTree = ({
   //#endregion
 
   //#region Event
+  const onSelect = (value, e) => {
+
+    let nodeKey = e?.node?.key;
+    let node = null;
+
+    if (nodeKey) {
+      node = _.find(ref_flatList.current, obj => obj[p_field.fieldValue] === nodeKey);
+    }
+    
+    if(p_onSelect) {
+      p_onSelect(value, node, e)
+    }
+  }
   const onExpand = (expandedKeys) => {
     s_setExpandedKeys(expandedKeys);
     s_setAutoExpandParent(false);
@@ -141,6 +158,7 @@ const CommonTree = ({
           autoExpandParent={s_autoExpandParent}
           onExpand={onExpand}
           treeData={genTreeHighLight(s_treeData)}
+          onSelect={onSelect}
           {...props}
         />
       </div>
@@ -159,6 +177,6 @@ CommonTree.defaultProps = {
   checkable: false,
   dataRender: [],
   showLine: { showLeafIcon: false },
-  onSelect: (selectedKeys, info) => console.log("onSelect", { selectedKeys, info }),
-  onCheck: (checkedKeys, info) => console.log("onCheck", { checkedKeys, info }),
+  onSelect: (selectedKeys, node, e) => console.log("onSelect", { selectedKeys, node, e }),
+  onCheck: (checkedKeys, node, e) => console.log("onCheck", { checkedKeys, node, e }),
 };
