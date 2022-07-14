@@ -12,7 +12,7 @@ import {
 import {
   toggleMessageBox,
   setMessageData,
-} from "redux/actions/messageBoxActions";
+} from "redux/slices/messageBoxSlice";
 
 const MessageBox = (props) => {
   const { t } = props;

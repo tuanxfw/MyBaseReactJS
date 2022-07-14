@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-export default createSlice({
+const circleLoadingSlice = createSlice({
   name: 'circleLoading',
   initialState: {
     registration: 0,
@@ -11,3 +11,8 @@ export default createSlice({
     },
   },
 });
+
+export default circleLoadingSlice;
+
+export const setRegistrationCircleLoading = circleLoadingSlice.actions.setRegistrationCircleLoading;
+

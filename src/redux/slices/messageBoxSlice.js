@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-export default createSlice({
+const messageBoxSlice = createSlice({
   name: 'messageBox',
   initialState: {
     isOpen: false,
@@ -16,3 +16,8 @@ export default createSlice({
     },
   },
 });
+
+export default messageBoxSlice;
+
+export const toggleMessageBox = messageBoxSlice.actions.toggleMessageBox;
+export const setMessageData = messageBoxSlice.actions.setMessageData;

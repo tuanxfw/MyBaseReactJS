@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 import { UserUtils } from 'utils/UserUtils';
 import store from "redux/store";
 import { getStatusSidebar } from "redux/selectors/defaultSidebarSelectors";
-import { toggleSideBar } from "redux/actions/defaultSidebarActions";
+import { toggleSideBar } from "redux/slices/defaultSidebarSlice";
 import { Config } from 'constants/Constants';
 import CommonTooltip from "components/CommonTooltip";
 
