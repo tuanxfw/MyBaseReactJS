@@ -7,9 +7,9 @@ const CommonTextEditor = ({ config: p_config, onChange: p_onChange, ...props }) 
         placeholder: ""
     };
 
-    const onChange = (e) => {
-        if (p_onChange) {
-            p_onChange(e);
+    const onChange = (value) => {
+        if (p_onChange && value?.trim() !== "") {
+            p_onChange(value);
         }
     };
 
