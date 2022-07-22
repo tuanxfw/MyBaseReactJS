@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import CommonButton from "components/CommonButton";
-import Dialog from "components/Dialog";
+import Dialog, {openModal} from "components/Dialog";
 
 import SampleForm from "../sampleForm";
 

@@ -13,7 +13,7 @@ yup.addMethod(yup.mixed, 'notEmpty', function () {
         if (!_.isBoolean(value) && !_.isNumber(value) && _.isEmpty(value)) {
             return createError({
                 path,
-                message: i18n.t('common:messages.validate.notEmpty'),
+                message: i18n.t('common:validate..notEmpty'),
             });
         }
 
@@ -50,7 +50,7 @@ yup.addMethod(yup.string, "maxByte", function (size) {
         let bytes = StringUtils.getBytesString(value);
 
         if (bytes > size) {
-            return createError({ path, message: i18n.t("common:messages.validate.textLengthIsLarget") });
+            return createError({ path, message: i18n.t("common:validate..textLengthIsLarget") });
         }
 
         return true;
@@ -77,7 +77,7 @@ yup.addMethod(yup.string, "minDate", function (fieldCompare, format = "") {
         }
 
         if (date1 < date2) {
-            return createError({ path, message: i18n.t("common:messages.validate.min").format(_.toString(parent?.[fieldCompare])) });
+            return createError({ path, message: i18n.t("common:validate..min").format(_.toString(parent?.[fieldCompare])) });
         }
 
         return true;
@@ -97,7 +97,7 @@ yup.addMethod(yup.string, "maxDate", function (fieldCompare, format = "") {
         }
 
         if (date1 > date2) {
-            return createError({ path, message: i18n.t("common:messages.validate.max").format(_.toString(parent?.[fieldCompare])) });
+            return createError({ path, message: i18n.t("common:validate..max").format(_.toString(parent?.[fieldCompare])) });
         }
 
         return true;

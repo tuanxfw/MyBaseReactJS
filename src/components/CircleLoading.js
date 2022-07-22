@@ -7,7 +7,7 @@ import {
 } from "redux/selectors/circleLoadingSelectors";
 import {
   setRegistrationCircleLoading,
-} from "redux/slices/circleLoadingSlice"
+} from "redux/slices/circleLoadingSlice";
 
 const CircleLoading = (props) => {
   const r_registration = useSelector(getRegistrationCircleLoading);

@@ -174,11 +174,6 @@ const genStringQuery = (path, data) => {
         fullPath = fullPath + (url.search !== "" ? "&" : "") + new URLSearchParams(data).toString();
     }
 
-
-    // if (data) {
-    //     fullPath = fullPath + "?" + new URLSearchParams(data).toString();
-    // }
-
     return fullPath;
 };
 

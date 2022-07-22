@@ -47,7 +47,6 @@ const SampleReactHookForm = (props) => {
 
     //#region hooks
     const find = useTestFetch(getValues); //{ data, isFetching, refetch }
-
     const create = useTestInsert(); //{ data: dataInsert, isLoading, mutate }
 
     useEffect(() => {

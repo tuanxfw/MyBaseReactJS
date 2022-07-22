@@ -83,17 +83,17 @@ function getDayOfWeek (d, w, y, formatDate) {
 };
 
 //d: số thự tự của ngày trong tháng
-//w: tuần
+//m: tháng
 //y: năm
 //Trả về ngày dạng string theo formatDate
 function getDayOfMonth (d, m, y, formatDate) {
-    let lastDay = moment(m + '-' + y, 'MM/YYYY').daysInMonth();
+    let lastDay = moment(m + '/' + y, 'MM/YYYY').daysInMonth();
 
     if (Number(d) > lastDay) {
         d = lastDay;
     }
 
-    let reuslt = moment(d + '/' + m + '/' + y, 'DD/MM/YYYY');
+    let result = moment(`${d}/${m}/${y}`, 'DD/MM/YYYY');
     
-    return convertDateToString (reuslt, formatDate);
+    return convertDateToString (result, formatDate);
 };
